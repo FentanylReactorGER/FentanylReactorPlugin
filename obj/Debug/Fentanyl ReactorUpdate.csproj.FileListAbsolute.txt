@@ -146,3 +146,5 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.UmbraModule.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.UnityTestProtocolModule.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\zxing.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.xml

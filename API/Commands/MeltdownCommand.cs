@@ -8,7 +8,7 @@ namespace Fentanyl_ReactorUpdate.API.Commands;
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
 public class ForceReactorMeltdownCommand : ICommand
 {
-    public string Command => "ForceReactorMeltdown";
+    public string Command => Plugin.Singleton.Translation.MeltdownCommandName;
     public string[] Aliases => Array.Empty<string>();
     public string Description => "Forces an immediate Fentanyl Reactor meltdown with a random delay before detonation.";
         

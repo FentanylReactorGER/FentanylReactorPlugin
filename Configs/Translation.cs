@@ -10,6 +10,9 @@ public class Translation : ITranslation
 
     [Description("Command Name to refuel the Fentanyl Reactor (Admins)")]
     public string FuelCommandName { get; set; } = "FentanylReactorFuel";
+    
+    [Description("Command Name to meltdown the Fentanyl Reactor (Admins)")]
+    public string MeltdownCommandName { get; set; } = "ForceReactorMeltdown";
 
     [Description("No Adrenaline Hint")]
     public string NoAdrenalineHint { get; set; } = "You have no adrenaline!";

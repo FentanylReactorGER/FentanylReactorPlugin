@@ -78,7 +78,7 @@ public class Reactor
         Room room = Room.Get(RoomType);
         if (room == null)
         {
-            Log.Info("Room ist nicht gefunden! Plugin is disabled.");
+            Log.Info("Room not found! Plugin is disabled.");
             Destroy();
             return;
         }
@@ -168,7 +168,6 @@ public class Reactor
 
         if (player.Nickname.Equals("Fentanyl Reactor", StringComparison.OrdinalIgnoreCase))
         {
-            Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
             player.PlayFentanylReactorAudio();
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
                 () =>
@@ -185,7 +184,6 @@ public class Reactor
 
         if (UnityEngine.Random.Range(1, 101) <= chance)
         {
-            Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
             player.PlayFentanylReactorAudio();
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
                 () =>
@@ -276,28 +274,29 @@ public class Reactor
         {
             Log.Info($"{RoomScheme.Position.x} {RoomScheme.Position.y} {RoomScheme.Position.z}, Pos: {RoomScheme.Position}");
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/fentanylreactorcore {ev.Player.Id} 1");
+            var player = $"{ev.Player.Id}";
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T1ID}");
             return;
         }
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage2Name)
         {
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/fentanylreactorcore {ev.Player.Id} 2");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T2ID}");
             return;
         }
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage3Name)
         {
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/fentanylreactorcore {ev.Player.Id} 3");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T3ID}");
             return;
         }
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonRefillName)
         {
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/fentanylreactorfuel {ev.Player.Id}");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {ev.Player.Id}");
             return;
         } 
     }

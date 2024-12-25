@@ -80,7 +80,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                 ev.Player.ChangeEffectIntensity<MovementBoost>(speed);
                 Timing.CallDelayed((Config.T1DurationUpper - Config.T1DurationLower) + Config.T1DurationLower, () =>
                 {
-                    ev.Player.ChangeEffectIntensity<MovementBoost>(0);
+                    ev.Player.DisableEffect<MovementBoost>();
                 });
                 if (Config.Debug) Log.Warn($"Changed {ev.Player.Nickname}'s speed to {speed}");
             });
