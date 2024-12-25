@@ -3,10 +3,11 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Exiled.API.Features;
+using UnityEngine.PlayerLoop;
 
 namespace Fentanyl_ReactorUpdate.API.Extensions
 {
-    public static class UpdateChecker
+    public class UpdateChecker
     {
         private static readonly string RepositoryUrl = "https://api.github.com/repos/FentanylReactorGER/FentanylReactorPlugin/releases/latest";
         private static readonly string PluginPath = Plugin.Singleton.Config.PluginPath;
@@ -15,19 +16,19 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
         {
             DefaultRequestHeaders = { { "User-Agent", "UpdateChecker" } }
         };
-
-        public static void RegisterUpdateEvents()
+        
+        public static void RegisterEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
         }
-        public static void UnregisterUpdateEvents()
+        public static void UnRegisterEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
         }
 
         private static void WaitingForPlayers()
         {
-            LogInfo("Checking for updates...");
+            LogInfo("Schaue nach Updates...");
             Task.Run(() => CheckForUpdates(true));
         }
         private static void LogInfo(string message)
