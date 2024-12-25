@@ -13,8 +13,9 @@
 
 # How to install?
 
-- Just Download the Fentanyl_ReactorUpdate.dll and put it into EXILED/Plugins. The Schematics and Sounds will be Downloaded Automatically.
+- Just Download the Fentanyl_ReactorUpdate.dll and put it into EXILED/Plugins.
 - Download the Dependencies.
+- Restart your Server so the Schematics and Sounds will be Downloaded Automatically.
 
 # Dependencies
 - AudioPlayer by [@Killers0992](https://github.com/Killers0992) download here: [AudipPlayer](https://github.com/Killers0992/AudioPlayer/releases/latest)
