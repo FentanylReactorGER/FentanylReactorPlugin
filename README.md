@@ -1,10 +1,10 @@
-![UsefulHints](https://github.com/user-attachments/assets/a01fc940-f540-4c8b-8caf-65848a22335d)<br><br><br>
+![UsefulHints]([https://github.com/user-attachments/assets/a01fc940-f540-4c8b-8caf-65848a22335d](https://github.com/user-attachments/assets/f5aa3e98-d73c-470d-a134-5e9d9))<br><br><br>
 [![downloads](https://img.shields.io/github/downloads/Vretu-Dev/UsefulHints/total?style=for-the-badge&logo=icloud&color=%233A6D8C)](https://github.com/Vretu-Dev/UsefulHints/releases/latest)
 ![Latest](https://img.shields.io/github/v/release/Vretu-Dev/UsefulHints?style=for-the-badge&label=Latest%20Release&color=%23D91656)
 
 # UsefulHints for EXILED
 <h4>If you like this plugin you can support me!</h4>
-<a href="https://opencollective.com/ucs/projects/usefulhints/donate"><img src="https://github.com/user-attachments/assets/f5aa3e98-d73c-470d-a134-5e9d923ea30b" style="width:154px;height:40px;"></a>
+23ea30b" style="width:154px;height:40px;"></a>
 <h4>UCS Independent Developer</h4>
 <a href='https://opencollective.com/ucs'><img src="https://github.com/user-attachments/assets/517f8cae-32ac-4886-8bd6-5e95447073e2" style="width:154px;height:40px;"></a>
 <a href='https://discord.gg/5StRGu8EJV'><img src="https://github.com/user-attachments/assets/17cc06b8-ced8-4223-93dc-8d3a21c55753" style="width:154px;height:40px;"></a>
