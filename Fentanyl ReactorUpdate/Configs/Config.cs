@@ -135,11 +135,4 @@ public class Config : IConfig
     public float T2Weight { get; set; } = 1;
 
     public float T3Weight { get; set; } = 1;
-    
-    [Description("The Blacklisted effect of each Fentanyl item")]
-    public EffectType T1Blacklist { get; set; } = EffectType.AntiScp207;
-
-    public EffectType T2Blacklist { get; set; } = EffectType.AntiScp207;
-
-    public EffectType T3Blacklist { get; set; } = EffectType.AntiScp207;
 }

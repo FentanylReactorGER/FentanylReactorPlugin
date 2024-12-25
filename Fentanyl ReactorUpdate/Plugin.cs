@@ -19,7 +19,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
 {
     public override string Name => "Fentanyl Reactor";
     public override string Author => "SCP: Secret Fentanyl Server Team";
-    public override Version Version => new Version(1, 3, 4);
+    public override Version Version => new Version(1, 3, 5);
     public override Version RequiredExiledVersion => new Version(9, 0, 1);
     public static Plugin Singleton = new Plugin();
     public static readonly Random Random = new Random();
@@ -28,13 +28,14 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
     public override void OnEnabled()
     {
         AudioClipStorage.LoadClip(Path.Combine(Paths.Plugins, "FentReactorTest.ogg"), "Fentanyl Reactor");
-        
+        AudioClipStorage.LoadClip(Path.Combine(Paths.Plugins, "FentMeltdown.ogg"), "Fentanyl Reactor Meltdown");
         Singleton = this;
         CustomItem.RegisterItems();
         Reactor = new Reactor();
         UpdateChecker.RegisterEvents();
         UpdateSchematicChecker.RegisterEvents();
-        UpdateOgg.RegisterEvents();
+        UpdateOggReactor.RegisterEvents();
+        UpdateOggMeltdown.RegisterEvents();
         base.OnEnabled();
     }
 
@@ -46,7 +47,8 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
         Reactor = null;
         UpdateChecker.UnRegisterEvents();
         UpdateSchematicChecker.UnRegisterEvents();
-        UpdateOgg.UnRegisterEvents();
+        UpdateOggReactor.UnRegisterEvents();
+        UpdateOggMeltdown.UnRegisterEvents();
         CustomItem.UnregisterItems();
         Singleton = null;
         base.OnDisabled();

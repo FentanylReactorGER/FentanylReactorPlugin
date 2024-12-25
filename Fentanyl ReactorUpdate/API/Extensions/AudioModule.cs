@@ -2,6 +2,7 @@
 using System.Numerics;
 using CommandSystem.Commands.RemoteAdmin.PermissionsManagement.Group;
 using Exiled.API.Features;
+using MapEditorReborn.API.Features.Objects;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Fentanyl_ReactorUpdate.API.Extensions;

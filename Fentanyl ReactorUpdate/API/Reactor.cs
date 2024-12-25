@@ -224,6 +224,9 @@ public class Reactor
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
+        AudioPlayer globalPlayer = AudioPlayer.Create("GlobalAudioPlayer");
+        Speaker speaker = globalPlayer.AddSpeaker("GlobalSpeaker");
+        globalPlayer.AddClip("Fentanyl Reactor Meltdown", Plugin.Singleton.Config.FentanylReactorAudioVolume, false, true);
         RandomDelayGiver();
         Warhead.Stop();
         Warhead.IsLocked = true;
@@ -274,7 +277,6 @@ public class Reactor
         {
             Log.Info($"{RoomScheme.Position.x} {RoomScheme.Position.y} {RoomScheme.Position.z}, Pos: {RoomScheme.Position}");
             ev.Button.Base.enabled = true;
-            var player = $"{ev.Player.Id}";
             Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T1ID}");
             return;
         }
