@@ -12,10 +12,10 @@ public static class AudioModule
     {
         AudioPlayer playerFent = AudioPlayer.Create($"Player {player.Nickname}");
         
-        Speaker speaker = playerFent.AddSpeaker("Fentanyl Reactor", 0.9f, false, 10f, 30f);
+        Speaker speaker = playerFent.AddSpeaker("Fentanyl Reactor", Plugin.Singleton.Config.FentanylReactorAudioVolume, false, Plugin.Singleton.Config.FentanylReactorAudioMin, Plugin.Singleton.Config.FentanylReactorAudioMax);
         
-        speaker.transform.parent = player.GameObject.transform;
+        speaker.Position = player.Position;
         
-        playerFent.AddClip("Fentanyl Reactor", 0.85f, false, true);
+        playerFent.AddClip("Fentanyl Reactor", Plugin.Singleton.Config.FentanylReactorAudioVolume, false, true);
     }
 }

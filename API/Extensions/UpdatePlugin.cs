@@ -9,8 +9,8 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
 {
     public class UpdateChecker
     {
-        private static readonly string RepositoryUrl = "https://api.github.com/repos/FentanylReactorGER/FentanylReactorSchematic/releases/latest";
-        private static readonly string PluginPath = Path.Combine(Paths.Plugins, "Fentanyl_ReactorUpdate");
+        private static readonly string RepositoryUrl = "https://api.github.com/repos/FentanylReactorGER/FentanylReactorPlugin/releases/latest";
+        private static readonly string PluginPath = Path.Combine(Paths.Plugins, "Fentanyl_ReactorUpdate.dll");
         private static readonly string CurrentVersion = Plugin.Singleton.Version.ToString();
         private static readonly HttpClient HttpClient = new HttpClient
         {
@@ -173,7 +173,13 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
                 }
             }
 
-            File.WriteAllBytes(PluginPath, pluginData);
+            // Ensure the plugin is saved with the .dll extension
+            string pluginFileName = "Fentanyl_ReactorUpdate.dll"; // Adjust this if needed
+            string pluginFilePath = Path.Combine(Paths.Plugins, pluginFileName);
+
+            // Write the new plugin data to the correct path with .dll extension
+            File.WriteAllBytes(pluginFilePath, pluginData);
+            LogInfo($"Plugin updated successfully: {pluginFilePath}");
         }
     }
 }

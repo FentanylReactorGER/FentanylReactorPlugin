@@ -5,57 +5,57 @@ namespace Fentanyl_ReactorUpdate.Configs;
 
 public class Translation : ITranslation
 {
-    [Description("Command Name zum Nutzen des Fentanyl Reaktors (Admins)")]
+    [Description("Command Name to use the Fentanyl Reactor (Admins)")]
     public string CommandName { get; set; } = "FentanylReactorCore";
 
-    [Description("Command Name zum Befüllen des Fentanyl Reaktors (Admins)")]
+    [Description("Command Name to refuel the Fentanyl Reactor (Admins)")]
     public string FuelCommandName { get; set; } = "FentanylReactorFuel";
 
-    [Description("Kein Adrenaline Hinweis")]
-    public string NoAdrenalineHint { get; set; } = "Du hast kein Adrenalin!";
+    [Description("No Adrenaline Hint")]
+    public string NoAdrenalineHint { get; set; } = "You have no adrenaline!";
 
     [Description("Meltdown CASSIE")]
     public string FentanylReactorMeltdownCassie { get; set; } = "pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4";
 
-    [Description("Meltdown CASSIE Übersetzung")]
-    public string FentanylReactorMeltdownCassieTrans { get; set; } = "Der Reaktor überhitzt! Sofort EVAKUIEREN..";
+    [Description("Meltdown CASSIE Translation")]
+    public string FentanylReactorMeltdownCassieTrans { get; set; } = "The reactor is overheating! Evacuate immediately..";
 
-    [Description("Fentanyl Reaktor Nachfüllhinweis")]
-    public string ReactorFueled { get; set; } = "Der Fentanyl Reaktor wurde aufgefüllt!";
+    [Description("Fentanyl Reactor Refuel Hint")]
+    public string ReactorFueled { get; set; } = "The Fentanyl Reactor has been refueled!";
 
-    [Description("Fentanyl Reaktor ist bereits aufgefüllt Hinweis")]
-    public string ReactorAlreadyFueledHint { get; set; } = "Der Fentanyl Reaktor ist bereits aufgefüllt!";
+    [Description("Fentanyl Reactor already refueled hint")]
+    public string ReactorAlreadyFueledHint { get; set; } = "The Fentanyl Reactor is already refueled!";
 
-    [Description("Fentanyl Reaktor ist nicht aufgefüllt Hinweis")]
-    public string ReactorNotFueledHint { get; set; } = "Der Fentanyl Reaktor ist nicht aufgefüllt!";
+    [Description("Fentanyl Reactor not refueled hint")]
+    public string ReactorNotFueledHint { get; set; } = "The Fentanyl Reactor is not refueled!";
 
-    [Description("Fentanyl Reaktor Startet Hinweis")]
-    public string ReactorStartingHint { get; set; } = "Fentanyl Reaktor startet...";
+    [Description("Fentanyl Reactor Starting Hint")]
+    public string ReactorStartingHint { get; set; } = "Fentanyl Reactor is starting...";
 
-    [Description("Fentanyl Reaktor Erfolg Hinweis Stufe 1")]
-    public string ReactorSuccessHintStageOne { get; set; } = "Fentanyl Stufe Eins wird generiert!";
+    [Description("Fentanyl Reactor Success Hint Stage 1")]
+    public string ReactorSuccessHintStageOne { get; set; } = "Fentanyl Stage One is being generated!";
 
-    [Description("Fentanyl Reaktor Erfolg Hinweis Stufe 2")]
-    public string ReactorSuccessHintStageTwo { get; set; } = "Fentanyl Stufe Zwei wird generiert!";
+    [Description("Fentanyl Reactor Success Hint Stage 2")]
+    public string ReactorSuccessHintStageTwo { get; set; } = "Fentanyl Stage Two is being generated!";
 
-    [Description("Fentanyl Reaktor Erfolg Hinweis Stufe 3")]
-    public string ReactorSuccessHintStageThree { get; set; } = "Fentanyl Stufe Drei wird generiert!";
+    [Description("Fentanyl Reactor Success Hint Stage 3")]
+    public string ReactorSuccessHintStageThree { get; set; } = "Fentanyl Stage Three is being generated!";
 
-    [Description("Fentanyl Reaktor Cooldown Hinweis")]
-    public string ReactorCooldown { get; set; } = "Der Fentanyl Reaktor hat eine Abklingzeit von: %Cooldown% Sekunden";
+    [Description("Fentanyl Reactor Cooldown Hint")]
+    public string ReactorCooldown { get; set; } = "The Fentanyl Reactor has a cooldown of: %Cooldown% seconds";
 
-    [Description("Fentanyl Reaktor konnte nichts produzieren Hinweis")]
-    public string ReactorFailureHint { get; set; } = "Der Fentanyl Reaktor konnte nichts produzieren!";
-    [Description("Fentanyl Stufe 1 Name")]
-    public string T1Name { get; set; } = "Fentanyl Stufe 1"; 
-    [Description("Fentanyl Stufe 1 Beschreibung")]
-    public string T1Description { get; set; } = "Unreines Fentanyl Stufe 1!"; 
-    [Description("Fentanyl Stufe 2 Name")]
-    public string T2Name { get; set; } = "Fentanyl Stufe 2"; 
-    [Description("Fentanyl Stufe 2 Beschreibung")]
-    public string T2Description { get; set; } = "Normales Fentanyl Stufe 2!"; 
-    [Description("Fentanyl Stufe 3 Name")]
-    public string T3Name { get; set; } = "Fentanyl Stufe 3"; 
-    [Description("Fentanyl Stufe 3 Beschreibung")]
-    public string T3Description { get; set; } = "Reinstes Fentanyl Stufe 3!";  
+    [Description("Fentanyl Reactor could not produce anything hint")]
+    public string ReactorFailureHint { get; set; } = "The Fentanyl Reactor could not produce anything!";
+    [Description("Fentanyl Stage 1 Name")]
+    public string T1Name { get; set; } = "Fentanyl Stage 1"; 
+    [Description("Fentanyl Stage 1 Description")]
+    public string T1Description { get; set; } = "Impure Fentanyl Stage 1!"; 
+    [Description("Fentanyl Stage 2 Name")]
+    public string T2Name { get; set; } = "Fentanyl Stage 2"; 
+    [Description("Fentanyl Stage 2 Description")]
+    public string T2Description { get; set; } = "Normal Fentanyl Stage 2!"; 
+    [Description("Fentanyl Stage 3 Name")]
+    public string T3Name { get; set; } = "Fentanyl Stage 3"; 
+    [Description("Fentanyl Stage 3 Description")]
+    public string T3Description { get; set; } = "Purest Fentanyl Stage 3!";  
 }

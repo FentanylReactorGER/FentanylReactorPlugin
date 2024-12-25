@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommandSystem;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
@@ -44,10 +45,11 @@ public class Reactor
     public void Destroy()
     {
         UnSubEvents();
-        if (_metldownProcess.IsRunning) Timing.KillCoroutines(_metldownProcess);
-        RoomScheme?.Destroy();
+        Timing.KillCoroutines(_metldownProcess);
+        Warhead.Stop();
+        Warhead.IsLocked = false;
     }
-
+    
     public Dictionary<Player, DateTime> Cooldowns = new Dictionary<Player, DateTime>();
     public HashSet<Player> FueledReactors = new HashSet<Player>();
 
@@ -140,7 +142,6 @@ public class Reactor
         CustomItem customItem;
         string successHint;
         string failureHint = Plugin.Singleton.Translation.ReactorFailureHint;
-        string audioPath = string.Empty;
 
         switch (level)
         {
@@ -148,19 +149,16 @@ public class Reactor
                 chance = Plugin.Singleton.Config.Level1Chance;
                 customItem = CustomItem.Get(Plugin.Singleton.Config.T1ID);
                 successHint = Plugin.Singleton.Translation.ReactorSuccessHintStageOne;
-                audioPath = Plugin.Singleton.Config.Level1AudioPath;
                 break;
             case 2:
                 chance = Plugin.Singleton.Config.Level2Chance;
                 customItem = CustomItem.Get(Plugin.Singleton.Config.T2ID);
                 successHint = Plugin.Singleton.Translation.ReactorSuccessHintStageTwo;
-                audioPath = Plugin.Singleton.Config.Level2AudioPath;
                 break;
             case 3:
                 chance = Plugin.Singleton.Config.Level3Chance;
                 customItem = CustomItem.Get(Plugin.Singleton.Config.T3ID);
                 successHint = Plugin.Singleton.Translation.ReactorSuccessHintStageThree;
-                audioPath = Plugin.Singleton.Config.Level3AudioPath;
                 break;
             default:
                 return "Invalid reactor level.";
@@ -170,6 +168,7 @@ public class Reactor
 
         if (player.Nickname.Equals("Fentanyl Reactor", StringComparison.OrdinalIgnoreCase))
         {
+            Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
             player.PlayFentanylReactorAudio();
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
                 () =>
@@ -186,6 +185,8 @@ public class Reactor
 
         if (UnityEngine.Random.Range(1, 101) <= chance)
         {
+            Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
+            player.PlayFentanylReactorAudio();
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
                 () =>
                 {
@@ -198,7 +199,8 @@ public class Reactor
                 });
             return $"Fentanyl Reactor succeeded for Player {player.Nickname} at Level {level}.";
         }
-        
+        Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
+        player.PlayFentanylReactorAudio();
         Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
             () =>
             {
@@ -216,6 +218,7 @@ public class Reactor
         Plugin.Singleton.Reactor.FuelReactor(player);
         return true;
     }
+
 
     #region Meltdown
 
@@ -271,6 +274,7 @@ public class Reactor
     {
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage1Name)
         {
+            Log.Info($"{RoomScheme.Position.x} {RoomScheme.Position.y} {RoomScheme.Position.z}, Pos: {RoomScheme.Position}");
             ev.Button.Base.enabled = true;
             Server.ExecuteCommand($"/fentanylreactorcore {ev.Player.Id} 1");
             return;
