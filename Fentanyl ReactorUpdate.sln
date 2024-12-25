@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fentanyl ReactorUpdate", "Fentanyl ReactorUpdate\Fentanyl ReactorUpdate.csproj", "{903C7E8C-265D-4725-9BD1-081EC40891F8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{903C7E8C-265D-4725-9BD1-081EC40891F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{903C7E8C-265D-4725-9BD1-081EC40891F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{903C7E8C-265D-4725-9BD1-081EC40891F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{903C7E8C-265D-4725-9BD1-081EC40891F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
