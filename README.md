@@ -1,6 +1,6 @@
 ![Fentanyl Reactor](https://github.com/user-attachments/assets/4a693450-9907-457e-9643-cdb310d66298)
 <br><br><br>
-[![downloads](https://img.shields.io/github/downloads/Vretu-Dev/UsefulHints/total?style=for-the-badge&logo=icloud&color=%233A6D8C)](https://github.com/FentanylReactorGER/FentanylReactorPlugin/releases/latest)
+[![downloads](https://img.shields.io/github/downloads/username/repository/latest/total)](https://github.com/FentanylReactorGER/FentanylReactorPlugin/releases/latest)
 ![Latest](https://img.shields.io/github/v/release/Vretu-Dev/UsefulHints?style=for-the-badge&label=Latest%20Release&color=%23D91656)
 
 # Fentanyl Reactor for EXILED
