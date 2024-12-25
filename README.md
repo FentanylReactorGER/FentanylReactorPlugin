@@ -1,7 +1,7 @@
 ![Fentanyl Reactor](https://github.com/user-attachments/assets/4a693450-9907-457e-9643-cdb310d66298)
 <br><br><br>
-[![downloads](https://img.shields.io/github/downloads/username/repository/latest/total)](https://github.com/FentanylReactorGER/FentanylReactorPlugin/releases/latest)
-![Latest](https://img.shields.io/github/v/release/Vretu-Dev/UsefulHints?style=for-the-badge&label=Latest%20Release&color=%23D91656)
+[![downloads](https://img.shields.io/github/downloads/FentanylReactorGER/FentanylReactorPlugin/total?style=for-the-badge&logo=icloud&color=%233A6D8C)](https://github.com/FentanylReactorGER/FentanylReactorPlugin/releases/latest)
+![Latest](https://img.shields.io/github/v/release/FentanylReactorGER/FentanylReactorPlugin?style=for-the-badge&label=Latest%20Release&color=%23D91656)
 
 # Fentanyl Reactor for EXILED
 
@@ -18,69 +18,130 @@
 ## Config:
 
 ```yaml
-UH:
-  is_enabled: true
-  debug: false
-  # Auto Translations:
-  translations: true
-  # Available Languages: pl, en, de, fr, cs, sk, es, it, pt, ru, tr, zh
-  language: 'en'
-  translations_path: '/home/container/.config/EXILED/Configs/UsefulHints/Translations'
-  # Auto Update:
-  auto_update: true
-  enable_logging: true
-  enable_backup: false
-  plugin_path: '/home/container/.config/EXILED/Plugins/UsefulHints.dll'
-  # Hint Settings:
-  enable_hints: true
-  scp096_look_message: 'You looked at SCP-096!'
-  scp268_time_left_message: 'Remaining: {0}s'
-  scp2176_time_left_message: 'Remaining: {0}s'
-  scp1576_time_left_message: 'Remaining: {0}s'
-  grenade_damage_hint: '{0} Damage'
-  jailbird_use_message: 'Remaining charges: {0}'
-  scp207_hint_message: 'You have {0} doses of SCP-207'
-  anti_scp207_hint_message: 'You have {0} doses of Anti SCP-207'
-  show_hint_on_equip_item: false
-  # Item Warnings:
-  enable_warnings: true
-  scp207_warning: '<color=yellow>⚠</color> You are already affected by <color=#A60C0E>SCP-207</color>'
-  anti_scp207_warning: '<color=yellow>⚠</color> You are already affected by <color=#2969AD>Anti SCP-207</color>'
-  scp1853_warning: '<color=yellow>⚠</color> You are already affected by <color=#1CAA21>SCP-1853</color>'
-  # Friendly Fire Warning:
-  enable_ff_warning: true
-  friendly_fire_warning: '<size=27><color=yellow>⚠ Do not hurt your teammate</color></size>'
-  damage_taken_warning: '<size=27><color=red>{0}</color> <color=yellow>(teammate) hit you</color></size>'
-  class_d_are_teammates: true
-  enable_cuffed_warning: false
-  cuffed_attacker_warning: '<size=27><color=yellow>⚠ Player is cuffed</color></size>'
-  cuffed_player_warning: '<size=27><color=red>{0}</color> <color=yellow>hit you when you were cuffed</color></size>'
-  # Kill Counter:
-  enable_kill_counter: true
-  kill_count_message: '{0} kills'
-  # Round Summary:
-  enable_round_summary: true
-  round_summary_message_duration: 10
-  human_kill_message: '<size=27><color=#70EE9C>{0}</color> had the most kills as a <color=green>Human</color>: <color=yellow>{1}</color></size>'
-  scp_kill_message: '<size=27><color=#70EE9C>{0}</color> had the most kills as a <color=red>SCP</color>: <color=yellow>{1}</color></size>'
-  top_damage_message: '<size=27><color=#70EE9C>{0}</color> dealt the most damage: <color=yellow>{1}</color></size>'
-  first_scp_killer_message: '<size=27><color=#70EE9C>{0}</color> was the first to kill an <color=red>SCP</color></size>'
-  escaper_message: '<size=27><color=#70EE9C>{0}</color> escaped first from the facility: <color=yellow>{1}:{2}</color></size>'
-  # Teammates:
-  enable_teammates: true
-  teammate_hint_delay: 4
-  teammate_hint_message: |-
-    <align=left><size=28><color=#70EE9C>Your Teammates</color></size> 
-    <size=25><color=yellow>{0}</color></size></align>
-  teammate_message_duration: 8
-  alone_hint_message: '<align=left><color=red>You are playing Solo</color></align>'
-  alone_message_duration: 4
-  # Last Human Broadcast:
-  enable_last_human_broadcast: true
-  broadcast_for_human: '<color=red>You are the last human alive!</color>'
-  broadcast_for_scp: '<color=#70EE9C>{0}</color> is the last human alive, playing as {1} in <color=yellow>{2}</color>'
-  ignore_tutorial_role: true
-  # Map Broadcast:
-  enable_map_broadcast: true
-  broadcast_warning_lcz: '<color=yellow>Light Zone</color> will be decontaminated in 5 minutes!'
+# Should the plugin be enabled
+is_enabled: true
+# Should the plugin display a debug message
+debug: true
+# Should the plugin create a backup
+backup: false
+# Should the plugin replace a room
+replace_room: true
+# Schematic name to replace
+schematic_name: 'FentanylReactor'
+# Room name to replace
+room_type: HczTestRoom
+# Meltdown time after round starts
+meltdown_zeit_start_runde: 1500
+# Minimum time to start a meltdown (subtracted from round start time)
+meltdown_zeit_start: 10
+# Maximum time to start a meltdown (subtracted from round start time)
+meltdown_zeit_end: 120
+# Fentanyl Reactor Stage 1 success chance
+level1_chance: 0.75
+# Fentanyl Reactor Stage 2 success chance
+level2_chance: 0.550000012
+# Fentanyl Reactor Stage 3 success chance
+level3_chance: 0.25
+# Fentanyl Reactor audio volume
+fentanyl_reactor_audio_volume: 1
+# Fentanyl Reactor audio Distance Min
+fentanyl_reactor_audio_min: 10
+# Fentanyl Reactor audio Distance Max
+fentanyl_reactor_audio_max: 20
+# Fentanyl Reactor Fentanyl stage 1 button name
+button_stage1_name: 'Stage1'
+# Fentanyl Reactor Fentanyl stage 2 button name
+button_stage2_name: 'Stage2'
+# Fentanyl Reactor Fentanyl stage 3 button name
+button_stage3_name: 'Stage3'
+# Fentanyl Reactor refill button name
+button_refill_name: 'Refill'
+# Fentanyl Reactor global hint duration
+global_hint_duration: 5
+# Fentanyl Reactor command cooldown
+command_cooldown: 60
+# Fentanyl Reactor wait time until product
+reactor_wait_time: 10
+# The zombification chance for each Fentanyl stage
+t1_zombie_chance: 0.550000012
+t2_zombie_chance: 0.349999994
+t3_zombie_chance: 0.100000001
+# The change in intensity for each effect at each Fentanyl stage
+t1_intensity: 1
+t2_intensity: 1
+t3_intensity: 1
+# The number of times each Fentanyl stage increases the intensity of an effect (by its respective intensity)
+t1_looping: 1
+t2_looping: 3
+t3_looping: 10
+# The delay between the usage and the effects of Fentanyl
+t1_delay: 2.5
+t2_delay: 2.5
+t3_delay: 2.5
+# The change in movement speed due to Fentanyl
+t1_movement_speed: 5
+t2_movement_speed: 25
+t3_movement_speed: 50
+# The minimum duration of Fentanyl effects
+t1_duration_lower: 5
+t2_duration_lower: 10
+t3_duration_lower: 15
+# The maximum duration of Fentanyl effects
+t1_duration_upper: 10
+t2_duration_upper: 20
+t3_duration_upper: 30
+# The custom item ID for the Fentanyl item
+t1_i_d: 1
+t2_i_d: 14
+t3_i_d: 90
+# The weight of each Fentanyl item
+t1_weight: 1
+t2_weight: 1
+t3_weight: 1
 ```
+
+## Translation:
+
+```yaml
+# Command Name to use the Fentanyl Reactor (Admins)
+command_name: 'FentanylReactorCore'
+# Command Name to refuel the Fentanyl Reactor (Admins)
+fuel_command_name: 'FentanylReactorFuel'
+# No Adrenaline Hint
+no_adrenaline_hint: 'Du hast kein Adrenalin!'
+# Meltdown CASSIE
+fentanyl_reactor_meltdown_cassie: 'pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4'
+# Meltdown CASSIE Translation
+fentanyl_reactor_meltdown_cassie_trans: 'Der Reaktor überhitzt! Sofort EVAKUIEREN..'
+# Fentanyl Reactor Refuel Hint
+reactor_fueled: 'Der Fentanyl Reaktor wurde aufgefüllt!'
+# Fentanyl Reactor already refueled hint
+reactor_already_fueled_hint: 'Der Fentanyl Reaktor ist bereits aufgefüllt!'
+# Fentanyl Reactor not refueled hint
+reactor_not_fueled_hint: 'Der Fentanyl Reaktor ist nicht aufgefüllt!'
+# Fentanyl Reactor Starting Hint
+reactor_starting_hint: 'Fentanyl Reaktor startet...'
+# Fentanyl Reactor Success Hint Stage 1
+reactor_success_hint_stage_one: 'Fentanyl Stufe Eins wird generiert!'
+# Fentanyl Reactor Success Hint Stage 2
+reactor_success_hint_stage_two: 'Fentanyl Stufe Zwei wird generiert!'
+# Fentanyl Reactor Success Hint Stage 3
+reactor_success_hint_stage_three: 'Fentanyl Stufe Drei wird generiert!'
+# Fentanyl Reactor Cooldown Hint
+reactor_cooldown: 'Der Fentanyl Reaktor hat eine Abklingzeit von:'
+# Fentanyl Reactor could not produce anything hint
+reactor_failure_hint: 'Der Fentanyl Reaktor konnte nichts produzieren!'
+# Fentanyl Stage 1 Name
+t1_name: 'Fentanyl Stufe 1'
+# Fentanyl Stage 1 Description
+t1_description: 'Unreines Fentanyl Stufe 1!'
+# Fentanyl Stage 2 Name
+t2_name: 'Fentanyl Stufe 2'
+# Fentanyl Stage 2 Description
+t2_description: 'Normales Fentanyl Stufe 2!'
+# Fentanyl Stage 3 Name
+t3_name: 'Fentanyl Stufe 3'
+# Fentanyl Stage 3 Description
+t3_description: 'Reinstes Fentanyl Stufe 3!'
+```
+
