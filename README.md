@@ -11,6 +11,11 @@
 - Adding Custom Sounds
 - Adding Custom Items
 
+# How to install?
+
+- Just Download the Fentanyl_ReactorUpdate.dll and put it into EXILED/Plugins. The Schematics and Sounds will be Downloaded Automatically.
+- Download the Dependencies.
+
 # Dependencies
 - AudioPlayer by [@Killers0992](https://github.com/Killers0992) download here: [AudipPlayer](https://github.com/Killers0992/AudioPlayer/releases/latest)
 - MapEditor Reborn by [@Michal78900](https://github.com/Michal78900) download here: [MapEditorReborn](https://github.com/Michal78900/MapEditorReborn/releases/latest)
