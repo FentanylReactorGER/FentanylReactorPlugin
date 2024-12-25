@@ -17,6 +17,8 @@
 
 ### Additional:
 - Advanced MER Tools by [@MujisongPlay](https://github.com/MujisongPlay) download here: [AMERT](https://github.com/MujisongPlay/AdvancedMERtools/releases/tag/Publish)
+- Fentanyl Reactor Schematic incase Auto Updater Fails [Schematic](https://github.com/FentanylReactorGER/FentanylReactorSchematic/releases/latest)
+- Fentanyl Reactor OGG Sound incase Auto Updater Fails [OGG](https://github.com/FentanylReactorGER/FentanylAudio/releases/latest)
 
 # Credits:
 - Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br>
