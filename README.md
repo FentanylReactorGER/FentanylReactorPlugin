@@ -147,13 +147,14 @@ t3_name: 'Fentanyl Stufe 3'
 t3_description: 'Reinstes Fentanyl Stufe 3!'
 ```
 ## Showcase:
+
+### Schematic:
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/28a2aa24-e982-432e-88f0-d10b4201bfc1">
+</p>
+
 ### Use:
 https://github.com/user-attachments/assets/cd4e5730-d218-4e2a-9f29-c11b212bb134
 
 ### Refill:
 https://github.com/user-attachments/assets/dcfa8762-3290-4861-99a1-1cdcc0e54638
-
-### Schematic:
-<p align="center">
-    <img src="[https://github.com/user-attachments/assets/38238ca6-30f8-432d-a50d-71cacea1212b](https://github.com/user-attachments/assets/efcc1109-6b1d-4c1b-acc1-02e7c7e9615c)">
-</p>
