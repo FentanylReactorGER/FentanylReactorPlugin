@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
 
@@ -16,8 +17,6 @@ public class Config : IConfig
     [Description("Soll das Plugin ein Backup erstellen")]
     public bool Backup { get; set; } = false;
     
-    [Description("Plugin Path")]
-    public string PluginPath { get; set; } = "/home/container/.config/EXILED/Plugins/UsefulHints.dll";
         
     [Description("Soll das Plugin einen Raum Replacen")]
     public bool ReplaceRoom { get; set; } = true;
@@ -54,7 +53,7 @@ public class Config : IConfig
     public string Level3AudioPath { get; set; } = "/home/zap1208577/g648626/.config/EXILED/Plugins/audio/FentReactorTest.ogg";
         
     [Description("Fentanyl Reaktor kein Fentanyl Audio")]
-    public string FailureAudioPath { get; set; } = "/home/zap1208577/g648626/.config/EXILED/Plugins/audio/FentReactorTest.ogg";
+    public string AudioPath { get; set; } = "/home/container/.config/EXILED/Plugins/audio";
         
     [Description("Fentanyl Reaktor Fentanyl Stufe 1 Button Name")]
     public string ButtonStage1Name { get; set; } = "Stage1";

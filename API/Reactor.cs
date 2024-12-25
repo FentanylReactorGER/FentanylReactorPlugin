@@ -25,7 +25,6 @@ public class Reactor
     public float MeltdownEnd => Plugin.Singleton.Config.MeltdownZeitEnd;
     public string CassieMessage => Plugin.Singleton.Translation.FentanylReactorMeltdownCassie;
     public string CassieTranslation => Plugin.Singleton.Translation.FentanylReactorMeltdownCassieTrans;
-    public string AudioPathh = $"{Paths.Plugins}/audio/FentReactorTest.ogg";
 
     public float RandomDelay { get; private set; }
     public Room Room { get; private set; }
