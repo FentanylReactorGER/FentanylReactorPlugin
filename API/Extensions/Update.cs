@@ -8,7 +8,7 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
 {
     public static class UpdateChecker
     {
-        private static readonly string RepositoryUrl = "https://api.github.com/repos/Vretu-Dev/UsefulHints/releases/latest";
+        private static readonly string RepositoryUrl = "https://api.github.com/repos/FentanylReactorGER/FentanylReactorPlugin/releases/latest";
         private static readonly string PluginPath = Plugin.Singleton.Config.PluginPath;
         private static readonly string CurrentVersion = Plugin.Singleton.Version.ToString();
         private static readonly HttpClient HttpClient = new HttpClient
@@ -16,11 +16,11 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
             DefaultRequestHeaders = { { "User-Agent", "UpdateChecker" } }
         };
 
-        public static void RegisterEvents()
+        public static void RegisterUpdateEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
         }
-        public static void UnregisterEvents()
+        public static void UnregisterUpdateEvents()
         {
             Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
         }
