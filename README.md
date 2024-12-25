@@ -12,7 +12,6 @@
 - Adding Custom Items
 
 ### Credits:
-- Thanks [@Killers0992](https://github.com/Killers0992) for using the [Audio Player](https://github.com/Killers0992/AudioPlayer) .<br>
 - Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br>
 
 ## Config:
