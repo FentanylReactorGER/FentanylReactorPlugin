@@ -27,8 +27,9 @@
 - Fentanyl Reactor OGG Sound incase Auto Updater Fails [OGG](https://github.com/FentanylReactorGER/FentanylAudio/releases/latest)
 
 # Credits:
-- Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br>
+- Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br> 
 - Thanks [@MujisongPlay](https://github.com/MujisongPlay) for using the [Site76](https://github.com/MujisongPlay/ScpSite76Plugin) Elevator Schematic and Refill Panel.<br>
+- Thanks [@Trevlouw](https://github.com/Trevlouw) for creating the Custom Items for me.<br>
 
 ## Config:
 
