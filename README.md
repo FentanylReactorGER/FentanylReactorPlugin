@@ -5,14 +5,22 @@
 
 # Fentanyl Reactor for EXILED
 
-### Minimum Exiled Version: 8.14.0
+### Minimum Exiled Version: [9.0.0](https://github.com/ExMod-Team/EXILED/releases/latest)
 ## Features:
 - Adding A Custom Schematic
 - Adding Custom Sounds
 - Adding Custom Items
 
-### Credits:
+# Dependencies
+- AudioPlayer by [@Killers0992](https://github.com/Killers0992) download here: [AudipPlayer](https://github.com/Killers0992/AudioPlayer/releases/latest)
+- MapEditor Reborn by [@Michal78900](https://github.com/Michal78900) download here: [MapEditorReborn](https://github.com/Michal78900/MapEditorReborn/releases/latest)
+
+### Additional:
+- Advanced MER Tools by [@MujisongPlay](https://github.com/MujisongPlay) download here: [AMERT](https://github.com/MujisongPlay/AdvancedMERtools/releases/tag/Publish)
+
+# Credits:
 - Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br>
+- Thanks [@MujisongPlay](https://github.com/MujisongPlay) for using the [Site76](https://github.com/MujisongPlay/ScpSite76Plugin) Elevator Schematic and Refill Panel.<br>
 
 ## Config:
 
