@@ -20,7 +20,7 @@ public class ForceReactorMeltdownCommand : ICommand
             return false;
         }
         Plugin.Singleton.Reactor.Meltdown(true);
-        response = $"Fentanyl Reaktor Meltdown in {Plugin.Singleton.Reactor.RandomDelay + 20f} Sekunden"; // why there is +20f ?
+        response = $"Fentanyl Reactor Meltdown in {Plugin.Singleton.Reactor.RandomDelay + 20f} Seconds"; // why there is +20f ?
         return true;
     }
 }

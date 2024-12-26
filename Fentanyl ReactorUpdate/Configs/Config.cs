@@ -2,6 +2,7 @@
 using System.IO;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
+using UnityEngine;
 
 namespace Fentanyl_ReactorUpdate.Configs;
 
@@ -33,7 +34,13 @@ public class Config : IConfig
 
     [Description("Maximum time to start a meltdown (subtracted from round start time)")]
     public float MeltdownZeitEnd { get; set; } = 120f;
+    
+    [Description("Maximum time to start a meltdown (subtracted from round start time)")]
+    public bool UseCassieInsteadOfAudio { get; set; } = false;
 
+    [Description("Meltdown Color")]
+    public Color MeltdownColor { get; set; } = new Color(0.150f, 0, 0.40f);
+    
     [Description("Fentanyl Reactor Stage 1 success chance")]
     public float Level1Chance { get; set; } = 0.75f;
 

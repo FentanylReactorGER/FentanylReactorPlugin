@@ -448,7 +448,6 @@
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />
         <Compile Include="API\CustomItems\FentT3.cs" />
-        <Compile Include="API\Extensions\AudioModuleMeltdown.cs" />
         <Compile Include="API\Extensions\AudioModule.cs" />
         <Compile Include="API\Extensions\PlayerHintHSM.cs" />
         <Compile Include="API\Extensions\UpdateOggMeltdown.cs" />
