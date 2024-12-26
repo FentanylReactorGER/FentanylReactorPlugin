@@ -6,12 +6,13 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
+using Exiled.Loader;
 using Fentanyl_ReactorUpdate.API.Extensions;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
-using PluginAPI.Events;
+using ForceReactorMeltdownCommand = Fentanyl_ReactorUpdate.API.Commands;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -23,7 +24,6 @@ public class Reactor
     public RoomType RoomType => Plugin.Singleton.Config.RoomType;
     public int CommandCooldown => Plugin.Singleton.Config.CommandCooldown;
     public string SchematicName => Plugin.Singleton.Config.SchematicName;
-    public float AutoStartIn => Plugin.Singleton.Config.MeltdownZeitStartRunde;
     public float MeltdownStart => Plugin.Singleton.Config.MeltdownZeitStart;
     public float MeltdownEnd => Plugin.Singleton.Config.MeltdownZeitEnd;
     public string CassieMessage => Plugin.Singleton.Translation.FentanylReactorMeltdownCassie;
@@ -52,6 +52,13 @@ public class Reactor
         foreach (var speaker in globalPlayer.SpeakersByName)
             speaker.Value.Position = meltdownPos;
         globalPlayer.AddClip("Fentanyl Reactor Meltdown", 1f, false, true);
+        Timing.CallDelayed(RandomDelay + 20f,
+            () =>
+            {
+                globalPlayer.RemoveAllClips();
+                globalPlayer.Destroy();
+                globalPlayer.RemoveSpeaker("Fentanyl Reactor Meltdown");
+            });
     }
     
     public void Destroy()
@@ -85,6 +92,8 @@ public class Reactor
 
     private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
     {
+        
+        Plugin.Singleton.MeltdownCommandInstance.ResetUsage();
         Log.Info("Round has ended, stopping meltdown process...");
         Timing.KillCoroutines(_metldownProcess);
         Warhead.Stop();
@@ -97,6 +106,13 @@ public class Reactor
 
     
     private bool _meltdownTriggered = false;
+    
+    public bool IsMeltdownTriggered => _meltdownTriggered;
+    
+    public void SetMeltdownTriggered(bool triggered)
+    {
+        _meltdownTriggered = triggered;
+    }
 
     private void OnRoundStarted()
     {
@@ -120,33 +136,8 @@ public class Reactor
         Warhead.IsLocked = false;
         RoomScheme = API.Classes.RoomReplacer.ReplaceRoom(room, SchematicName, room.Position, room.Rotation,
             Vector3.one, MapUtils.GetSchematicDataByName(SchematicName), false);
-
-        if (AutoStartIn <= 0)
-        {
-            Log.Info("Meltdown autostart is disabled.");
-            return;
-        }
-
-        if (_meltdownTriggered)
-        {
-            Log.Warn("Meltdown has already been triggered and will not occur again.");
-            return;
-        }
-
-        Timing.CallDelayed(AutoStartIn, () =>
-        {
-            if (!_meltdownTriggered)
-            {
-                _meltdownTriggered = true;
-                Meltdown(true);
-            }
-            else
-            {
-                Log.Warn("Meltdown attempt blocked as it has already been triggered.");
-            }
-        });
     }
-
+    
     #endregion
     
     public string Start(Player player, int level)
@@ -226,7 +217,29 @@ public class Reactor
             });
         return $"Fentanyl Reactor failed for Player {player.Nickname} at Level {level}.";
     }
-
+    
+    public void EndMeltdown()
+    {
+        if (_meltdownTriggered)
+        {
+            _meltdownTriggered = false;
+            RandomDelay = UnityEngine.Random.Range(MeltdownStart, MeltdownEnd);
+            Timing.KillCoroutines(_metldownProcess);
+            foreach (Room room in Room.List)
+            {
+                room.Color = new Color(1f, 1f, 1f);;
+            }
+            if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
+            {
+                ap.RemoveAllClips();
+            }   
+        }
+        else
+        {
+            Log.Info("Meltdown cannot be canceled, because theres no Meltdown!");
+        }
+    }
+    
     public bool Refill(Player player)
     {
         if (IsReactorFueled(player)) return false;
@@ -238,8 +251,8 @@ public class Reactor
     }
 
     #region Meltdown
-
-    public void Meltdown(bool isRandom) => _metldownProcess = Timing.RunCoroutine(MeltdownProcess(UnityEngine.Random.Range(MeltdownStart, MeltdownEnd)));
+    
+    public void Meltdown(bool isRandom) => _metldownProcess = Timing.RunCoroutine(MeltdownProcess(RandomDelay));
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
@@ -307,25 +320,26 @@ public class Reactor
     {
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage1Name)
         {
-            Log.Info($"{RoomScheme.Position.x} {RoomScheme.Position.y} {RoomScheme.Position.z}, Pos: {RoomScheme.Position}");
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T1ID}");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} 1");
             return;
         }
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage2Name)
         {
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T2ID}");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} 2");
             return;
         }
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage3Name)
         {
             ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} {Plugin.Singleton.Config.T3ID}");
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {ev.Player.Id} 3");
             return;
         }
+
+
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonRefillName)
         {

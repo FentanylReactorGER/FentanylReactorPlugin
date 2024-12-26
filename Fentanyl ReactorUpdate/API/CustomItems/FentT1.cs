@@ -49,6 +49,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                 if (Plugin.Random.NextDouble() < Config.T1ZombieChance)
                 {
                     if (ev.Item == ev.Player.CurrentItem) ev.Player.RemoveHeldItem();
+                    ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
                     return;
                 }
                 for (int i = 0; i < Plugin.Singleton.Config.T1Looping; i++)
@@ -62,7 +63,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                             .Where(x => x.Equals(Object.FindObjectOfType(randomValue.Type())))
                             .GetRandomValue();
                         effect.Intensity += Config.T1Intensity;
-                        effect.ServerSetState(Config.T1Intensity, (float)Plugin.Random.NextDouble() * (Config.T1DurationUpper - Config.T1DurationLower) + Config.T1DurationLower, true); 
+                        effect.ServerSetState(Config.T2Intensity, (float)Plugin.Random.NextDouble() * (Config.T2DurationUpper - Config.T2DurationLower) + Config.T2DurationLower, true );
                         intensity = effect.Intensity;
                     }
                     else
@@ -78,7 +79,8 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                 if (speed + Config.T1MovementSpeed > 255) speed = 255;
                 else speed += Config.T1MovementSpeed;
                 ev.Player.ChangeEffectIntensity<MovementBoost>(speed);
-                Timing.CallDelayed((Config.T1DurationUpper - Config.T1DurationLower) + Config.T1DurationLower, () =>
+                if (Config.Debug) Log.Warn($"Changed {ev.Player.Nickname}'s speed to {speed}");
+                Timing.CallDelayed((Config.T1DurationUpper + Config.T1DurationLower) * 20 / Config.T1DurationLower, () =>
                 {
                     ev.Player.DisableEffect<MovementBoost>();
                 });

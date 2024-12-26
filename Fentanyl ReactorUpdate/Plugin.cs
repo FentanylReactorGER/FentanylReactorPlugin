@@ -5,11 +5,14 @@ using Exiled.API.Features;
 using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Fentanyl_ReactorUpdate.API;
+using Fentanyl_ReactorUpdate.API.Classes;
+using Fentanyl_ReactorUpdate.API.Commands;
 using Fentanyl_ReactorUpdate.Configs;
 using MEC;
 using Mirror;
 using UnityEngine;
 using Random = System.Random;
+using Fentanyl_ReactorUpdate.API.Commands;
 using Fentanyl_ReactorUpdate.API.Extensions;
 using UnityEngine.PlayerLoop;
 
@@ -17,16 +20,19 @@ namespace Fentanyl_ReactorUpdate;
 
 public class Plugin : Plugin<Configs.Config, Configs.Translation>
 {
+    public ForceReactorMeltdownCommand MeltdownCommandInstance { get; private set; }
     public override string Name => "Fentanyl Reactor";
     public override string Author => "SCP: Secret Fentanyl Server Team";
-    public override Version Version => new Version(1, 4, 2);
+    public override Version Version => new Version(1, 4, 9);
     public override Version RequiredExiledVersion => new Version(9, 0, 1);
     public static Plugin Singleton = new Plugin();
     public static readonly Random Random = new Random();
     public Reactor Reactor { get; private set; }
+    public MeltdownAutoStart MeltdownAutoStart { get; private set; }
         
     public override void OnEnabled()
     {
+        MeltdownCommandInstance = new ForceReactorMeltdownCommand();
         AudioClipStorage.LoadClip(Path.Combine(Paths.Plugins, "FentReactorTest.ogg"), "Fentanyl Reactor");
         AudioClipStorage.LoadClip(Path.Combine(Paths.Plugins, "FentReactorMeltdown.ogg"), "Fentanyl Reactor Meltdown");
         Singleton = this;
@@ -36,6 +42,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
         UpdateSchematicChecker.RegisterEvents();
         UpdateOggReactor.RegisterEvents();
         UpdateOggMeltdown.RegisterEvents();
+        MeltdownAutoStart = new MeltdownAutoStart();
         base.OnEnabled();
     }
 
@@ -44,11 +51,13 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
     {
         CustomRole.UnregisterRoles();
         Reactor.Destroy();
+        MeltdownAutoStart.Destroy();
         Reactor = null;
         UpdateChecker.UnRegisterEvents();
         UpdateSchematicChecker.UnRegisterEvents();
         UpdateOggReactor.UnRegisterEvents();
         UpdateOggMeltdown.UnRegisterEvents();
+        MeltdownAutoStart.UnSubEvents();
         CustomItem.UnregisterItems();
         Singleton = null;
         base.OnDisabled();

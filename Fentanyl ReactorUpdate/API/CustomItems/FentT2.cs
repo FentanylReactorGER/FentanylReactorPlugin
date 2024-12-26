@@ -62,6 +62,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                             .Where(x => x.Equals(Object.FindObjectOfType(randomValue.Type())))
                             .GetRandomValue();
                         effect.ServerSetState(Config.T2Intensity, (float)Plugin.Random.NextDouble() * (Config.T2DurationUpper - Config.T2DurationLower) + Config.T2DurationLower, true );
+                        ev.Player.IsGodModeEnabled = true;
                             
                         intensity = effect.Intensity;
                     }
@@ -79,6 +80,14 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                 else speed += Config.T2MovementSpeed;
                 ev.Player.ChangeEffectIntensity<MovementBoost>(speed);
                 Timing.CallDelayed((Config.T2DurationUpper - Config.T2DurationLower) + Config.T2DurationLower, () =>
+                {
+                    ev.Player.IsGodModeEnabled = false;
+                    ev.Player.DisableEffect<Scp1344>();
+                    ev.Player.DisableEffect<Scp1853>();
+                    ev.Player.DisableEffect<Scp207>();
+                    ev.Player.DisableEffect<Poisoned>();
+                });
+                Timing.CallDelayed((Config.T2DurationUpper + Config.T2DurationLower) * 20 / Config.T2DurationLower, () =>
                 {
                     ev.Player.DisableEffect<MovementBoost>();
                 });

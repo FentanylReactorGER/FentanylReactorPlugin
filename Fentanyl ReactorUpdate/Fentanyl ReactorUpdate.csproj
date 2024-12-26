@@ -58,6 +58,9 @@
         <Reference Include="DnsClient">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\DnsClient.dll</HintPath>
         </Reference>
+        <Reference Include="DSharp4Webhook">
+          <HintPath>..\..\..\Downloads\Abstraction\Sparky\References\DSharp4Webhook.dll</HintPath>
+        </Reference>
         <Reference Include="Exiled.API, Version=9.0.1.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>..\packages\ExMod.Exiled.9.0.1\lib\net48\Exiled.API.dll</HintPath>
         </Reference>
@@ -441,9 +444,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\Classes\MeltdownAutoStart.cs" />
         <Compile Include="API\Classes\RoomReplacer.cs" />
         <Compile Include="API\Commands\FentanylReactorCommandMain.cs" />
         <Compile Include="API\Commands\FentanylReactorRefill.cs" />
+        <Compile Include="API\Commands\MeltdownCancelCommand.cs" />
         <Compile Include="API\Commands\MeltdownCommand.cs" />
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />

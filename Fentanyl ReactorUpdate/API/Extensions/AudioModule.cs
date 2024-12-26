@@ -3,6 +3,7 @@ using System.Numerics;
 using CommandSystem.Commands.RemoteAdmin.PermissionsManagement.Group;
 using Exiled.API.Features;
 using MapEditorReborn.API.Features.Objects;
+using MEC;
 using Vector3 = UnityEngine.Vector3;
 
 namespace Fentanyl_ReactorUpdate.API.Extensions;
@@ -18,5 +19,12 @@ public static class AudioModule
         speaker.Position = player.Position;
         
         playerFent.AddClip("Fentanyl Reactor", Plugin.Singleton.Config.FentanylReactorAudioVolume, false, true);
+        Timing.CallDelayed(15f,
+            () =>
+            {
+                playerFent.RemoveAllClips();
+                playerFent.Destroy();
+                playerFent.RemoveSpeaker("Fentanyl Reactor");
+            });
     }
 }

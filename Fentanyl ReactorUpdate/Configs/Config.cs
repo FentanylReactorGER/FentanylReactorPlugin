@@ -26,8 +26,11 @@ public class Config : IConfig
     [Description("Room name to replace")]
     public RoomType RoomType { get; set; } = RoomType.HczTestRoom;
         
-    [Description("Meltdown time after round starts")]
-    public float MeltdownZeitStartRunde { get; set; } = 1500f;
+    [Description("Meltdown Minimum time after round starts")]
+    public float MeltdownZeitMinStartRunde { get; set; } = 900f;
+    
+    [Description("Meltdown Maximum after round starts")]
+    public float MeltdownZeitMaxStartRunde { get; set; } = 1500f;
 
     [Description("Minimum time to start a meltdown (subtracted from round start time)")]
     public float MeltdownZeitStart { get; set; } = 10f;

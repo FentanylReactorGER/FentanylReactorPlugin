@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Exiled.API.Features;
-using UnityEngine.PlayerLoop;
+using Server = Exiled.API.Features.Server;
 
 namespace Fentanyl_ReactorUpdate.API.Extensions
 {
@@ -16,6 +16,7 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
         {
             DefaultRequestHeaders = { { "User-Agent", "AudioUpdater" } }
         };
+        private const string DiscordWebhookUrl = "YOUR_DISCORD_WEBHOOK_URL"; 
         
         public static void RegisterEvents()
         {

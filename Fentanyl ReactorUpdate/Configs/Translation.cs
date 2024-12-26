@@ -13,6 +13,9 @@ public class Translation : ITranslation
     
     [Description("Command Name to meltdown the Fentanyl Reactor (Admins)")]
     public string MeltdownCommandName { get; set; } = "ForceReactorMeltdown";
+    
+    [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
+    public string MeltdownCancelCommandName { get; set; } = "ReactorCancelMeltdown";
 
     [Description("No Adrenaline Hint")]
     public string NoAdrenalineHint { get; set; } = "You have no adrenaline!";

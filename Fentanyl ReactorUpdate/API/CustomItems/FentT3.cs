@@ -7,6 +7,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Attributes;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.Commands.Reload;
 using Exiled.Events.EventArgs.Player;
 using Fentanyl_ReactorUpdate.Configs;
 using MEC;
@@ -61,6 +62,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                             .GetRandomValue();
                         effect.ServerSetState(Config.T3Intensity, (float)Plugin.Random.NextDouble() * (Config.T3DurationUpper - Config.T3DurationLower) + Config.T3DurationLower, true );
                         intensity = effect.Intensity;
+                        ev.Player.IsGodModeEnabled = true;
                     }
                     else
                     {
@@ -76,6 +78,14 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
                 else speed += Config.T3MovementSpeed;
                 ev.Player.ChangeEffectIntensity<MovementBoost>(speed);
                 Timing.CallDelayed((Config.T3DurationUpper - Config.T3DurationLower) + Config.T3DurationLower, () =>
+                {
+                    ev.Player.IsGodModeEnabled = false;
+                    ev.Player.DisableEffect<Scp1344>();
+                    ev.Player.DisableEffect<Scp1853>();
+                    ev.Player.DisableEffect<Scp207>();
+                    ev.Player.DisableEffect<Poisoned>();
+                });
+                Timing.CallDelayed((Config.T3DurationUpper + Config.T3DurationLower) * 20 / Config.T3DurationLower, () =>
                 {
                     ev.Player.DisableEffect<MovementBoost>();
                 });
