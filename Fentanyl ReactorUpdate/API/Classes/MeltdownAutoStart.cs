@@ -41,9 +41,16 @@ namespace Fentanyl_ReactorUpdate.API.Classes
             {
                 if (!_reactor.IsMeltdownTriggered) 
                 {
-                    _reactor.SetMeltdownTriggered(true); 
-                    Log.Info($"Meltdown triggered and explodes in {RandomDelay}.");
-                    _reactor.Meltdown(true);  
+                    if (Plugin.Singleton.Config.Meltdown)
+                    {
+                        _reactor.SetMeltdownTriggered(true); 
+                        Log.Info($"Meltdown triggered and explodes in {RandomDelay}.");
+                        _reactor.Meltdown(true);  
+                    }
+                    else
+                    {
+                        Log.Info("Can't Meltdown because Config is false.");
+                    }
                 }
                 else
                 {

@@ -16,9 +16,43 @@ public class Translation : ITranslation
     
     [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
     public string MeltdownCancelCommandName { get; set; } = "ReactorCancelMeltdown";
-
+    
+    [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
+    public string TeleportFentanyl { get; set; } = "FentTP";
+    [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
+    public string TeleportFentanylNoPrem { get; set; } = "You don't have the Premission to use this Button!";
+        
+    [Description("Player not in Fentanyl Reactor Hint")]
+    public string FentanylReactorSSFuel { get; set; } = "You not inside the Fentanyl Reactor Basement buidling!";
+    
+    [Description("Fentanyl Reactor Teleport Premission")]
+    public string TeleportFentanylPremission { get; set; } = "FentTP";
+    
+    [Description("Server Specific Settings")]
+    public string SSSSheaderPlayer { get; set; } = "Fentanyl Reaktor";
+    
+    public string SSSSLabelTp { get; set; } = "Fentanyl Reactor Teleport";
+    
+    public string SSSSDescTp { get; set; } = "Uses the Fentanyl Reactor Teleport";
+    
+    public string SSSSTpButton { get; set; } = "TP";
+    
+    public string SSSSLabelFuel { get; set; } = "Fentanyl Reactor Fuel";
+    
+    public string SSSSDescFuel { get; set; } = "Uses the Fentanyl Reactor Refueling";
+    
+    public string SSSSFuelButton { get; set; } = "Refill";
+    
+    public string SSSSStage1Button { get; set; } = "TP";
+    
+    public string SSSSLabelStage1 { get; set; } = "Fentanyl Reactor Fuel";
+    
+    public string SSSSDescStage1 { get; set; } = "Uses the Fentanyl Reactor Refueling";
+    
+    public string SSSSFuelStage1 { get; set; } = "Stag";
+    
     [Description("No Adrenaline Hint")]
-    public string NoAdrenalineHint { get; set; } = "You have no adrenaline!";
+    public string NoAdrenalineHint { get; set; } = "You have no Adrenaline!";
 
     [Description("Meltdown CASSIE")]
     public string FentanylReactorMeltdownCassie { get; set; } = "pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4";

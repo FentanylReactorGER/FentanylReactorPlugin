@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using CommandSystem;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using InventorySystem.Items.Usables;
 
 namespace Fentanyl_ReactorUpdate.API.Commands;
 
@@ -43,6 +46,7 @@ public class FentanylReactorFuelCommand : ICommand
             response = "Could not remove Adrenaline!";
             return false;
         }
+        
         player.ShowMeowHint(Plugin.Singleton.Translation.ReactorFueled);
         response = $"Fentanyl Reactor fueled for Player {player.Nickname}.";
         return true;

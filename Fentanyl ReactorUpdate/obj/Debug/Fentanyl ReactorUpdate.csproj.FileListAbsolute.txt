@@ -99,7 +99,6 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\HintServiceMeow-Exiled.dll
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Assembly-CSharp.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\BouncyCastle.Cryptography.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Caress.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\DnsClient.dll
@@ -148,3 +147,4 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\zxing.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Assembly-CSharp-Publicized.dll

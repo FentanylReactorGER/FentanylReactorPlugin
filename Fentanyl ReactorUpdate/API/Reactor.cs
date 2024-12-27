@@ -36,7 +36,7 @@ public class Reactor
 
     public Reactor()
     {
-        SubEvents();
+    SubEvents();
     }
 
     public void AudioMeltdown()
@@ -81,6 +81,7 @@ public class Reactor
         MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted += OnButtonInteracted;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+        Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
     }
 
     public void UnSubEvents()
@@ -88,14 +89,14 @@ public class Reactor
         MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted -= OnButtonInteracted;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+        Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
     }
 
     private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
     {
-        
+        EndMeltdown();
+        _meltdownTriggered = true;
         Plugin.Singleton.MeltdownCommandInstance.ResetUsage();
-        Log.Info("Round has ended, stopping meltdown process...");
-        Timing.KillCoroutines(_metldownProcess);
         Warhead.Stop();
         Warhead.IsLocked = false;
         if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
@@ -111,11 +112,21 @@ public class Reactor
     
     public void SetMeltdownTriggered(bool triggered)
     {
-        _meltdownTriggered = triggered;
+        _meltdownTriggered = true;
     }
 
+    private void WaitingForPlayers()
+    {
+        _meltdownTriggered = true;
+        if (Round.LobbyWaitingTime == 5)
+        {
+            _meltdownTriggered = false;
+        }
+    }
+    
     private void OnRoundStarted()
     {
+        _meltdownTriggered = false;
         RandomDelay = UnityEngine.Random.Range(MeltdownStart, MeltdownEnd);
         Room room = Room.Get(RoomType);
         if (room == null)
@@ -232,7 +243,7 @@ public class Reactor
             if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
             {
                 ap.RemoveAllClips();
-            }   
+            }
         }
         else
         {
@@ -256,6 +267,7 @@ public class Reactor
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
+        _meltdownTriggered = true;
         if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
         {
             AudioMeltdown();
@@ -275,6 +287,7 @@ public class Reactor
         }
         
         yield return Timing.WaitForSeconds(RandomDelay + 20f);
+        
         if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
         {
             ap.RemoveAllClips();
@@ -282,9 +295,12 @@ public class Reactor
         
         if (!Round.IsEnded && !Round.IsLobby)
         {
-            Warhead.IsLocked = false;
-            Warhead.Detonate();
-            Timing.KillCoroutines(_metldownProcess);
+            if (_meltdownTriggered)
+            {
+                Warhead.IsLocked = false;
+                Warhead.Detonate();
+                Timing.KillCoroutines(_metldownProcess);
+            }
         }
         else
         {

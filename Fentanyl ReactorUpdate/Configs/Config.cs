@@ -23,8 +23,16 @@ public class Config : IConfig
     [Description("Schematic name to replace")]
     public string SchematicName { get; set; } = "FentanylReactor";
 
-    [Description("Room name to replace")]
+    [Description("Room name to replace")] 
     public RoomType RoomType { get; set; } = RoomType.HczTestRoom;
+    
+    [Description("Server Specific Settings")] 
+    public int ServerSpecificSettingId { get; set; } = 511;
+    public int ServerSpecificSettingHoldTime { get; set; } = 5;
+    public int ServerSpecificSettingIdFuel { get; set; } = 512;
+    
+    [Description("Should the plugin have a meltdown (This doesn't affect the Admin Command)")]
+    public bool Meltdown { get; set; } = true;
         
     [Description("Meltdown Minimum time after round starts")]
     public float MeltdownZeitMinStartRunde { get; set; } = 900f;

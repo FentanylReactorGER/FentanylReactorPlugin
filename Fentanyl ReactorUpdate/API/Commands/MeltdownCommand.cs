@@ -13,7 +13,7 @@ public class ForceReactorMeltdownCommand : ICommand
     public string[] Aliases => Array.Empty<string>();
     public string Description => "Forces an immediate Fentanyl Reactor meltdown with a random delay before detonation.";
     
-    private bool _isUsed; 
+    private bool _isUsed;
     public void ResetUsage() => _isUsed = false;
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)

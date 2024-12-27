@@ -4,6 +4,7 @@ using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
+using MEC;
 using Utils.Networking;
 
 namespace Fentanyl_ReactorUpdate.API.Extensions
@@ -12,7 +13,22 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
     {
         public static void ShowMeowHint(this Player player, string text)
         {
-            player.ShowHint(text);
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+
+            DynamicHint hint = new()
+            {
+                Text = text,
+                TargetY = 950,
+                FontSize = 30,
+                SyncSpeed = HintSyncSpeed.Fast,
+            };
+            
+            playerDisplay.AddHint(hint);
+            Timing.CallDelayed( Plugin.Singleton.Config.GlobalHintDuration,
+                () =>
+                {
+                    playerDisplay.RemoveHint(hint);
+                });
         }
     }
 }
