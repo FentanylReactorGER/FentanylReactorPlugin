@@ -27,9 +27,11 @@ public class Config : IConfig
     public RoomType RoomType { get; set; } = RoomType.HczTestRoom;
     
     [Description("Server Specific Settings")] 
+    public int ServerSpecificSettingHoldTime { get; set; } = 3;
     public int ServerSpecificSettingId { get; set; } = 511;
-    public int ServerSpecificSettingHoldTime { get; set; } = 5;
     public int ServerSpecificSettingIdFuel { get; set; } = 512;
+    
+    public int ServerSpecificSettingIdStart { get; set; } = 513;
     
     [Description("Should the plugin have a meltdown (This doesn't affect the Admin Command)")]
     public bool Meltdown { get; set; } = true;

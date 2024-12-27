@@ -43,13 +43,18 @@ public class Translation : ITranslation
     
     public string SSSSFuelButton { get; set; } = "Refill";
     
-    public string SSSSStage1Button { get; set; } = "TP";
+    public string SSSSStartName { get; set; } = "Fentanyl Reactor Start";
     
-    public string SSSSLabelStage1 { get; set; } = "Fentanyl Reactor Fuel";
+    public string SSSSlStage1 { get; set; } = "Stage-1";
     
-    public string SSSSDescStage1 { get; set; } = "Uses the Fentanyl Reactor Refueling";
+    public string SSSSlStage2 { get; set; } = "Stage-2";
     
-    public string SSSSFuelStage1 { get; set; } = "Stag";
+    public string SSSSlStage3 { get; set; } = "Stage-3";
+    
+    public string SSSStartNotInReactor { get; set; } = "You are not Inside the Fentanyl Reactor to use this!";
+    public string SSSSRoundNotStarted { get; set; } = "Round is not Started which is needed for this to work!";
+    public string SSSSPlayerIsSCP { get; set; } = "You are SCP, SCPs cannot use this!";
+    public string SSSSStartDesc { get; set; } = "Starts the Fentanyl Reactor on a given Stage.";
     
     [Description("No Adrenaline Hint")]
     public string NoAdrenalineHint { get; set; } = "You have no Adrenaline!";

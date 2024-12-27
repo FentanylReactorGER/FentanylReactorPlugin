@@ -39,6 +39,7 @@ public class SSMenu
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified += OnPlayerVerified;
         ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnButtonTriggered;
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnDropdownTriggered;
         RegisterSSButton();
     }
 
@@ -48,6 +49,7 @@ public class SSMenu
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Player.Verified -= OnPlayerVerified;
         ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnButtonTriggered;
+        ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnDropdownTriggered;
     }
 
     public void OnPlayerVerified(VerifiedEventArgs ev)
@@ -75,14 +77,15 @@ public class SSMenu
             Plugin.Singleton.Config.ServerSpecificSettingHoldTime,
             Plugin.Singleton.Translation.SSSSDescFuel);
         
-        DropdownSetting startreactor = new(5, "label", new[] { "Off", "Startup", "Maintenance" }, 5, 5, "hintDescription");
+        DropdownSetting startreactor = new(Plugin.Singleton.Config.ServerSpecificSettingIdStart, Plugin.Singleton.Translation.SSSSStartName, new[] { Plugin.Singleton.Translation.SSSSlStage1, Plugin.Singleton.Translation.SSSSlStage2, Plugin.Singleton.Translation.SSSSlStage3 }, 1, dropdownEntryType: SSDropdownSetting.DropdownEntryType.Regular,  Plugin.Singleton.Translation.SSSSStartDesc);
 
     IEnumerable<SettingBase> settings = new SettingBase[]
         {
             admin,
             testButton,
             player,
-            fuelreactor
+            fuelreactor,
+            startreactor
         };
         SettingBase.Register(settings);
         SettingBase.SendToAll();
@@ -107,6 +110,16 @@ public class SSMenu
 
         if (settingBase is SSButton fentTpButton && fentTpButton.SettingId == Plugin.Singleton.Config.ServerSpecificSettingId)
         {
+            if (!Round.IsStarted)
+            {
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSRoundNotStarted);
+                return;
+            }
+            if (player.IsScp)
+            {
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
+                return;
+            }
             if (!player.CheckPermission(Plugin.Singleton.Translation.TeleportFentanylPremission))
             {
                 player.ShowMeowHint(Plugin.Singleton.Translation.TeleportFentanylNoPrem);
@@ -116,13 +129,62 @@ public class SSMenu
         }
         if (settingBase is SSButton fuelButton && fuelButton.SettingId == Plugin.Singleton.Config.ServerSpecificSettingIdFuel)
         {
-            if (Vector3.Distance(player.Position, _roomPos) <= 12 && player.Position.y >= Plugin.Singleton.Reactor.RoomScheme.Position.y - 10)
+            if (!Round.IsStarted)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.FentanylReactorSSFuel);
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSRoundNotStarted);
                 return;
             }
 
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {player.UserId}");
+            if (player.IsScp)
+            {
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
+                return;
+            }
+            if (Vector3.Distance(player.Position, _roomPos) > 12)
+            {
+                if (player.Position.y >= -1015 && player.Position.y <= -1005)
+                {
+                    player.ShowMeowHint(Plugin.Singleton.Translation.FentanylReactorSSFuel);
+                    return;
+                }
+            }
+            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {player.Id}");
+        }
+    }
+
+    private void OnDropdownTriggered(ReferenceHub hub, ServerSpecificSettingBase settingBase)
+    {
+        if (!Player.TryGet(hub, out Player player))
+        {
+            return;
+        }
+
+        if (settingBase is SSDropdownSetting startreactor && startreactor.SettingId == Plugin.Singleton.Config.ServerSpecificSettingIdStart)
+        {
+            if (Round.IsStarted)
+            {
+                if (player.IsScp)
+                {
+                    player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
+                    return;
+                }
+                if (Vector3.Distance(player.Position, _roomPos) <= 12)
+                {
+                        if (startreactor.SyncSelectionText == Plugin.Singleton.Translation.SSSSlStage1)
+                        {
+                            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {player.Id} 1");
+                        }
+                        if (startreactor.SyncSelectionText == Plugin.Singleton.Translation.SSSSlStage2)
+                        {
+                            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {player.Id} 2");
+                        }
+                        if (startreactor.SyncSelectionText == Plugin.Singleton.Translation.SSSSlStage3)
+                        {
+                            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.CommandName} {player.Id} 3");
+                        }
+                }
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSStartNotInReactor);
+            }
         }
     }
     
