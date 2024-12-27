@@ -10,6 +10,9 @@
 - Adding A Custom Schematic
 - Adding Custom Sounds
 - Adding Custom Items
+- Server Specific Setting
+- Admin Commands
+- Autonuke / Reactor Meltdown
 
 # How to install?
 
