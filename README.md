@@ -4,6 +4,7 @@
 ![Latest](https://img.shields.io/github/v/release/FentanylReactorGER/FentanylReactorPlugin?style=for-the-badge&label=Latest%20Release&color=%23D91656)
 
 # Fentanyl Reactor for EXILED
+### REWORK ONGOING!!
 
 ### Minimum Exiled Version: [9.1.0](https://github.com/ExMod-Team/EXILED/releases/latest)
 ## Features:
