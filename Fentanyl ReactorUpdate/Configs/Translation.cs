@@ -19,6 +19,17 @@ public class Translation : ITranslation
     
     [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
     public string TeleportFentanyl { get; set; } = "FentTP";
+    [Description("Demon Core Death Reason")]
+    public string KillareaDeathReason { get; set; } = "Radiation"; 
+    [Description("Demon Core Cooldown Hint")]
+    public string DemonCoreCooldownHint { get; set; } = "The Demon Core remains in Cooldown for {DemonCoreStartCooldown} Seconds."; 
+    [Description("Demon Core Already Open Hint")]
+    public string DemonCoreAlrOpenHint { get; set; } = "The Demon Core is already unlocked."; 
+    [Description("Demon Core Open Hint")]
+    public string DemonCoreOpenHint { get; set; } = "The Demon Core is now unlocked."; 
+    
+    [Description("Demon Core Ready to Open Hint")]
+    public string DemonCoreReadyToOpenHint { get; set; } = "The Demon Core is now able to be unlocked."; 
     [Description("Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)")]
     public string TeleportFentanylNoPrem { get; set; } = "You don't have the Premission to use this Button!";
         
@@ -55,6 +66,9 @@ public class Translation : ITranslation
     public string SSSSRoundNotStarted { get; set; } = "Round is not Started which is needed for this to work!";
     public string SSSSPlayerIsSCP { get; set; } = "You are SCP, SCPs cannot use this!";
     public string SSSSStartDesc { get; set; } = "Starts the Fentanyl Reactor on a given Stage.";
+    
+    [Description("Enter the Schematic hint, use {PlayerName} for the Players Name that enters the Reactor. (If Config is enabled)")]
+    public string EnterFentanylReactor { get; set; } = "Welcome inside the Fentanyl Reactor! \n {PlayerName}";
     
     [Description("No Adrenaline Hint")]
     public string NoAdrenalineHint { get; set; } = "You have no Adrenaline!";

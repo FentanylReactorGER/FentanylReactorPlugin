@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using CommandSystem;
+using CommandSystem.Commands.RemoteAdmin.Doors;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.CustomItems.API.Features;
 using Exiled.Loader;
+using Fentanyl_ReactorUpdate.API.Commands;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using LightContainmentZoneDecontamination;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
-using ForceReactorMeltdownCommand = Fentanyl_ReactorUpdate.API.Commands;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -28,15 +31,16 @@ public class Reactor
     public float MeltdownEnd => Plugin.Singleton.Config.MeltdownZeitEnd;
     public string CassieMessage => Plugin.Singleton.Translation.FentanylReactorMeltdownCassie;
     public string CassieTranslation => Plugin.Singleton.Translation.FentanylReactorMeltdownCassieTrans;
-
+    
+    
     public float RandomDelay { get; private set; }
     public Room Room { get; private set; }
     
     public SchematicObject RoomScheme { get; private set; }
 
     public Reactor()
-    {
-    SubEvents();
+    { 
+        SubEvents();
     }
 
     public void AudioMeltdown()
@@ -267,44 +271,59 @@ public class Reactor
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
-        _meltdownTriggered = true;
-        if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
+        if (!Warhead.IsDetonated)
         {
-            AudioMeltdown();
-            Cassie.MessageTranslated(".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .g1", CassieTranslation, false, false);
-        }
-        else
-        {
-            Cassie.MessageTranslated(CassieMessage, CassieTranslation);
-        }
-        
-        Warhead.Stop();
-        Warhead.IsLocked = true;
-        
-        foreach (Room room in Room.List)
-        {
-            room.Color = Plugin.Singleton.Config.MeltdownColor;
-        }
-        
-        yield return Timing.WaitForSeconds(RandomDelay + 20f);
-        
-        if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
-        {
-            ap.RemoveAllClips();
-        }
-        
-        if (!Round.IsEnded && !Round.IsLobby)
-        {
-            if (_meltdownTriggered)
+            _meltdownTriggered = true;
+            if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
             {
-                Warhead.IsLocked = false;
-                Warhead.Detonate();
-                Timing.KillCoroutines(_metldownProcess);
+                AudioMeltdown();
+                Cassie.MessageTranslated(
+                    ".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .g1",
+                    CassieTranslation, false, false);
+            }
+            else
+            {
+                Cassie.MessageTranslated(CassieMessage, CassieTranslation);
+            }
+            foreach (LightSourceObject Light in RoomScheme.gameObject.GetComponentsInChildren<LightSourceObject>())
+            {
+                Light.Light.Color = Plugin.Singleton.Config.MeltdownColor;
+            }
+            Warhead.Stop();
+            Warhead.IsLocked = true;
+
+            foreach (Room room in Room.List)
+            {
+                room.Color = Plugin.Singleton.Config.MeltdownColor;
+            }
+            
+            foreach (Door Door in Door.List)
+            {
+                Door.IsOpen = true;
+            }
+            
+            yield return Timing.WaitForSeconds(RandomDelay + 20f);
+
+            if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
+            {
+                ap.RemoveAllClips();
+            }
+
+            if (!Round.IsEnded && !Round.IsLobby)
+            {
+                if (_meltdownTriggered)
+                {
+                    Warhead.IsLocked = false;
+                    Warhead.Detonate();
+                    Timing.KillCoroutines(_metldownProcess);
+                    Plugin.Singleton.KillAreaCommand.AddDemonCore();
+                    Plugin.Singleton.KillAreaCommand.StartCooldown();
+                }
             }
         }
         else
         {
-            Log.Info("Round has ended or is in lobby, no explosion triggered!");
+            Log.Info("Round has ended or is in lobby or Wahread is already Detonated, no explosion triggered!");
         }
     }
 
@@ -332,7 +351,7 @@ public class Reactor
         return FueledReactors.Contains(player);
     }
 
-    public void OnButtonInteracted(ButtonInteractedEventArgs ev)
+    private void OnButtonInteracted(ButtonInteractedEventArgs ev)
     {
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonStage1Name)
         {

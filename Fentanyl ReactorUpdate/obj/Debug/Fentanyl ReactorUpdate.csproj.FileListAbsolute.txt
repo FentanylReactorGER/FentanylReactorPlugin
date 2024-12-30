@@ -78,13 +78,6 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.ARModule.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.InputModule.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.ValueTuple.dll
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.API.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.CreditTags.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.CustomItems.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.CustomRoles.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.Events.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.Loader.xml
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Exiled.Permissions.xml
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\obj\Debug\Fentanyl ReactorUpdate.csproj.AssemblyReference.cache
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\obj\Debug\Fentanyl ReactorUpdate.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\obj\Debug\Fentanyl.27CC3FB2.Up2Date
@@ -146,5 +139,5 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.UnityTestProtocolModule.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\zxing.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.dll
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Assembly-CSharp-Publicized.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\RueI.dll

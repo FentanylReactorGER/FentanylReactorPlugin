@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "J4Hs0ORZu9Q=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Administrator\\RiderProjects\\Fentanyl ReactorUpdate\\Fentanyl ReactorUpdate\\Fentanyl ReactorUpdate.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\exmod.exiled\\9.1.1\\exmod.exiled.9.1.1.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\lib.harmony\\2.2.2\\lib.harmony.2.2.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\ruei\\2.1.0\\ruei.2.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

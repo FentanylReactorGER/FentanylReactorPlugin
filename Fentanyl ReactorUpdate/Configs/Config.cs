@@ -2,6 +2,7 @@
 using System.IO;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
+using PluginAPI.Core;
 using UnityEngine;
 
 namespace Fentanyl_ReactorUpdate.Configs;
@@ -13,6 +14,9 @@ public class Config : IConfig
         
     [Description("Should the plugin display a debug message")]
     public bool Debug { get; set; } = false;
+    
+    [Description("Should the plugin Check for Uopdates / Set this false if you want Custom Schematics / Sounds!")]
+    public bool Update { get; set; } = true;
     
     [Description("Should the plugin create a backup")]
     public bool Backup { get; set; } = false;
@@ -26,12 +30,24 @@ public class Config : IConfig
     [Description("Room name to replace")] 
     public RoomType RoomType { get; set; } = RoomType.HczTestRoom;
     
+    public float KillAreaExpansionRate { get; set; } = 1f; 
+    public float KillAreaEffectInterval { get; set; } = 2f;
+    public EffectType EffectOne { get; set; } = EffectType.Poisoned;
+    public EffectType EffectTwo { get; set; } = EffectType.Burned;
+    public EffectType EffectThree { get; set; } = EffectType.Deafened;
+    public int EffectDuration { get; set; } = 1; 
+    public float KillAreaDamage { get; set; } = 2f; 
+    public float CheckInterval { get; set; } = 0.5f;
+    
     [Description("Server Specific Settings")] 
     public int ServerSpecificSettingHoldTime { get; set; } = 3;
     public int ServerSpecificSettingId { get; set; } = 511;
     public int ServerSpecificSettingIdFuel { get; set; } = 512;
     
     public int ServerSpecificSettingIdStart { get; set; } = 513;
+    
+    [Description("Should the plugin have a Hint whenever a player enters the Fentanyl Reactor?")]
+    public bool EnterHint { get; set; } = true;
     
     [Description("Should the plugin have a meltdown (This doesn't affect the Admin Command)")]
     public bool Meltdown { get; set; } = true;
@@ -45,14 +61,35 @@ public class Config : IConfig
     [Description("Minimum time to start a meltdown (subtracted from round start time)")]
     public float MeltdownZeitStart { get; set; } = 10f;
 
-    [Description("Maximum time to start a meltdown (subtracted from round start time)")]
+    [Description("Maximum time to start a meltdown (subtracted from C.A.S.S.I.E time)")]
     public float MeltdownZeitEnd { get; set; } = 120f;
     
-    [Description("Maximum time to start a meltdown (subtracted from round start time)")]
+    [Description("Maximum time to start a meltdown (subtracted from C.A.S.S.I.E time)")]
     public bool UseCassieInsteadOfAudio { get; set; } = false;
 
     [Description("Meltdown Color")]
     public Color MeltdownColor { get; set; } = new Color(0.150f, 0, 0.40f);
+    
+    [Description("Meltdown Demon Core Color")]
+    public Color DemonCoreColorMelt { get; set; } = new Color(57f / 255f, 255f / 255f, 20f / 255f);
+    
+    [Description("Demon Core Color")]
+    public Color DemonCoreColor { get; set; } = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+
+    [Description("Demon Core Schematic Name")]
+    public string DemonCoreSchemeName { get; set; } = "demon_core";
+    
+    [Description("Demon Core Position")]
+    public Vector3 DemonCorePos{ get; set; } = new Vector3(27, 990.48f, -24.44f);
+    
+    [Description("Demon Core Rotation")]
+    public Vector3 DemonCoreRot{ get; set; } = new Vector3(0, 90, 0);
+    
+    [Description("Demon Core Scale")]
+    public Vector3 DemonCoreScale { get; set; } = new Vector3(1f, 1f, 1f);    
+    
+    [Description("Demon Core Cooldown")]
+    public float DemonCoreCooldown { get; set; } = 120f;    
     
     [Description("Fentanyl Reactor Stage 1 success chance")]
     public float Level1Chance { get; set; } = 0.75f;
@@ -72,14 +109,17 @@ public class Config : IConfig
     [Description("Fentanyl Reactor audio Distance Max")]
     public float FentanylReactorAudioMax { get; set; } = 20f;
         
-    [Description("Fentanyl Reactor Fentanyl stage 1 button name")]
+    [Description("Fentanyl Reactor Fentanyl stage 1 button name / Don't Touch this if you aren't a Developer!")]
     public string ButtonStage1Name { get; set; } = "Stage1";
         
-    [Description("Fentanyl Reactor Fentanyl stage 2 button name")]
+    [Description("Fentanyl Reactor Fentanyl stage 2 button name / Don't Touch this if you aren't a Developer!")]
     public string ButtonStage2Name { get; set; } = "Stage2";
         
-    [Description("Fentanyl Reactor Fentanyl stage 3 button name")]
+    [Description("Fentanyl Reactor Fentanyl stage 3 button name / Don't Touch this if you aren't a Developer!")]
     public string ButtonStage3Name { get; set; } = "Stage3";
+    
+    [Description("Fentanyl Reactor Fentanyl stage 3 button name / Don't Touch this if you aren't a Developer!")]
+    public string ButtonDeomCoreName { get; set; } = "Pickup_DemonCore";
         
     [Description("Fentanyl Reactor refill button name")]
     public string ButtonRefillName { get; set; } = "Refill";

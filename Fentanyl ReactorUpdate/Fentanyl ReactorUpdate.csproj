@@ -34,9 +34,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="0Harmony">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\0Harmony.dll</HintPath>
-        </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
@@ -55,35 +52,11 @@
         <Reference Include="Caress">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Caress.dll</HintPath>
         </Reference>
-        <Reference Include="CommandSystem.Core">
-          <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
-        </Reference>
         <Reference Include="DnsClient">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\DnsClient.dll</HintPath>
         </Reference>
         <Reference Include="DSharp4Webhook">
           <HintPath>..\..\..\Downloads\Abstraction\Sparky\References\DSharp4Webhook.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.API, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.API.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.CreditTags, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CreditTags.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.CustomItems, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CustomItems.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.CustomRoles, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CustomRoles.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.Events, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Events.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.Loader, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Loader.dll</HintPath>
-        </Reference>
-        <Reference Include="Exiled.Permissions, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Permissions.dll</HintPath>
         </Reference>
         <Reference Include="Facepunch.Steamworks.Win64">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Facepunch.Steamworks.Win64.dll</HintPath>
@@ -109,17 +82,8 @@
         <Reference Include="netstandard">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\netstandard.dll</HintPath>
         </Reference>
-        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-          <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="NorthwoodLib, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\NorthwoodLib.dll</HintPath>
-        </Reference>
         <Reference Include="NVorbis">
           <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\dependencies\NVorbis.dll</HintPath>
-        </Reference>
-        <Reference Include="PluginAPI, Version=13.1.5.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\PluginAPI.dll</HintPath>
         </Reference>
         <Reference Include="Pooling">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Pooling.dll</HintPath>
@@ -439,9 +403,6 @@
         <Reference Include="UnityEngine.XRModule">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\UnityEngine.XRModule.dll</HintPath>
         </Reference>
-        <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\YamlDotNet.dll</HintPath>
-        </Reference>
         <Reference Include="zxing">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\zxing.dll</HintPath>
         </Reference>
@@ -450,20 +411,24 @@
         <Compile Include="API\Classes\MeltdownAutoStart.cs" />
         <Compile Include="API\Classes\RoomReplacer.cs" />
         <Compile Include="API\Classes\SSMenu.cs" />
+        <Compile Include="API\Commands\DemonCore.cs" />
         <Compile Include="API\Commands\FentanylReactorCommandMain.cs" />
         <Compile Include="API\Commands\FentanylReactorRefill.cs" />
         <Compile Include="API\Commands\MeltdownCancelCommand.cs" />
         <Compile Include="API\Commands\MeltdownCommand.cs" />
+        <Compile Include="API\Commands\RoomReplacerCommand.cs" />
         <Compile Include="API\Commands\TeleportCommand.cs" />
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />
         <Compile Include="API\CustomItems\FentT3.cs" />
         <Compile Include="API\Extensions\AudioModule.cs" />
         <Compile Include="API\Extensions\PlayerHintHSM.cs" />
+        <Compile Include="API\Extensions\UpdateOggDemonCore.cs" />
         <Compile Include="API\Extensions\UpdateOggMeltdown.cs" />
         <Compile Include="API\Extensions\UpdateOggReactor.cs" />
         <Compile Include="API\Extensions\UpdatePlugin.cs" />
         <Compile Include="API\Extensions\UpdateSchematic.cs" />
+        <Compile Include="API\Extensions\UpdateSchematicDemonCore.cs" />
         <Compile Include="API\Reactor.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Translation.cs" />
@@ -472,7 +437,12 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />
-      <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
+      <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="RueI" Version="2.1.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

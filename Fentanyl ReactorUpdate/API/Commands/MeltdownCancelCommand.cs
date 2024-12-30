@@ -20,6 +20,7 @@ public class StopReactorMeltdownCommand : ICommand
             return false;
         }
         Plugin.Singleton.Reactor.EndMeltdown();
+        Plugin.Singleton.MeltdownCommandInstance._isUsed = false;
         response = $"Meltdown canceled"; 
         return true;
     }
