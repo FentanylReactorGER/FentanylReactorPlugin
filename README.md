@@ -6,7 +6,7 @@
 # Fentanyl Reactor for EXILED
 ### REWORK ONGOING!!
 
-### Minimum Exiled Version: [9.1.0](https://github.com/ExMod-Team/EXILED/releases/latest)
+### Minimum Exiled Version: [9.1.1](https://github.com/ExMod-Team/EXILED/releases/latest)
 ## Features:
 - Adding A Custom Schematic
 - Adding Custom Sounds
@@ -22,13 +22,16 @@
 - Restart your Server so the Schematics and Sounds will be Downloaded Automatically.
 
 # Dependencies
-- AudioPlayer by [@Killers0992](https://github.com/Killers0992) download here: [AudipPlayer](https://github.com/Killers0992/AudioPlayer/releases/latest)
-- MapEditor Reborn by [@Michal78900](https://github.com/Michal78900) download here: [MapEditorReborn](https://github.com/Michal78900/MapEditorReborn/releases/latest)
+- AudioPlayer by [@Killers0992](https://github.com/Killers0992) download here: [AudioPlayer](https://github.com/Killers0992/AudioPlayer/releases/latest)
+- MapEditorReborn by [@Michal78900](https://github.com/Michal78900) download here: [MapEditorReborn](https://github.com/Michal78900/MapEditorReborn/releases/latest)
+- HintServiceMeow by [@MeowServer](https://github.com/MeowServer) download here: [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow/releases/latest)
 
 ### Additional:
 - Advanced MER Tools by [@MujisongPlay](https://github.com/MujisongPlay) download here: [AMERT](https://github.com/MujisongPlay/AdvancedMERtools/releases/tag/Publish)
 - Fentanyl Reactor Schematic incase Auto Updater Fails [Schematic](https://github.com/FentanylReactorGER/FentanylReactorSchematic/releases/latest)
+- Demon Core Schematic incase Auto Updater Fails [Schematic](https://github.com/FentanylReactorGER/DemonCoreSchematic/releases/latest)
 - Fentanyl Reactor OGG Sound incase Auto Updater Fails [OGG](https://github.com/FentanylReactorGER/FentanylAudio/releases/latest)
+- Fentanyl Reactor Radiaton OGG Sound incase Auto Updater Fails [OGG](https://github.com/FentanylReactorGER/FentReactorDemonCoreOgg/releases/latest)
 
 # Credits:
 - Thanks [@Vretu-Dev](https://github.com/Vretu-Dev) for using the [UsefulHints](https://github.com/Vretu-Dev/UsefulHints/) idea for Auto Updating, and using your Readme as Example.<br> 
