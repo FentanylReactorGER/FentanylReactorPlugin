@@ -254,8 +254,8 @@ reactor_success_hint_stage_one: 'Fentanyl Stage One is being generated!'
 reactor_success_hint_stage_two: 'Fentanyl Stage Two is being generated!'
 # Fentanyl Reactor Success Hint Stage 3
 reactor_success_hint_stage_three: 'Fentanyl Stage Three is being generated!'
-# Fentanyl Reactor Cooldown Hint
-reactor_cooldown: 'The Fentanyl Reactor has a cooldown of: %Cooldown% seconds'
+# Fentanyl Reactor Cooldown Hint, use {Cooldown} as Cooldown Variable
+reactor_cooldown: 'The Fentanyl Reactor has a cooldown of: {Cooldown} seconds'
 # Fentanyl Reactor could not produce anything hint
 reactor_failure_hint: 'The Fentanyl Reactor could not produce anything!'
 # Fentanyl Stage 1 Name
