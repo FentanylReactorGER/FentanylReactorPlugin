@@ -44,7 +44,9 @@
 # Should the plugin be enabled
 is_enabled: true
 # Should the plugin display a debug message
-debug: true
+debug: false
+# Should the plugin Check for Uopdates / Set this false if you want Custom Schematics / Sounds!
+update: true
 # Should the plugin create a backup
 backup: false
 # Should the plugin replace a room
@@ -53,12 +55,70 @@ replace_room: true
 schematic_name: 'FentanylReactor'
 # Room name to replace
 room_type: HczTestRoom
-# Meltdown time after round starts
-meltdown_zeit_start_runde: 1500
+kill_area_expansion_rate: 1
+kill_area_effect_interval: 2
+effect_one: Poisoned
+effect_two: Burned
+effect_three: Deafened
+effect_duration: 1
+kill_area_damage: 2
+check_interval: 0.5
+# Server Specific Settings
+server_specific_setting_hold_time: 3
+server_specific_setting_id: 511
+server_specific_setting_id_fuel: 512
+server_specific_setting_id_start: 513
+# Should the plugin have a Hint whenever a player enters the Fentanyl Reactor?
+enter_hint: true
+# Should the plugin have a meltdown (This doesn't affect the Admin Command)
+meltdown: true
+# Meltdown Minimum time after round starts
+meltdown_zeit_min_start_runde: 900
+# Meltdown Maximum after round starts
+meltdown_zeit_max_start_runde: 1500
 # Minimum time to start a meltdown (subtracted from round start time)
 meltdown_zeit_start: 10
-# Maximum time to start a meltdown (subtracted from round start time)
+# Maximum time to start a meltdown (subtracted from C.A.S.S.I.E time)
 meltdown_zeit_end: 120
+# Maximum time to start a meltdown (subtracted from C.A.S.S.I.E time)
+use_cassie_instead_of_audio: false
+# Meltdown Color
+meltdown_color:
+  r: 0.15
+  g: 0
+  b: 0.4
+  a: 1
+# Meltdown Demon Core Color
+demon_core_color_melt:
+  r: 0.2235294
+  g: 1
+  b: 0.07843138
+  a: 1
+# Demon Core Color
+demon_core_color:
+  r: 0.5
+  g: 0.5
+  b: 0.5
+  a: 0.5
+# Demon Core Schematic Name
+demon_core_scheme_name: 'demon_core'
+# Demon Core Position
+demon_core_pos:
+  x: 27
+  y: 990.48
+  z: -24.44
+# Demon Core Rotation
+demon_core_rot:
+  x: 0
+  y: 90
+  z: 0
+# Demon Core Scale
+demon_core_scale:
+  x: 1
+  y: 1
+  z: 1
+# Demon Core Cooldown
+demon_core_cooldown: 120
 # Fentanyl Reactor Stage 1 success chance
 level1_chance: 0.75
 # Fentanyl Reactor Stage 2 success chance
@@ -71,12 +131,14 @@ fentanyl_reactor_audio_volume: 1
 fentanyl_reactor_audio_min: 10
 # Fentanyl Reactor audio Distance Max
 fentanyl_reactor_audio_max: 20
-# Fentanyl Reactor Fentanyl stage 1 button name
+# Fentanyl Reactor Fentanyl stage 1 button name / Don't Touch this if you aren't a Developer!
 button_stage1_name: 'Stage1'
-# Fentanyl Reactor Fentanyl stage 2 button name
+# Fentanyl Reactor Fentanyl stage 2 button name / Don't Touch this if you aren't a Developer!
 button_stage2_name: 'Stage2'
-# Fentanyl Reactor Fentanyl stage 3 button name
+# Fentanyl Reactor Fentanyl stage 3 button name / Don't Touch this if you aren't a Developer!
 button_stage3_name: 'Stage3'
+# Fentanyl Reactor Fentanyl stage 3 button name / Don't Touch this if you aren't a Developer!
+button_deom_core_name: 'Pickup_DemonCore'
 # Fentanyl Reactor refill button name
 button_refill_name: 'Refill'
 # Fentanyl Reactor global hint duration
@@ -114,8 +176,8 @@ t1_duration_upper: 10
 t2_duration_upper: 20
 t3_duration_upper: 30
 # The custom item ID for the Fentanyl item
-t1_i_d: 1
-t2_i_d: 14
+t1_i_d: 88
+t2_i_d: 89
 t3_i_d: 90
 # The weight of each Fentanyl item
 t1_weight: 1
@@ -132,42 +194,82 @@ command_name: 'FentanylReactorCore'
 fuel_command_name: 'FentanylReactorFuel'
 # Command Name to meltdown the Fentanyl Reactor (Admins)
 meltdown_command_name: 'ForceReactorMeltdown'
+# Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)
+meltdown_cancel_command_name: 'ReactorCancelMeltdown'
+# Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)
+teleport_fentanyl: 'FentTP'
+# Demon Core Death Reason
+killarea_death_reason: 'Radiation'
+# Demon Core Cooldown Hint
+demon_core_cooldown_hint: 'The Demon Core remains in Cooldown for {DemonCoreStartCooldown} Seconds.'
+# Demon Core Already Open Hint
+demon_core_alr_open_hint: 'The Demon Core is already unlocked.'
+# Demon Core Open Hint
+demon_core_open_hint: 'The Demon Core is now unlocked.'
+# Demon Core Ready to Open Hint
+demon_core_ready_to_open_hint: 'The Demon Core is now able to be unlocked.'
+# Command Name to Cancel the meltdown of the Fentanyl Reactor (Admins)
+teleport_fentanyl_no_prem: 'You don''t have the Premission to use this Button!'
+# Player not in Fentanyl Reactor Hint
+fentanyl_reactor_s_s_fuel: 'You not inside the Fentanyl Reactor Basement buidling!'
+# Fentanyl Reactor Teleport Premission
+teleport_fentanyl_premission: 'FentTP'
+# Server Specific Settings
+s_s_s_sheader_player: 'Fentanyl Reaktor'
+s_s_s_s_label_tp: 'Fentanyl Reactor Teleport'
+s_s_s_s_desc_tp: 'Uses the Fentanyl Reactor Teleport'
+s_s_s_s_tp_button: 'TP'
+s_s_s_s_label_fuel: 'Fentanyl Reactor Fuel'
+s_s_s_s_desc_fuel: 'Uses the Fentanyl Reactor Refueling'
+s_s_s_s_fuel_button: 'Refill'
+s_s_s_s_start_name: 'Fentanyl Reactor Start'
+s_s_s_sl_stage1: 'Stage-1'
+s_s_s_sl_stage2: 'Stage-2'
+s_s_s_sl_stage3: 'Stage-3'
+s_s_s_start_not_in_reactor: 'You are not Inside the Fentanyl Reactor to use this!'
+s_s_s_s_round_not_started: 'Round is not Started which is needed for this to work!'
+s_s_s_s_player_is_s_c_p: 'You are SCP, SCPs cannot use this!'
+s_s_s_s_start_desc: 'Starts the Fentanyl Reactor on a given Stage.'
+# Enter the Schematic hint, use {PlayerName} for the Players Name that enters the Reactor. (If Config is enabled)
+enter_fentanyl_reactor: |-
+  Welcome inside the Fentanyl Reactor! 
+   {PlayerName}
 # No Adrenaline Hint
-no_adrenaline_hint: 'Du hast kein Adrenalin!'
+no_adrenaline_hint: 'You have no adrenaline!'
 # Meltdown CASSIE
 fentanyl_reactor_meltdown_cassie: 'pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4'
 # Meltdown CASSIE Translation
-fentanyl_reactor_meltdown_cassie_trans: 'Der Reaktor überhitzt! Sofort EVAKUIEREN..'
+fentanyl_reactor_meltdown_cassie_trans: 'The reactor is overheating! Evacuate immediately..'
 # Fentanyl Reactor Refuel Hint
-reactor_fueled: 'Der Fentanyl Reaktor wurde aufgefüllt!'
+reactor_fueled: 'The Fentanyl Reactor has been refueled!'
 # Fentanyl Reactor already refueled hint
-reactor_already_fueled_hint: 'Der Fentanyl Reaktor ist bereits aufgefüllt!'
+reactor_already_fueled_hint: 'The Fentanyl Reactor is already refueled!'
 # Fentanyl Reactor not refueled hint
-reactor_not_fueled_hint: 'Der Fentanyl Reaktor ist nicht aufgefüllt!'
+reactor_not_fueled_hint: 'The Fentanyl Reactor is not refueled!'
 # Fentanyl Reactor Starting Hint
-reactor_starting_hint: 'Fentanyl Reaktor startet...'
+reactor_starting_hint: 'Fentanyl Reactor is starting...'
 # Fentanyl Reactor Success Hint Stage 1
-reactor_success_hint_stage_one: 'Fentanyl Stufe Eins wird generiert!'
+reactor_success_hint_stage_one: 'Fentanyl Stage One is being generated!'
 # Fentanyl Reactor Success Hint Stage 2
-reactor_success_hint_stage_two: 'Fentanyl Stufe Zwei wird generiert!'
+reactor_success_hint_stage_two: 'Fentanyl Stage Two is being generated!'
 # Fentanyl Reactor Success Hint Stage 3
-reactor_success_hint_stage_three: 'Fentanyl Stufe Drei wird generiert!'
+reactor_success_hint_stage_three: 'Fentanyl Stage Three is being generated!'
 # Fentanyl Reactor Cooldown Hint
-reactor_cooldown: 'Der Fentanyl Reaktor hat eine Abklingzeit von:'
+reactor_cooldown: 'The Fentanyl Reactor has a cooldown of: %Cooldown% seconds'
 # Fentanyl Reactor could not produce anything hint
-reactor_failure_hint: 'Der Fentanyl Reaktor konnte nichts produzieren!'
+reactor_failure_hint: 'The Fentanyl Reactor could not produce anything!'
 # Fentanyl Stage 1 Name
-t1_name: 'Fentanyl Stufe 1'
+t1_name: 'Fentanyl Stage 1'
 # Fentanyl Stage 1 Description
-t1_description: 'Unreines Fentanyl Stufe 1!'
+t1_description: 'Impure Fentanyl Stage 1!'
 # Fentanyl Stage 2 Name
-t2_name: 'Fentanyl Stufe 2'
+t2_name: 'Fentanyl Stage 2'
 # Fentanyl Stage 2 Description
-t2_description: 'Normales Fentanyl Stufe 2!'
+t2_description: 'Normal Fentanyl Stage 2!'
 # Fentanyl Stage 3 Name
-t3_name: 'Fentanyl Stufe 3'
+t3_name: 'Fentanyl Stage 3'
 # Fentanyl Stage 3 Description
-t3_description: 'Reinstes Fentanyl Stufe 3!'
+t3_description: 'Purest Fentanyl Stage 3!'
 ```
 ## Showcase:
 
