@@ -41,7 +41,7 @@
           "dependencies": {
             "ExMod.Exiled": {
               "target": "Package",
-              "version": "[9.1.1, )"
+              "version": "[9.2.1, )"
             },
             "Lib.Harmony": {
               "target": "Package",

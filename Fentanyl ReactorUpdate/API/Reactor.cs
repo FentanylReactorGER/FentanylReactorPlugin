@@ -86,6 +86,8 @@ public class Reactor
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
+        Exiled.Events.Handlers.Warhead.Starting += OnStarting;
+        Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
     }
 
     public void UnSubEvents()
@@ -94,6 +96,8 @@ public class Reactor
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
+        Exiled.Events.Handlers.Warhead.Starting -= OnStarting;
+        Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
     }
 
     private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
@@ -316,8 +320,6 @@ public class Reactor
                     Warhead.IsLocked = false;
                     Warhead.Detonate();
                     Timing.KillCoroutines(_metldownProcess);
-                    Plugin.Singleton.KillAreaCommand.AddDemonCore();
-                    Plugin.Singleton.KillAreaCommand.StartCooldown();
                 }
             }
         }
@@ -327,6 +329,42 @@ public class Reactor
         }
     }
 
+    private static Color HexToColor(string hex)
+    {
+        hex = hex.Replace("#", "");
+        
+        float r = int.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
+        float g = int.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
+        float b = int.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
+
+        return new Color(r, g, b);
+    }
+
+    
+    private void OnStarting(Exiled.Events.EventArgs.Warhead.StartingEventArgs ev)
+    {
+        foreach (LightSourceObject Light in RoomScheme.gameObject
+                     .GetComponentsInChildren<LightSourceObject>()
+                     .Where(light => 
+                         light.Light.Color != HexToColor("#00800AFF") && 
+                         light.Light.Color != HexToColor("#FF1600FF")))   
+        {
+            Light.Light.Color = Color.red;
+        }
+    }
+    
+    private void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
+    {
+        foreach (LightSourceObject Light in RoomScheme.gameObject
+                     .GetComponentsInChildren<LightSourceObject>()
+                     .Where(light => 
+                         light.Light.Color != HexToColor("#00800AFF") &&
+                         light.Light.Color != HexToColor("#FF1600FF")))
+        {
+            Light.Light.Color = HexToColor("#FFF2AAFF"); 
+        }
+    }
+    
     #endregion
 
     public bool CanUseReactor(Player player, out double remainingTime)

@@ -33,6 +33,7 @@ public class KillAreaCommand : ICommand
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Player.InteractingLocker += OnLockerInteracting;
         MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted += OnButtonInteracted;
+        Exiled.Events.Handlers.Warhead.Detonated += OnDetonated;
     }
 
     public void UnSubEvents()
@@ -41,6 +42,7 @@ public class KillAreaCommand : ICommand
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Player.InteractingLocker -= OnLockerInteracting;
         MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted -= OnButtonInteracted;
+        Exiled.Events.Handlers.Warhead.Detonated -= OnDetonated;
     }
     public PrimitiveObject Demonarea { get; private set; }
     public bool DemonCorePedestal { get; set; } = true;
@@ -71,11 +73,18 @@ public class KillAreaCommand : ICommand
                 response = "The Round is not Started!";
                 return false;
             }
-            AddDemonCore();
+            Plugin.Singleton.KillAreaCommand.AddDemonCore();
+            Plugin.Singleton.KillAreaCommand.StartCooldown();
             response = $"Demon Core spawned.";
             return true;
         }
 
+        private void OnDetonated()
+        {
+            Plugin.Singleton.KillAreaCommand.AddDemonCore();
+            Plugin.Singleton.KillAreaCommand.StartCooldown();
+        }
+        
         private void StartKillArea(float x, float y, float z)
         {
             Timing.RunCoroutine(KillDouble());
@@ -169,18 +178,22 @@ public class KillAreaCommand : ICommand
                 yield break;
             }
 
-            if (DemonCoreStartCooldown == 1)
-            {
-                foreach (Player player in Player.List)
-                {
-                    player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreReadyToOpenHint);
-                }
-            }
-            DemonCoreStartCooldown = Plugin.Singleton.Config.DemonCoreCooldown; 
+            DemonCoreStartCooldown = Plugin.Singleton.Config.DemonCoreCooldown;
+            bool hasShownHint = false; 
+
             for (float i = DemonCoreStartCooldown; i >= 0; i--)
             {
+                if (!hasShownHint && i == 1)
+                {
+                    foreach (Player player in Player.List)
+                    {
+                        player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreReadyToOpenHint);
+                    }
+                    hasShownHint = true; 
+                }
+
                 DemonCoreStartCooldown = i;
-                yield return Timing.WaitForSeconds(1f); 
+                yield return Timing.WaitForSeconds(1f);
             }
         }
         

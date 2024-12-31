@@ -25,8 +25,8 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
     public ForceReactorMeltdownCommand MeltdownCommandInstance { get; private set; }
     public override string Name => "Fentanyl Reactor";
     public override string Author => "SCP: Secret Fentanyl Server Team";
-    public override Version Version => new Version(1, 5, 0);
-    public override Version RequiredExiledVersion => new Version(9, 1, 1);
+    public override Version Version => new Version(1, 5, 1);
+    public override Version RequiredExiledVersion => new Version(9, 2, 1);
     public static Plugin Singleton = new Plugin();
     public static readonly Random Random = new Random();
     public Reactor Reactor { get; private set; }

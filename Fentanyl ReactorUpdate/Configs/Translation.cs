@@ -100,8 +100,8 @@ public class Translation : ITranslation
     [Description("Fentanyl Reactor Success Hint Stage 3")]
     public string ReactorSuccessHintStageThree { get; set; } = "Fentanyl Stage Three is being generated!";
 
-    [Description("Fentanyl Reactor Cooldown Hint")]
-    public string ReactorCooldown { get; set; } = "The Fentanyl Reactor has a cooldown of: %Cooldown% seconds";
+    [Description("Fentanyl Reactor Cooldown Hint, use {Cooldown} as Cooldown Variable")]
+    public string ReactorCooldown { get; set; } = "The Fentanyl Reactor has a cooldown of: {Cooldown} seconds";
 
     [Description("Fentanyl Reactor could not produce anything hint")]
     public string ReactorFailureHint { get; set; } = "The Fentanyl Reactor could not produce anything!";

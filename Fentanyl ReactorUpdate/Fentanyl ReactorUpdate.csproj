@@ -439,7 +439,7 @@
       <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="ExMod.Exiled" Version="9.1.1" />
+      <PackageReference Include="ExMod.Exiled" Version="9.2.1" />
       <PackageReference Include="Lib.Harmony" Version="2.2.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="RueI" Version="2.1.0" />
