@@ -5,7 +5,7 @@
 
 # Fentanyl Reactor for EXILED
 
-### Minimum Exiled Version: [9.1.1](https://github.com/ExMod-Team/EXILED/releases/latest)
+### Minimum Exiled Version: [9.2.1](https://github.com/ExMod-Team/EXILED/releases/latest)
 ## Features:
 - Adding A Custom Schematic
 - Adding Custom Sounds
