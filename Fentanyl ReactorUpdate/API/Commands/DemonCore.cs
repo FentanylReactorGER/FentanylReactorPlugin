@@ -10,6 +10,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
+using Exiled.Loader;
 using Fentanyl_ReactorUpdate.API.Extensions;
 using Light = Exiled.API.Features.Toys.Light;
 using MapEditorReborn.API.Features;
@@ -81,8 +82,11 @@ public class KillAreaCommand : ICommand
 
         private void OnDetonated()
         {
-            Plugin.Singleton.KillAreaCommand.AddDemonCore();
-            Plugin.Singleton.KillAreaCommand.StartCooldown();
+            if (Plugin.Singleton.Config.DemonCore)
+            {
+                Plugin.Singleton.KillAreaCommand.AddDemonCore();
+                Plugin.Singleton.KillAreaCommand.StartCooldown();
+            }
         }
         
         private void StartKillArea(float x, float y, float z)
@@ -129,40 +133,49 @@ public class KillAreaCommand : ICommand
 
         private void OnLockerInteracting(Exiled.Events.EventArgs.Player.InteractingLockerEventArgs ev)
         {
-            if (ev.InteractingLocker.Base.gameObject.name == "Pedestal_DemonCore")
+            if (Plugin.Singleton.Config.DemonCore)
             {
-                if (DemonCoreUsed)
+                if (ev.InteractingLocker.Base.gameObject.name == "Pedestal_DemonCore")
                 {
-                    ev.IsAllowed = false;
-                    ev.Player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreAlrOpenHint);
-                    return;
-                }
-                
-                ev.InteractingChamber.RequiredPermissions = KeycardPermissions.ContainmentLevelThree | KeycardPermissions.ArmoryLevelThree | KeycardPermissions.ScpOverride;
-                
-                if (DemonCoreStartCooldown == 0)
-                {
-                    ev.InteractingChamber.RequiredPermissions = KeycardPermissions.ContainmentLevelThree | KeycardPermissions.ArmoryLevelThree | KeycardPermissions.ScpOverride;
-                    ev.InteractingChamber.IsOpen = true;
+                    if (DemonCoreUsed)
+                    {
+                        ev.IsAllowed = false;
+                        ev.Player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreAlrOpenHint);
+                        return;
+                    }
+
+                    ev.InteractingChamber.RequiredPermissions = KeycardPermissions.ContainmentLevelThree |
+                                                                KeycardPermissions.ArmoryLevelThree |
+                                                                KeycardPermissions.ScpOverride;
+
+                    if (DemonCoreStartCooldown == 0)
+                    {
+                        ev.InteractingChamber.RequiredPermissions = KeycardPermissions.ContainmentLevelThree |
+                                                                    KeycardPermissions.ArmoryLevelThree |
+                                                                    KeycardPermissions.ScpOverride;
+                        ev.InteractingChamber.IsOpen = true;
+                        ev.IsAllowed = false;
+                        ev.InteractingChamber.Base.enabled = false;
+                        ev.InteractingLocker.Base.enabled = false;
+                        foreach (Player player in Player.List)
+                        {
+                            player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreOpenHint);
+                        }
+
+                        DemonCoreUsed = true;
+
+                        return;
+                    }
+
                     ev.IsAllowed = false;
                     ev.InteractingChamber.Base.enabled = false;
                     ev.InteractingLocker.Base.enabled = false;
-                    foreach (Player player in Player.List)
-                    {
-                        player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreOpenHint);
-                    }
-                    
-                    DemonCoreUsed = true;
 
+                    ev.Player.ShowMeowHint(
+                        Plugin.Singleton.Translation.DemonCoreCooldownHint.Replace("{DemonCoreStartCooldown}",
+                            DemonCoreStartCooldown.ToString()));
                     return;
                 }
-                
-                ev.IsAllowed = false;
-                ev.InteractingChamber.Base.enabled = false;
-                ev.InteractingLocker.Base.enabled = false;
-
-                ev.Player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreCooldownHint.Replace("{DemonCoreStartCooldown}", DemonCoreStartCooldown.ToString()));
-                return;
             }
         }
     

@@ -211,7 +211,7 @@ namespace Fentanyl_ReactorUpdate.API.Classes
             if (Vector3.Distance(player.Position, _roomPos) > 12 &&
                 player.Position.y >= -1015 && player.Position.y <= -1005)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.FentanylReactorSSFuel);
+                player.ShowMeowHint(Plugin.Singleton.Translation.SSSStartNotInReactor);
                 return;
             }
 

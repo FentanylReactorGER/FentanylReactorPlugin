@@ -18,13 +18,11 @@ public static class RoomReplacer
             try
             {
                 if (componentsInChild.name.Contains("SCP-079") ||
-                    componentsInChild.name.Contains("CCTV") ||
-                    componentsInChild.name.Contains("GeneratorStructure(Clone)") ||
+                    componentsInChild.name.Contains("CCTV")||
                     //-------------------------------------------------------------------//
                     componentsInChild.GetComponentsInParent<Component>().Any(c => 
                         c.name.Contains("SCP-079") ||
-                        c.name.Contains("CCTV") ||
-                        c.name.Contains("GeneratorStructure(Clone)")))
+                        c.name.Contains("CCTV")))
                 {
                     //Logs.CoreDebugLog(typeof(RoomReplacerModule), $"Prevent from destroying: [{componentsInChild.name}] [{componentsInChild.tag}] [{componentsInChild.GetType().FullName}]");
                     continue;
