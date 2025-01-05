@@ -18,8 +18,15 @@ public bool Debug { get; set; } = false;
 [Description("Should the plugin Check for Updates / Set this false if you want Custom Schematics / Sounds!")]
 public bool Update { get; set; } = true;
 
+[Description("Devnuke (Experimental Feature, for now only in German!)")]
+public bool Devnuke { get; set; } = false;
+
 [Description("Should the plugin create a backup")]
 public bool Backup { get; set; } = false;
+
+[Description("Round Summary of the Fentanyl Consumers")]
+public bool RoundSummaryFentanyl { get; set; } = true;
+public float RoundSummaryHintDuration { get; set; } = 10f;
 
 [Description("Should the plugin replace a room")]
 public bool ReplaceRoom { get; set; } = true;
@@ -118,8 +125,12 @@ public string ButtonStage3Name { get; set; } = "Stage3";
 public string ButtonDeomCoreName { get; set; } = "Pickup_DemonCore";
 public string ButtonRefillName { get; set; } = "Refill";
 
-[Description("Fentanyl Reactor Timers")]
+[Description("Fentanyl Reactor Hints")]
 public float GlobalHintDuration { get; set; } = 5f;
+public int GlobalHintSize { get; set; } = 30;
+public float GlobalHintY { get; set; } = 950f;
+
+[Description("Fentanyl Reactor Timers")]
 public int CommandCooldown { get; set; } = 60;
 public int ReactorWaitTime { get; set; } = 10;
 

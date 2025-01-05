@@ -61,7 +61,6 @@ public class KillAreaCommand : ICommand
     public SchematicObject DemonCore { get; private set; }
     public Light DemonLight { get; private set; }
     
-    string schemeDemonCore = "demon_core";
     private Speaker speaker;
     
         public string Command => "ForceDemonCore";

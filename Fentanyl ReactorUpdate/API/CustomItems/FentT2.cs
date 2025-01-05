@@ -21,6 +21,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
     [CustomItem(ItemType.Adrenaline)]
     public class FentT2 : CustomItem
     {
+        public static Dictionary<Player, int> FentItemConsumers => FentT1.FentItemConsumers;
         private static readonly Config Config = Plugin.Singleton.Config;
         private static readonly Translation Translation = Plugin.Singleton.Translation;
         public override string Name { get; set; } = Translation.T2Name;
@@ -43,6 +44,12 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
         private void UsingItem(UsingItemEventArgs ev)
         {
             if (!Check(ev.Item)) return;
+            
+            if (!FentItemConsumers.ContainsKey(ev.Player))
+                FentItemConsumers[ev.Player] = 0;
+
+            FentItemConsumers[ev.Player]++;
+            
             Timing.CallDelayed(Config.T2Delay, () =>
             {
                 if (Plugin.Random.NextDouble() < Config.T2ZombieChance)

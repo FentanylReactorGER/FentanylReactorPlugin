@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
@@ -20,6 +21,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
     [CustomItem(ItemType.Adrenaline)]
     public class FentT3 : CustomItem
     {
+        public static Dictionary<Player, int> FentItemConsumers => FentT1.FentItemConsumers;
         private static readonly Config Config = Plugin.Singleton.Config;
         private static readonly Translation Translation = Plugin.Singleton.Translation;
         public override string Name { get; set; } = Translation.T3Name;
@@ -42,6 +44,12 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
         private void UsingItem(UsingItemEventArgs ev)
         {
             if (!Check(ev.Item)) return;
+            
+            if (!FentItemConsumers.ContainsKey(ev.Player))
+                FentItemConsumers[ev.Player] = 0;
+
+            FentItemConsumers[ev.Player]++;
+            
             Timing.CallDelayed(Config.T3Delay, () =>
             {
                 if (Plugin.Random.NextDouble() < Config.T3ZombieChance)

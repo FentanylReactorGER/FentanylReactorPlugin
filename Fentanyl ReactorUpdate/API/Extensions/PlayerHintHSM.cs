@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Features;
-using HintServiceMeow.Core;
+
 using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
@@ -18,13 +18,34 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
             DynamicHint hint = new()
             {
                 Text = text,
-                TargetY = 950,
-                FontSize = 30,
+                TargetY = Plugin.Singleton.Config.GlobalHintY,
+                FontSize = Plugin.Singleton.Config.GlobalHintSize,
                 SyncSpeed = HintSyncSpeed.Fast,
             };
             
             playerDisplay.AddHint(hint);
             Timing.CallDelayed( Plugin.Singleton.Config.GlobalHintDuration,
+                () =>
+                {
+                    playerDisplay.RemoveHint(hint);
+                });
+        }
+        
+        public static void ShowMeowHintExtra(this Player player, string Text, float TargetY, float TargetX, int FrontSize, float Duration)
+        {
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+
+            DynamicHint hint = new()
+            {
+                Text = Text,
+                TargetY = TargetY,
+                TargetX = TargetX,
+                FontSize = FrontSize,
+                SyncSpeed = HintSyncSpeed.Fast,
+            };
+            
+            playerDisplay.AddHint(hint);
+            Timing.CallDelayed(Duration,
                 () =>
                 {
                     playerDisplay.RemoveHint(hint);

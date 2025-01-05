@@ -59,9 +59,8 @@ public class Reactor
         Timing.CallDelayed(RandomDelay + 20f,
             () =>
             {
-                globalPlayer.RemoveAllClips();
-                globalPlayer.Destroy();
                 globalPlayer.RemoveSpeaker("Fentanyl Reactor Meltdown");
+                globalPlayer.Destroy();
             });
     }
     
@@ -105,6 +104,7 @@ public class Reactor
         EndMeltdown();
         _meltdownTriggered = true;
         Plugin.Singleton.MeltdownCommandInstance.ResetUsage();
+        RoomScheme.ChangeLight(HexToColor("#FFF2AAFF"));
         Warhead.Stop();
         Warhead.IsLocked = false;
         if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
@@ -275,6 +275,10 @@ public class Reactor
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
+        if (!Plugin.Singleton.DevNuke.IsDevNuke == false)
+        {
+        yield break;
+        }
         if (!Warhead.IsDetonated)
         {
             _meltdownTriggered = true;
@@ -289,10 +293,7 @@ public class Reactor
             {
                 Cassie.MessageTranslated(CassieMessage, CassieTranslation);
             }
-            foreach (LightSourceObject Light in RoomScheme.gameObject.GetComponentsInChildren<LightSourceObject>())
-            {
-                Light.Light.Color = Plugin.Singleton.Config.MeltdownColor;
-            }
+            RoomScheme.ChangeLight(Plugin.Singleton.Config.MeltdownColor);
             Warhead.Stop();
             Warhead.IsLocked = true;
 
@@ -343,26 +344,12 @@ public class Reactor
     
     private void OnStarting(Exiled.Events.EventArgs.Warhead.StartingEventArgs ev)
     {
-        foreach (LightSourceObject Light in RoomScheme.gameObject
-                     .GetComponentsInChildren<LightSourceObject>()
-                     .Where(light => 
-                         light.Light.Color != HexToColor("#00800AFF") && 
-                         light.Light.Color != HexToColor("#FF1600FF")))   
-        {
-            Light.Light.Color = Color.red;
-        }
+        RoomScheme.ChangeLight(Color.red);
     }
     
     private void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
     {
-        foreach (LightSourceObject Light in RoomScheme.gameObject
-                     .GetComponentsInChildren<LightSourceObject>()
-                     .Where(light => 
-                         light.Light.Color != HexToColor("#00800AFF") &&
-                         light.Light.Color != HexToColor("#FF1600FF")))
-        {
-            Light.Light.Color = HexToColor("#FFF2AAFF"); 
-        }
+        RoomScheme.ChangeLight(HexToColor("#FFF2AAFF"));
     }
     
     #endregion

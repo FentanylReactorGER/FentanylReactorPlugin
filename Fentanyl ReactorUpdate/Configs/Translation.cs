@@ -36,6 +36,11 @@ public string ReactorSuccessHintStageThree { get; set; } = "Fentanyl Stage Three
 public string ReactorCooldown { get; set; } = "The Fentanyl Reactor has a cooldown of: {Cooldown} seconds";
 public string ReactorFailureHint { get; set; } = "The Fentanyl Reactor could not produce anything!";
 
+[Description("Fentanyl Round Summary Hints")]
+
+public string RoundSummaryHint { get; set; } = "<size=30><align=right>Top Fentanyl Consumers: \n {FentanylConsumers}</size><voffset=1000> </voffset></align>";
+public string RoundSummaryHintPlayers { get; set; } = "{PlayerNickname} | {FentanylItems}";
+
 [Description("CASSIE Announcements")]
 public string FentanylReactorMeltdownCassie { get; set; } = "pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4";
 public string FentanylReactorMeltdownCassieTrans { get; set; } = "The reactor is overheating! Evacuate immediately..";

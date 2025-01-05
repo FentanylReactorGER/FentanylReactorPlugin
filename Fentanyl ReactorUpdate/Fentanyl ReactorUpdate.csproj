@@ -408,11 +408,14 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\Classes\DevNuke.cs" />
         <Compile Include="API\Classes\MeltdownAutoStart.cs" />
         <Compile Include="API\Classes\RoomReplacer.cs" />
+        <Compile Include="API\Classes\RoundSummaryText.cs" />
         <Compile Include="API\Classes\SpawnGenerator.cs" />
         <Compile Include="API\Classes\SSMenu.cs" />
         <Compile Include="API\Commands\AudioCommand.cs" />
+        <Compile Include="API\Commands\CommandDevNuke.cs" />
         <Compile Include="API\Commands\DemonCore.cs" />
         <Compile Include="API\Commands\FentanylReactorCommandMain.cs" />
         <Compile Include="API\Commands\FentanylReactorRefill.cs" />
@@ -425,6 +428,7 @@
         <Compile Include="API\CustomItems\FentT3.cs" />
         <Compile Include="API\Extensions\AudioModule.cs" />
         <Compile Include="API\Extensions\PlayerHintHSM.cs" />
+        <Compile Include="API\Extensions\SchematicColor.cs" />
         <Compile Include="API\Extensions\UpdateOggDemonCore.cs" />
         <Compile Include="API\Extensions\UpdateOggMeltdown.cs" />
         <Compile Include="API\Extensions\UpdateOggReactor.cs" />
