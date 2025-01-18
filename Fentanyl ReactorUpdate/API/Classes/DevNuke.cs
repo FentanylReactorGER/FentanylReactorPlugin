@@ -214,7 +214,7 @@ namespace Fentanyl_ReactorUpdate.API.Classes
             {
                 player.EnableEffect(EffectType.Ensnared);
                 player.EnableEffect(EffectType.Invisible);
-                player.GlobalPlayer("Devnukee", "DEVNUKEEE", "DEVNUKE.OGG", 5000f);
+                player.MassivePlayer("DEVNUKE.ogg", 5000, 180);
                 Cassie.Clear();
                 Warhead.Stop();
                 foreach (Door allDoors in Door.List)

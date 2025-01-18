@@ -11,9 +11,13 @@ using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Fentanyl_ReactorUpdate.API.Extensions;
 using Fentanyl_ReactorUpdate.Configs;
+using MapEditorReborn.API.Features.Objects;
 using MEC;
 using PlayerRoles;
+using UnityEngine;
+using Light = Exiled.API.Features.Toys.Light;
 using Object = UnityEngine.Object;
 using Plyr = Exiled.Events.Handlers.Player;
 
@@ -22,6 +26,7 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
     [CustomItem(ItemType.Adrenaline)]
     public class FentT1 : CustomItem
     {
+        private Light FENTANYLYYALIGTSAS { get; set; }
         public static Dictionary<Player, int> FentItemConsumers = new();
         private static readonly Config Config = Plugin.Singleton.Config;
         private static readonly Translation Translation = Plugin.Singleton.Translation;
@@ -41,13 +46,15 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
             Plyr.UsingItem -= UsingItem;
             base.UnsubscribeEvents();
         }
-
+        
+        
         private void UsingItem(UsingItemEventArgs ev)
         {
             if (!Check(ev.Item)) return;
             if (!FentItemConsumers.ContainsKey(ev.Player))
                 FentItemConsumers[ev.Player] = 0;
-
+            ev.Player.EnableEffect(EffectType.Flashed, 1f);
+            ev.Player.FentanylAudio("FentanylUse.ogg", 5, 1, 10);
             FentItemConsumers[ev.Player]++;
             Timing.CallDelayed(Config.T1Delay, () =>
             {

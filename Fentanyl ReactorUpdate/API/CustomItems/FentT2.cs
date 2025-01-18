@@ -10,6 +10,7 @@ using Exiled.API.Features.Roles;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Fentanyl_ReactorUpdate.API.Extensions;
 using Fentanyl_ReactorUpdate.Configs;
 using MEC;
 using PlayerRoles;
@@ -47,7 +48,8 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
             
             if (!FentItemConsumers.ContainsKey(ev.Player))
                 FentItemConsumers[ev.Player] = 0;
-
+            ev.Player.EnableEffect(EffectType.Flashed, 1f);
+            ev.Player.FentanylAudio("FentanylUse.ogg", 5, 1, 10);
             FentItemConsumers[ev.Player]++;
             
             Timing.CallDelayed(Config.T2Delay, () =>

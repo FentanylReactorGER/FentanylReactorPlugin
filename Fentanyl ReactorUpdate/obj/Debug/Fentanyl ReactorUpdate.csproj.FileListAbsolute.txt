@@ -86,7 +86,6 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\MapEditorReborn.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Unity.TextMeshPro.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\UnityEngine.UI.dll
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\AudioPlayer.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.Buffers.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.Memory.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\System.Numerics.Vectors.dll
@@ -141,3 +140,7 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\Assembly-CSharp-Publicized.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\RueI.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\AudioPlayerApi.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\DSharp4Webhook.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\AdvancedMERTools.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\ServerSpecificSyncer-EXILED.dll

@@ -183,15 +183,18 @@ public class KillAreaCommand : ICommand
             Timing.RunCoroutine(CheckPedestal());
         }
         
+        private bool isCheckPedestalRunning = false; // Flag to prevent multiple instances
+
         private IEnumerator<float> CheckPedestal()
         {
-            if (Round.IsEnded)
+            if (Round.IsEnded || isCheckPedestalRunning) // Prevent duplicate coroutine execution
             {
                 yield break;
             }
 
+            isCheckPedestalRunning = true; // Mark as running
             DemonCoreStartCooldown = Plugin.Singleton.Config.DemonCoreCooldown;
-            bool hasShownHint = false; 
+            bool hasShownHint = false;
 
             for (float i = DemonCoreStartCooldown; i >= 0; i--)
             {
@@ -201,12 +204,14 @@ public class KillAreaCommand : ICommand
                     {
                         player.ShowMeowHint(Plugin.Singleton.Translation.DemonCoreReadyToOpenHint);
                     }
-                    hasShownHint = true; 
+                    hasShownHint = true;
                 }
 
                 DemonCoreStartCooldown = i;
                 yield return Timing.WaitForSeconds(1f);
             }
+
+            isCheckPedestalRunning = false; // Reset the flag after coroutine ends
         }
         
         public void AudioMeltdown()
@@ -366,6 +371,7 @@ public class KillAreaCommand : ICommand
     
         private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
         {
+            isCheckPedestalRunning = false; 
             DemonCorePedestal = true;
             StopDamageIncrease();
             KillArea?.Cancel();

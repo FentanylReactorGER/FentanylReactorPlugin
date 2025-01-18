@@ -19,12 +19,12 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
         
         public static void RegisterEvents()
         {
-            Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
+            // Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
         }
 
         public static void UnRegisterEvents()
         {
-            Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
+            // Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
         }
 
         private static void WaitingForPlayers()

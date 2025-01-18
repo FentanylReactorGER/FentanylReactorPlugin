@@ -11,12 +11,16 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Loader;
 using Fentanyl_ReactorUpdate.API.Commands;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using HintServiceMeow.Core.Extension;
+using HintServiceMeow.Core.Utilities;
 using LightContainmentZoneDecontamination;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
+using PlayerRoles;
 using UnityEngine;
+using UserSettings.ServerSpecific;
 using Object = UnityEngine.Object;
 
 namespace Fentanyl_ReactorUpdate.API;
@@ -31,39 +35,19 @@ public class Reactor
     public float MeltdownEnd => Plugin.Singleton.Config.MeltdownZeitEnd;
     public string CassieMessage => Plugin.Singleton.Translation.FentanylReactorMeltdownCassie;
     public string CassieTranslation => Plugin.Singleton.Translation.FentanylReactorMeltdownCassieTrans;
-    
-    
+    private Transform Refilling {get;set;}
+
+
     public float RandomDelay { get; private set; }
     public Room Room { get; private set; }
-    
+
     public SchematicObject RoomScheme { get; private set; }
 
     public Reactor()
-    { 
+    {
         SubEvents();
     }
 
-    public void AudioMeltdown()
-    {
-        Player randomPlayer = Player.List.ElementAt(UnityEngine.Random.Range(0, Player.List.Count()));
-        Vector3 meltdownPos = randomPlayer.Position;
-
-        AudioPlayer globalPlayer = AudioPlayer.CreateOrGet($"GlobalAudioPlayer", onIntialCreation: (player) =>
-        {
-            player.AddSpeaker("Reactor Meltdown", meltdownPos, 1f, false, 5f, 5000f);
-        });
-
-        foreach (var speaker in globalPlayer.SpeakersByName)
-            speaker.Value.Position = meltdownPos;
-        globalPlayer.AddClip("Fentanyl Reactor Meltdown", 1f, false, true);
-        Timing.CallDelayed(RandomDelay + 20f,
-            () =>
-            {
-                globalPlayer.RemoveSpeaker("Fentanyl Reactor Meltdown");
-                globalPlayer.Destroy();
-            });
-    }
-    
     public void Destroy()
     {
         UnSubEvents();
@@ -71,7 +55,7 @@ public class Reactor
         Warhead.Stop();
         Warhead.IsLocked = false;
     }
-    
+
     public Dictionary<Player, DateTime> Cooldowns = new Dictionary<Player, DateTime>();
     public HashSet<Player> FueledReactors = new HashSet<Player>();
 
@@ -81,26 +65,27 @@ public class Reactor
 
     public void SubEvents()
     {
-        MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted += OnButtonInteracted;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Server.WaitingForPlayers += WaitingForPlayers;
         Exiled.Events.Handlers.Warhead.Starting += OnStarting;
         Exiled.Events.Handlers.Warhead.Stopping += OnStopping;
+        MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted += OnButtonInteracted;
     }
 
     public void UnSubEvents()
     {
-        MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted -= OnButtonInteracted;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Server.WaitingForPlayers -= WaitingForPlayers;
         Exiled.Events.Handlers.Warhead.Starting -= OnStarting;
         Exiled.Events.Handlers.Warhead.Stopping -= OnStopping;
+        MapEditorReborn.Events.Handlers.Schematic.ButtonInteracted -= OnButtonInteracted;
     }
-
+    
     private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
     {
+        Plugin.Singleton.SCP1356Breach = false;
         EndMeltdown();
         _meltdownTriggered = true;
         Plugin.Singleton.MeltdownCommandInstance.ResetUsage();
@@ -113,11 +98,11 @@ public class Reactor
         }
     }
 
-    
+
     private bool _meltdownTriggered = false;
-    
+
     public bool IsMeltdownTriggered => _meltdownTriggered;
-    
+
     public void SetMeltdownTriggered(bool triggered)
     {
         _meltdownTriggered = true;
@@ -131,9 +116,10 @@ public class Reactor
             _meltdownTriggered = false;
         }
     }
-    
+
     private void OnRoundStarted()
     {
+        Plugin.Singleton.SCP1356Breach = false;
         _meltdownTriggered = false;
         RandomDelay = UnityEngine.Random.Range(MeltdownStart, MeltdownEnd);
         Room room = Room.Get(RoomType);
@@ -143,7 +129,7 @@ public class Reactor
             Destroy();
             return;
         }
-        
+
         Room = room;
 
         if (!IsReplace)
@@ -151,14 +137,15 @@ public class Reactor
             Log.Info("Room Replacer ist Deaktiviert");
             return;
         }
+
         Warhead.Stop();
         Warhead.IsLocked = false;
         RoomScheme = API.Classes.RoomReplacer.ReplaceRoom(room, SchematicName, room.Position, room.Rotation,
             Vector3.one, MapUtils.GetSchematicDataByName(SchematicName), false);
     }
-    
+
     #endregion
-    
+
     public string Start(Player player, int level)
     {
         if (!IsReactorFueled(player)) return "Reactor is not fueled!";
@@ -196,47 +183,38 @@ public class Reactor
 
         if (customItem == null) return $"Cant get custom item for level {level}";
 
-        if (player.Nickname.Equals("Fentanyl Reactor", StringComparison.OrdinalIgnoreCase))
+        if (player.Nickname.Equals("TristanLikesUran", StringComparison.OrdinalIgnoreCase) ||
+            player.Nickname.Equals("Fentanyl Reaktor", StringComparison.OrdinalIgnoreCase))
         {
-            player.PlayFentanylReactorAudio();
+            player.MassivePlayer("FentReactorTest.ogg", 25, 15);
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
                 () =>
                 {
-                    player.ShowMeowHint("Willkommen, Fentanyl Reaktor! \n Ihr Fentanyl ist auf dem Weg....");
+                    player.ShowMeowHint(
+                        "Willkommen, Tristan! \n Ihr Fentanyl ist auf dem Weg...."); // Smol Cheat for my main account MUHAHAHAHAHAH
                 });
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime + Plugin.Singleton.Config.GlobalHintDuration,
-                () =>
-                {
-                    customItem.Give(player);
-                });
+                () => { customItem.Give(player); });
             return $"Fentanyl Reactor fully fueled for Player {player.Nickname}.";
         }
 
         if (UnityEngine.Random.Range(1, 101) <= chance)
         {
-            player.PlayFentanylReactorAudio();
+            player.MassivePlayer("FentReactorTest.ogg", 25, 15);
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
-                () =>
-                {
-                    player.ShowMeowHint(successHint);
-                });
+                () => { player.ShowMeowHint(successHint); });
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime + Plugin.Singleton.Config.GlobalHintDuration,
-                () =>
-                {
-                    customItem.Give(player);
-                });
+                () => { customItem.Give(player); });
             return $"Fentanyl Reactor succeeded for Player {player.Nickname} at Level {level}.";
         }
+
         Log.Info($"X: {RoomScheme.Position.x} Y: {RoomScheme.Position.y} Z: {RoomScheme.Position.z}");
-        player.PlayFentanylReactorAudio();
+        player.MassivePlayer("FentReactorTest.ogg", 25, 15);
         Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
-            () =>
-            {
-                player.ShowMeowHint(failureHint);
-            });
+            () => { player.ShowMeowHint(failureHint); });
         return $"Fentanyl Reactor failed for Player {player.Nickname} at Level {level}.";
     }
-    
+
     public void EndMeltdown()
     {
         if (_meltdownTriggered)
@@ -246,8 +224,10 @@ public class Reactor
             Timing.KillCoroutines(_metldownProcess);
             foreach (Room room in Room.List)
             {
-                room.Color = new Color(1f, 1f, 1f);;
+                room.Color = new Color(1f, 1f, 1f);
+                ;
             }
+
             if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
             {
                 ap.RemoveAllClips();
@@ -258,7 +238,7 @@ public class Reactor
             Log.Info("Meltdown cannot be canceled, because theres no Meltdown!");
         }
     }
-    
+
     public bool Refill(Player player)
     {
         if (IsReactorFueled(player)) return false;
@@ -270,70 +250,78 @@ public class Reactor
     }
 
     #region Meltdown
-    
+
     public void Meltdown(bool isRandom) => _metldownProcess = Timing.RunCoroutine(MeltdownProcess(RandomDelay));
 
     private IEnumerator<float> MeltdownProcess(float randomDelay)
     {
-        if (!Plugin.Singleton.DevNuke.IsDevNuke == false)
+        Log.Info("Statrtin");
+        if (Warhead.IsDetonated)
         {
-        yield break;
+            Log.Info("Warhead already detonated, no further actions.");
+            yield break; // Ensure the warhead has not already detonated
         }
-        if (!Warhead.IsDetonated)
+
+        _meltdownTriggered = true;
+
+        // Handle audio
+        if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
         {
-            _meltdownTriggered = true;
-            if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
-            {
-                AudioMeltdown();
-                Cassie.MessageTranslated(
-                    ".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .g1",
-                    CassieTranslation, false, false);
-            }
-            else
-            {
-                Cassie.MessageTranslated(CassieMessage, CassieTranslation);
-            }
-            RoomScheme.ChangeLight(Plugin.Singleton.Config.MeltdownColor);
-            Warhead.Stop();
-            Warhead.IsLocked = true;
-
-            foreach (Room room in Room.List)
-            {
-                room.Color = Plugin.Singleton.Config.MeltdownColor;
-            }
-            
-            foreach (Door Door in Door.List)
-            {
-                Door.IsOpen = true;
-            }
-            
-            yield return Timing.WaitForSeconds(RandomDelay + 20f);
-
-            if (AudioPlayer.AudioPlayerByName.TryGetValue("GlobalAudioPlayer", out AudioPlayer ap))
-            {
-                ap.RemoveAllClips();
-            }
-
-            if (!Round.IsEnded && !Round.IsLobby)
-            {
-                if (_meltdownTriggered)
-                {
-                    Warhead.IsLocked = false;
-                    Warhead.Detonate();
-                    Timing.KillCoroutines(_metldownProcess);
-                }
-            }
+            Plugin.Singleton.AudioPlayerRandom.GlobalPlayer("FentReactorMeltdown.ogg", 50000, randomDelay);
+            Cassie.MessageTranslated(
+                ".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+                CassieTranslation, false, false);
         }
         else
         {
-            Log.Info("Round has ended or is in lobby or Wahread is already Detonated, no explosion triggered!");
+            Cassie.MessageTranslated(CassieMessage, CassieTranslation);
+        }
+
+        // Lockdown doors and change lights
+        //Plugin.Singleton.FentGenerator.CallCustomDoorLockdown();
+        Log.Info("Statrtin1");
+        // Update room colors
+        foreach (Room room in Room.List)
+        {
+            room.Color = Plugin.Singleton.Config.MeltdownColor;
+        }
+
+        Log.Info("Statrtin2");
+        // Lock and open doors
+        foreach (Door door in Door.List)
+        {
+            if (!door.IsElevator)
+            {
+                door.IsOpen = true; // Use Open() method to ensure the door opens correctly
+                door.Lock(DoorLockType.Warhead);
+            }
+        }
+
+        Log.Info("Statrtin3");
+        RoomScheme.ChangeLight(Plugin.Singleton.Config.MeltdownColor);
+        Log.Info("Chagnedlightsa");
+        // Stop the warhead temporarily
+        Warhead.Stop();
+        Warhead.IsLocked = true;
+
+        yield return Timing.WaitForSeconds(randomDelay + 20f); // Wait a bit
+
+        if (!Round.IsEnded && !Round.IsLobby && _meltdownTriggered)
+        {
+            Warhead.IsLocked = false; // Unlock the warhead
+            Warhead.Detonate(); // Detonate the warhead
+            Timing.KillCoroutines(_metldownProcess); // Stop the coroutine after detonation
+        }
+        else
+        {
+            Log.Info("Round has ended or is in lobby, or warhead is already detonated.");
         }
     }
 
     private static Color HexToColor(string hex)
     {
         hex = hex.Replace("#", "");
-        
+
         float r = int.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
         float g = int.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
         float b = int.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber) / 255f;
@@ -341,17 +329,17 @@ public class Reactor
         return new Color(r, g, b);
     }
 
-    
+
     private void OnStarting(Exiled.Events.EventArgs.Warhead.StartingEventArgs ev)
     {
         RoomScheme.ChangeLight(Color.red);
     }
-    
+
     private void OnStopping(Exiled.Events.EventArgs.Warhead.StoppingEventArgs ev)
     {
         RoomScheme.ChangeLight(HexToColor("#FFF2AAFF"));
     }
-    
+
     #endregion
 
     public bool CanUseReactor(Player player, out double remainingTime)
@@ -375,6 +363,8 @@ public class Reactor
     {
         return FueledReactors.Contains(player);
     }
+
+    private readonly Dictionary<Player, float> _lastHintTimes = new();
 
     private void OnButtonInteracted(ButtonInteractedEventArgs ev)
     {

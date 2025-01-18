@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.8": {
-      "ExMod.Exiled/9.2.1": {
+      "ExMod.Exiled/9.3.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -105,7 +105,7 @@
       }
     },
     ".NETFramework,Version=v4.8/win": {
-      "ExMod.Exiled/9.2.1": {
+      "ExMod.Exiled/9.3.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -208,7 +208,7 @@
       }
     },
     ".NETFramework,Version=v4.8/win-arm64": {
-      "ExMod.Exiled/9.2.1": {
+      "ExMod.Exiled/9.3.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -311,7 +311,7 @@
       }
     },
     ".NETFramework,Version=v4.8/win-x64": {
-      "ExMod.Exiled/9.2.1": {
+      "ExMod.Exiled/9.3.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -414,7 +414,7 @@
       }
     },
     ".NETFramework,Version=v4.8/win-x86": {
-      "ExMod.Exiled/9.2.1": {
+      "ExMod.Exiled/9.3.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -518,14 +518,14 @@
     }
   },
   "libraries": {
-    "ExMod.Exiled/9.2.1": {
-      "sha512": "YEzDVFHmzVJkMgNjlqbxdR+XjNd2N5zDJrtbZUrdA7Q/e8+DBJj2EsazhLYxZZBvnqtAmg1phAxvA6fzPKd62w==",
+    "ExMod.Exiled/9.3.0": {
+      "sha512": "WLeFL5T1B7TQhn5oloeEX8RF0Vy943bTmxgfR+4GtEjxQMLp0cnj0OFvo2d/V0TxfG68hVbugVANA2Koq9s+Kw==",
       "type": "package",
-      "path": "exmod.exiled/9.2.1",
+      "path": "exmod.exiled/9.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "exmod.exiled.9.2.1.nupkg.sha512",
+        "exmod.exiled.9.3.0.nupkg.sha512",
         "exmod.exiled.nuspec",
         "images/Exiled_Icon.png",
         "lib/net48/Assembly-CSharp-Publicized.dll",
@@ -626,7 +626,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8": [
-      "ExMod.Exiled >= 9.2.1",
+      "ExMod.Exiled >= 9.3.0",
       "Lib.Harmony >= 2.2.2",
       "Newtonsoft.Json >= 13.0.3",
       "RueI >= 2.1.0"
@@ -672,7 +672,7 @@
         "dependencies": {
           "ExMod.Exiled": {
             "target": "Package",
-            "version": "[9.2.1, )"
+            "version": "[9.3.0, )"
           },
           "Lib.Harmony": {
             "target": "Package",

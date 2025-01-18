@@ -2,6 +2,7 @@
 using System.IO;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
+using Exiled.CustomItems.API.Features;
 using PluginAPI.Core;
 using UnityEngine;
 

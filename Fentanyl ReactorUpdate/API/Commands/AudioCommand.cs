@@ -30,7 +30,7 @@ public class AudioCommand : ICommand
         
         if (arguments.Count < 2)
         {
-            response = "Usage: AudioPlayerFent <Bot Name> <Clip Name / PATH> <Gib deinem Clip einem Namen> <Volume>";
+            response = "Usage: AudioPlayerFent <Audio Name mit .ogg> <Distance> <Clip Distance>";
             return false;
         }
 
@@ -38,10 +38,10 @@ public class AudioCommand : ICommand
         {
             response = "The command Audio has already been triggered, wait for it to finish or create a new bot with a new Name.";
         }
-        string BotName = arguments.At(0);
-        string ClipName = arguments.At(1);
-        string ClipPath = arguments.At(2);
-        player.GlobalPlayer(BotName, ClipName, ClipPath, 5000f);
+        string ClipPath = arguments.At(0);
+        string ClipDistance= arguments.At(1);
+        string ClipDuration = arguments.At(2);
+        player.MassivePlayer(ClipPath, float.Parse(ClipDistance), float.Parse(ClipDuration));
         response = "Playing Audio...";
         return true;
     }

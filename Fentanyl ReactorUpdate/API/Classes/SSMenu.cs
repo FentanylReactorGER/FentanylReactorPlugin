@@ -1,269 +1,216 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Exiled.API.Features;
-using Exiled.API.Features.Core.UserSettings;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Permissions.Extensions;
-using Fentanyl_ReactorUpdate.API.Classes;
+using Exiled.CustomItems.API.Features;
 using Fentanyl_ReactorUpdate.API.Extensions;
-using Fentanyl_ReactorUpdate.Configs;
+using InventorySystem.Items;
 using MapEditorReborn.API.Features.Objects;
-using MEC;
-using PlayerRoles;
+using ServerSpecificSyncer.Features;
+using ServerSpecificSyncer.Features.Wrappers;
 using UnityEngine;
 using UserSettings.ServerSpecific;
+using MEC;
+using PlayerRoles;
+using UserSettings.ServerSpecific.Examples;
 
-namespace Fentanyl_ReactorUpdate.API.Classes
+namespace Fentanyl_ReactorUpdate.API.SCP4837
 {
-    public class SSMenu
+    public class SCP4837InteractionMenu : Menu
     {
-        private CancellationTokenSource _playerPosCts;
-        private static float XPos { get; set; }
-        private static float YPos { get; set; }
-        private static float ZPos { get; set; }
-        private Vector3 _roomPos;
-        private readonly HashSet<Player> _playersInReactor = new();
+        private const string Scp4837InteractionHint = "SCP-4837 Interaktionen.";
+        private List<ServerSpecificSettingBase> _settings;
+        private readonly Dictionary<Player, float> _lastHintTimes = new();
+        private List<Preset> _presets;
 
-        public SSMenu()
+        public class Preset
         {
-            _roomPos = new Vector3(XPos, YPos, ZPos);
-            SubEvents();
-        }
+            public string Name { get; set; }
+            public Color Color { get; set; }
 
-        public void Destroy()
-        {
-            UnSubEvents();
-        }
-
-        private void SubEvents()
-        {
-            Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-            Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
-            Exiled.Events.Handlers.Player.Verified += OnPlayerVerified;
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnButtonTriggered;
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived += OnDropdownTriggered;
-            RegisterSSButton();
-        }
-
-        private void UnSubEvents()
-        {
-            Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-            Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
-            Exiled.Events.Handlers.Player.Verified -= OnPlayerVerified;
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnButtonTriggered;
-            ServerSpecificSettingsSync.ServerOnSettingValueReceived -= OnDropdownTriggered;
-            UnregisterSSButton();
-        }
-
-        private void OnPlayerVerified(VerifiedEventArgs ev)
-        {
-            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
-        }
-
-        private void RegisterSSButton()
-        {
-            var admin = new HeaderSetting("Fentanyl Reaktor Admin");
-            var testButton = new ButtonSetting(
-                Plugin.Singleton.Config.ServerSpecificSettingId,
-                Plugin.Singleton.Translation.SSSSLabelTp,
-                Plugin.Singleton.Translation.SSSSTpButton,
-                Plugin.Singleton.Config.ServerSpecificSettingHoldTime,
-                Plugin.Singleton.Translation.SSSSDescTp);
-
-            var player = new HeaderSetting(Plugin.Singleton.Translation.SSSSheaderPlayer);
-            var fuelReactor = new ButtonSetting(
-                Plugin.Singleton.Config.ServerSpecificSettingIdFuel,
-                Plugin.Singleton.Translation.SSSSLabelFuel,
-                Plugin.Singleton.Translation.SSSSFuelButton,
-                Plugin.Singleton.Config.ServerSpecificSettingHoldTime,
-                Plugin.Singleton.Translation.SSSSDescFuel);
-
-            var startReactor = new DropdownSetting(
-                Plugin.Singleton.Config.ServerSpecificSettingIdStart,
-                Plugin.Singleton.Translation.SSSSStartName,
-                new[] {
-                    Plugin.Singleton.Translation.SSSSlStage1,
-                    Plugin.Singleton.Translation.SSSSlStage2,
-                    Plugin.Singleton.Translation.SSSSlStage3
-                },
-                1,
-                SSDropdownSetting.DropdownEntryType.Regular,
-                Plugin.Singleton.Translation.SSSSStartDesc);
-
-            IEnumerable<SettingBase> settings = new SettingBase[]
+            public Preset(string name, Color color)
             {
-                admin,
-                testButton,
-                player,
-                fuelReactor,
-                startReactor
+                Name = name;
+                Color = color;
+            }
+        }
+
+        public override ServerSpecificSettingBase[] Settings => GetSettings();
+
+        private ServerSpecificSettingBase[] GetSettings()
+        {
+            _presets ??= new List<Preset>
+            {
+                new Preset("Weiß", Color.white),
+                new Preset("Schwarz", Color.black),
+                new Preset("Grau", Color.gray),
+                new Preset("Rot", Color.red),
+                new Preset("Grün", Color.green),
+                new Preset("Blau", Color.blue),
+                new Preset("Gelb", Color.yellow),
+                new Preset("Cyan", Color.cyan),
+                new Preset("Magenta", Color.magenta),
             };
-            SettingBase.Register(settings);
-            SettingBase.SendToAll();
-        }
-
-        private void UnregisterSSButton()
-        {
-            SettingBase.Unregister();
-        }
-
-        private void OnRoundStarted()
-        {
-            if (Plugin.Singleton.Config.EnterHint)
+            
+            _settings = new List<ServerSpecificSettingBase>
             {
-                _playerPosCts = new CancellationTokenSource();
-                Timing.RunCoroutine(PlayerPos(_playerPosCts.Token));
+                new YesNoButton(412, "Soll der SCP-4837 Tutorial Hint angezeigt werden?", "Ja", "Nein", OnAvoid4837Hint, false),
+                new YesNoButton(413, "Sollen Custom SCP Sounds gespielt werden?", "Ja", "Nein", OnAvoid4837Hint, false),
+                new YesNoButton(414, "Soll SCP-4837 Jumpscare Sounds spielen?", "Ja", "Nein", OnAvoid4837Hint, false),
+                new Dropdown(415, "SCP-4837 Pocket Dimensions Farbe", _presets.Select(x => x.Name).ToArray(), Chose4837Color, 1, SSDropdownSetting.DropdownEntryType.Hybrid, "Wähl deine Eigene Farbe aus, für die Dimension von SCP-4837!"),
+                new YesNoButton(416, "Soll SCP-4837 Regenbogen-Farben nutzten?", "Ja", "Nein", OnAvoid4837Hint, false, "Dies überschreibt deine Eigende Farbe, falls es Aktiv ist!"),
+                new Keybind(ExampleId.Scp4837InteractKey, "SCP-4837 Interaktion", OnScp4837KeyPress, KeyCode.E, hint: Scp4837InteractionHint, isGlobal: true),
+            };
+
+            return _settings.ToArray();
+        }
+        private void OnAvoid4837Hint(ReferenceHub hub, bool yesorNo, SSTwoButtonsSetting ssTwoButtonsSetting)
+        {
+            Player player = Player.Get(hub);
+            if (ssTwoButtonsSetting.SyncIsB)
+            {
+                player.ShowMeowHint("Feature Deaktiviert!");
             }
-
-            XPos = Plugin.Singleton.Reactor.RoomScheme.Position.x;
-            YPos = Plugin.Singleton.Reactor.RoomScheme.Position.y + 3;
-            ZPos = Plugin.Singleton.Reactor.RoomScheme.Position.z;
-            _roomPos = new Vector3(XPos, YPos, ZPos);
-
-            Log.Info("Round Started");
-            Log.Info($"{Plugin.Singleton.Reactor.RoomScheme.Position} {_roomPos}");
-        }
-
-        private IEnumerator<float> PlayerPos(CancellationToken token)
-        {
-            while (Round.IsStarted && !Round.IsEnded)
+            if (ssTwoButtonsSetting.SyncIsA)
             {
-                if (token.IsCancellationRequested)
-                {
-                    yield break;
-                }
-
-                foreach (var player in Player.List.Where(p => p.IsAlive))
-                {
-                    bool isInReactor = Vector3.Distance(player.Position, _roomPos) < 8;
-
-                    if (isInReactor)
-                    {
-                        if (!_playersInReactor.Contains(player))
-                        {
-                            player.ShowMeowHint($"{Plugin.Singleton.Translation.EnterFentanylReactor.Replace("{PlayerName}", player.Nickname)}");
-                            _playersInReactor.Add(player);
-                        }
-                    }
-                    else
-                    {
-                        _playersInReactor.Remove(player);
-                    }
-                }
-
-                yield return Timing.WaitForSeconds(1f);
+                player.ShowMeowHint("Feature Aktiviert!");
             }
         }
+        
+        public List<KeyValuePair<Player, Color>> PlayerColorSelections = new List<KeyValuePair<Player, Color>>();
+        
+        private Dictionary<Player, string> SavedPlayerColors = new();
 
-        private void OnButtonTriggered(ReferenceHub hub, ServerSpecificSettingBase settingBase)
+        private void Chose4837Color(ReferenceHub hub, SSDropdownSetting dropdown, string answer)
         {
-            if (!Player.TryGet(hub, out var player)) return;
+            Player player = Player.Get(hub);
 
-            if (settingBase is SSButton fentTpButton && fentTpButton.SettingId == Plugin.Singleton.Config.ServerSpecificSettingId)
+            int selectedIndex = dropdown.SyncSelectionIndexRaw;
+
+            Color selectedColor = _presets[selectedIndex].Color;
+
+            string hexColor = ColorUtility.ToHtmlStringRGB(selectedColor);
+
+            string colorName = _presets[selectedIndex].Name;
+
+            var existingSelection = PlayerColorSelections.FirstOrDefault(p => p.Key == player);
+
+            if (existingSelection.Key != null)
             {
-                HandleTeleportButton(player);
+                PlayerColorSelections.Remove(existingSelection);
             }
-            else if (settingBase is SSButton fuelButton && fuelButton.SettingId == Plugin.Singleton.Config.ServerSpecificSettingIdFuel)
+
+            PlayerColorSelections.Add(new KeyValuePair<Player, Color>(player, selectedColor));
+            
+            if (SavedPlayerColors.ContainsKey(player))
             {
-                HandleFuelButton(player);
+                SavedPlayerColors[player] = hexColor;
             }
+            else
+            {
+                SavedPlayerColors.Add(player, hexColor);
+            }
+
+            player.ShowMeowHint($"Du hast die Farbe <color=#{hexColor}>{colorName}</color> ausgewählt!");
         }
 
-        private void HandleTeleportButton(Player player)
+        public Color GetPlayerColor(Player player)
         {
-            if (!Round.IsStarted)
+            if (SavedPlayerColors.TryGetValue(player, out var hexColor) && ColorUtility.TryParseHtmlString($"{hexColor}", out var color))
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSRoundNotStarted);
+                return color;
+            }
+            
+            var selection = PlayerColorSelections.FirstOrDefault(p => p.Key == player);
+            return selection.Equals(default(KeyValuePair<Player, Color>)) ? Color.white : selection.Value;
+        }
+
+        private void OnScp4837KeyPress(ReferenceHub hub, bool isPressed)
+        {
+            if (!isPressed)
+                return;
+
+            Player player = Player.Get(hub);
+            if (player == null)
+                return;
+            StartTrading4837(player);
+        }
+
+        public override void OnRegistered()
+        {
+            Log.Info("SCP-4837 Interaction Menu has been registered.");
+        }
+
+        public override bool CheckAccess(ReferenceHub hub) => true;
+
+        public override string Name { get; set; } = "Raven's garden Interaktion";
+        public override int Id { get; set; } = -5151;
+        public override Type MenuRelated { get; set; } = null;
+
+        private static class ExampleId
+        {
+            public static readonly int Scp4837InteractKey = 1132;
+        }
+
+        public void StartTrading4837(Player player)
+        {
+
+            if (!PluginAPI.Core.Round.IsRoundStarted) return;
+
+            if (_lastHintTimes.TryGetValue(player, out float lastHintTime) && Time.time - lastHintTime < 1f)
+            {
                 return;
             }
 
-            if (player.IsScp)
+            _lastHintTimes[player] = Time.time;
+
+            if (!Physics.Raycast(
+                    new Ray(
+                        player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f,
+                        player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit raycastHit, 5)
+                || raycastHit.collider.GetComponentInParent<SchematicObject>() is not { } schematicObject
+                || schematicObject.Name != Plugin.Singleton.Main4837.SCP4837.Name)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
                 return;
             }
 
-            if (!player.CheckPermission(Plugin.Singleton.Translation.TeleportFentanylPremission))
+            if (Plugin.Singleton.Main4837._Cooldown)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.TeleportFentanylNoPrem);
+                player.ShowMeowHint("<color=yellow>⚠️</color> <b><color=#757935>SCP-4837</b></color> hat Cooldown!");
                 return;
             }
 
-            player.Position = _roomPos;
-        }
-
-        private void HandleFuelButton(Player player)
-        {
-            if (!Round.IsStarted)
+            if (Vector3.Distance(player.Position, Plugin.Singleton.Main4837.SCP4837.Position) > 4)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSRoundNotStarted);
+                player.ShowMeowHint(
+                    "<color=yellow>⚠️</color> Du bist zu weit von <b><color=#757935>SCP-4837</b></color> entfernt!");
                 return;
             }
 
-            if (player.IsScp)
+            if (player.Role.Type == RoleTypeId.Tutorial)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
+                Plugin.Singleton.Main4837.Trade4837(player);
                 return;
             }
 
-            if (Vector3.Distance(player.Position, _roomPos) > 12 &&
-                player.Position.y >= -1015 && player.Position.y <= -1005)
+            if (player.CurrentItem == null)
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSStartNotInReactor);
+                player.ShowMeowHint(
+                    "<color=yellow>⚠️</color> Du musst <b>Brot</b> in der Hand halten, um mit <b><color=#757935>SCP-4837</b></color> zu handeln!");
                 return;
             }
 
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {player.Id}");
-        }
-
-        private void OnDropdownTriggered(ReferenceHub hub, ServerSpecificSettingBase settingBase)
-        {
-            if (!Player.TryGet(hub, out var player)) return;
-
-            if (settingBase is SSDropdownSetting startReactor && startReactor.SettingId == Plugin.Singleton.Config.ServerSpecificSettingIdStart)
+            if (CustomItem.TryGet(player.CurrentItem, out CustomItem customItem) && customItem?.Id == Plugin.Singleton.brot.Id)
             {
-                HandleDropdownSelection(player, startReactor);
-            }
-        }
-
-        private void HandleDropdownSelection(Player player, SSDropdownSetting startReactor)
-        {
-            if (!Round.IsStarted) return;
-
-            if (player.IsScp)
-            {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSSPlayerIsSCP);
-                return;
+                Plugin.Singleton.Main4837.Trade4837(player);
+                player.CurrentItem.Destroy();
             }
 
-            if (Vector3.Distance(player.Position, _roomPos) > 12)
+            else
             {
-                player.ShowMeowHint(Plugin.Singleton.Translation.SSSStartNotInReactor);
-                return;
+                player.ShowMeowHint(
+                    "<color=yellow>⚠️</color> Du musst <b>Brot</b> in der Hand halten, um mit <b><color=#757935>SCP-4837</b></color> zu handeln!");
             }
-
-            string commandName = Plugin.Singleton.Translation.CommandName;
-            switch (startReactor.SyncSelectionText)
-            {
-                case var text when text == Plugin.Singleton.Translation.SSSSlStage1:
-                    Server.ExecuteCommand($"/{commandName} {player.Id} 1");
-                    break;
-                case var text when text == Plugin.Singleton.Translation.SSSSlStage2:
-                    Server.ExecuteCommand($"/{commandName} {player.Id} 2");
-                    break;
-                case var text when text == Plugin.Singleton.Translation.SSSSlStage3:
-                    Server.ExecuteCommand($"/{commandName} {player.Id} 3");
-                    break;
-            }
-        }
-
-        private void OnRoundEnded(Exiled.Events.EventArgs.Server.RoundEndedEventArgs ev)
-        {
-            _playerPosCts?.Cancel();
-            _playerPosCts = null;
-            _playersInReactor.Clear();
         }
     }
 }

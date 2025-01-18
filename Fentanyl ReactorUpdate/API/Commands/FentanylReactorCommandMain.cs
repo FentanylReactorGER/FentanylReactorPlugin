@@ -38,8 +38,10 @@ public class FentanylReactorCommand : ICommand
         }
         if (!Plugin.Singleton.Reactor.CanUseReactor(player, out double remainingTime))
         {
-            response = $"You need to wait {Math.Ceiling(remainingTime)} seconds before using the Fentanyl Reactor again.";
-            player.ShowMeowHint($"{Plugin.Singleton.Translation.ReactorCooldown.Replace("{Cooldown}", remainingTime.ToString())}");
+            int roundedTime = (int)Math.Ceiling(remainingTime);
+
+            response = $"You need to wait {roundedTime} seconds before using the Fentanyl Reactor again.";
+            player.ShowMeowHint($"{Plugin.Singleton.Translation.ReactorCooldown.Replace("{Cooldown}", roundedTime.ToString())}");
             return false;
         }
         

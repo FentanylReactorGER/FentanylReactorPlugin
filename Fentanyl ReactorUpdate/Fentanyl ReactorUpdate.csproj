@@ -34,6 +34,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="AdvancedMERTools">
+          <HintPath>..\..\..\Downloads\AdvancedMERTools.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
@@ -43,8 +46,8 @@
         <Reference Include="Assembly-CSharp-firstpass">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
-        <Reference Include="AudioPlayer">
-          <HintPath>..\..\..\Downloads\AudioPlayer.dll</HintPath>
+        <Reference Include="AudioPlayerApi">
+          <HintPath>..\..\..\Downloads\AudioPlayerApi.dll</HintPath>
         </Reference>
         <Reference Include="BouncyCastle.Cryptography">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\BouncyCastle.Cryptography.dll</HintPath>
@@ -90,6 +93,9 @@
         </Reference>
         <Reference Include="SCPSLAudioApi">
           <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
+        </Reference>
+        <Reference Include="ServerSpecificSyncer-EXILED">
+          <HintPath>..\..\..\Downloads\ServerSpecificSyncer-EXILED.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.ComponentModel.Composition">
@@ -409,20 +415,28 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\Classes\DevNuke.cs" />
+        <Compile Include="API\Classes\Elevator.cs" />
         <Compile Include="API\Classes\MeltdownAutoStart.cs" />
         <Compile Include="API\Classes\RoomReplacer.cs" />
         <Compile Include="API\Classes\RoundSummaryText.cs" />
         <Compile Include="API\Classes\SpawnGenerator.cs" />
         <Compile Include="API\Classes\SSMenu.cs" />
         <Compile Include="API\Commands\AudioCommand.cs" />
+        <Compile Include="API\Commands\Breach1356.cs" />
         <Compile Include="API\Commands\CommandDevNuke.cs" />
+        <Compile Include="API\Commands\Contain1356.cs" />
         <Compile Include="API\Commands\DemonCore.cs" />
         <Compile Include="API\Commands\FentanylReactorCommandMain.cs" />
         <Compile Include="API\Commands\FentanylReactorRefill.cs" />
         <Compile Include="API\Commands\MeltdownCancelCommand.cs" />
         <Compile Include="API\Commands\MeltdownCommand.cs" />
+        <Compile Include="API\Commands\ResetCooldown.cs" />
         <Compile Include="API\Commands\RoomReplacerCommand.cs" />
         <Compile Include="API\Commands\TeleportCommand.cs" />
+        <Compile Include="API\Commands\Trade4837.cs" />
+        <Compile Include="API\Commands\UseButtons.cs" />
+        <Compile Include="API\CustomItems\Brot.cs" />
+        <Compile Include="API\CustomItems\CustomItemLight.cs" />
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />
         <Compile Include="API\CustomItems\FentT3.cs" />
@@ -436,6 +450,12 @@
         <Compile Include="API\Extensions\UpdateSchematic.cs" />
         <Compile Include="API\Extensions\UpdateSchematicDemonCore.cs" />
         <Compile Include="API\Reactor.cs" />
+        <Compile Include="API\SCP1356\1356Main.cs" />
+        <Compile Include="API\SCP1356\CustomItems1356\RecontainmentDevice.cs" />
+        <Compile Include="API\SCP1356\Events\Breach.cs" />
+        <Compile Include="API\SCP1356\Events\Contain.cs" />
+        <Compile Include="API\SCP1356\Events\RadiationDamage.cs" />
+        <Compile Include="API\SCP4837\4837Main.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Translation.cs" />
         <Compile Include="Plugin.cs" />
@@ -445,7 +465,7 @@
       <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="ExMod.Exiled" Version="9.2.1" />
+      <PackageReference Include="ExMod.Exiled" Version="9.3.0" />
       <PackageReference Include="Lib.Harmony" Version="2.2.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="RueI" Version="2.1.0" />

@@ -39,7 +39,7 @@ public string ReactorFailureHint { get; set; } = "The Fentanyl Reactor could not
 [Description("Fentanyl Round Summary Hints")]
 
 public string RoundSummaryHint { get; set; } = "<size=30><align=right>Top Fentanyl Consumers: \n {FentanylConsumers}</size><voffset=1000> </voffset></align>";
-public string RoundSummaryHintPlayers { get; set; } = "{PlayerNickname} | {FentanylItems}";
+public string RoundSummaryHintPlayers { get; set; } = "{PlayerNickname} | {FentanylItems} \n";
 
 [Description("CASSIE Announcements")]
 public string FentanylReactorMeltdownCassie { get; set; } = "pitch_0,20 .G4 . .G4 . pitch_0,95 The Reactor is overheating pitch_0,20 .G4 . .G4 . pitch_0,82 evacuate immediately pitch_0,20 .G4 . .G4 . jam_017_15 .G4";
@@ -47,9 +47,6 @@ public string FentanylReactorMeltdownCassieTrans { get; set; } = "The reactor is
 
 [Description("Server Specific Settings")]
 public string SSSSheaderPlayer { get; set; } = "Fentanyl Reaktor";
-public string SSSSLabelTp { get; set; } = "Fentanyl Reactor Teleport";
-public string SSSSDescTp { get; set; } = "Uses the Fentanyl Reactor Teleport";
-public string SSSSTpButton { get; set; } = "TP";
 public string SSSSLabelFuel { get; set; } = "Fentanyl Reactor Fuel";
 public string SSSSDescFuel { get; set; } = "Uses the Fentanyl Reactor Refueling";
 public string SSSSFuelButton { get; set; } = "Refill";

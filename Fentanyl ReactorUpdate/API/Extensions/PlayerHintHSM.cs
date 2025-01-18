@@ -22,7 +22,7 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
                 FontSize = Plugin.Singleton.Config.GlobalHintSize,
                 SyncSpeed = HintSyncSpeed.Fast,
             };
-            
+            playerDisplay.RemoveHint(hint);
             playerDisplay.AddHint(hint);
             Timing.CallDelayed( Plugin.Singleton.Config.GlobalHintDuration,
                 () =>
@@ -30,22 +30,40 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
                     playerDisplay.RemoveHint(hint);
                 });
         }
-        
-        public static void ShowMeowHintExtra(this Player player, string Text, float TargetY, float TargetX, int FrontSize, float Duration)
+        public static void ShowMeowHintDur(this Player player, string text, float Dur)
         {
             PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
 
             DynamicHint hint = new()
             {
-                Text = Text,
-                TargetY = TargetY,
-                TargetX = TargetX,
-                FontSize = FrontSize,
+                Text = text,
+                TargetY = Plugin.Singleton.Config.GlobalHintY,
+                FontSize = Plugin.Singleton.Config.GlobalHintSize,
                 SyncSpeed = HintSyncSpeed.Fast,
             };
-            
+            playerDisplay.RemoveHint(hint);
             playerDisplay.AddHint(hint);
-            Timing.CallDelayed(Duration,
+            Timing.CallDelayed(Dur,
+                () =>
+                {
+                    playerDisplay.RemoveHint(hint);
+                });
+        }
+        
+        public static void ShowMeowHintExtra(this Player player, string text, string ID)
+        {
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+
+            DynamicHint hint = new()
+            {
+                Id = ID,
+                Text = text,
+                TargetY = Plugin.Singleton.Config.GlobalHintY,
+                FontSize = Plugin.Singleton.Config.GlobalHintSize,
+                SyncSpeed = HintSyncSpeed.Fast,
+            };
+            playerDisplay.AddHint(hint);
+            Timing.CallDelayed(Plugin.Singleton.Config.GlobalHintDuration,
                 () =>
                 {
                     playerDisplay.RemoveHint(hint);
