@@ -143,4 +143,4 @@ C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpda
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\AudioPlayerApi.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\DSharp4Webhook.dll
 C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\AdvancedMERTools.dll
-C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\ServerSpecificSyncer-EXILED.dll
+C:\Users\Administrator\RiderProjects\Fentanyl ReactorUpdate\Fentanyl ReactorUpdate\bin\Debug\SSMenuSystem-EXILED.dll

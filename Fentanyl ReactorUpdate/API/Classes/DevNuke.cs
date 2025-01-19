@@ -188,7 +188,7 @@ namespace Fentanyl_ReactorUpdate.API.Classes
             yield break;
         }
 
-        public IEnumerator<float> AfterBlastDoors()
+         IEnumerator<float> AfterBlastDoors()
         {
             while (DevNukeHintTimerBlastDoors > 0) 
             {

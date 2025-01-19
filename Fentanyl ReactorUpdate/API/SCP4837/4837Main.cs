@@ -15,7 +15,7 @@ using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Commands.UtilityCommands;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
-using ServerSpecificSyncer.Features;
+using SSMenuSystem.Features;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using Utils.Networking;
@@ -32,12 +32,12 @@ public class Main4837
     private Transform Scp4837PickupPosition_1 { get; set; }
     private Transform Scp4837PickupPosition_2 { get; set; }
     private Transform Scp4837PickupPosition_3 { get; set; }
+    private CustomItem SCP4837Custom { get; set; }
     private Transform Scp4837PickupPositionScheme { get; set; }
     private Vector3 Scp4837PickupPositionSchemeOld { get; set; }
     private Quaternion Scp4837PickupRotationSchemeOld { get; set; }
-    private Pickup Scp4837Pickup_1 { get; set; }
-    private Pickup Scp4837Pickup_2 { get; set; }
-    private Pickup Scp4837Pickup_3 { get; set; }
+    private List<Pickup> Scp4837Pickups { get; set; } = new List<Pickup>();
+    private List<CustomItem> Scp4837CustomItems { get; set; } = new List<CustomItem>();
     private Transform SCP4837Light { get; set; }
     private bool _hasPlayerPickedUp { get; set; }
     public bool _Cooldown { get; set; }
@@ -49,6 +49,21 @@ public class Main4837
         ItemType.Medkit,
         ItemType.Coin,
         ItemType.SCP500,
+        ItemType.Adrenaline,
+        ItemType.Flashlight,
+        ItemType.Lantern,
+        ItemType.Jailbird,
+        ItemType.GunShotgun,
+        ItemType.ParticleDisruptor,
+        ItemType.Painkillers,
+        ItemType.SCP207,
+        ItemType.SCP1344,
+        ItemType.SCP268,
+        ItemType.SCP330,
+        ItemType.SCP1853,
+        ItemType.SCP1576,
+        ItemType.SCP2176,
+        ItemType.AntiSCP207
     };
     private List<int> customItemIDs4837 = new List<int>
     {
@@ -187,7 +202,6 @@ public void Trade4837(Player player)
     Timing.RunCoroutine(ColorRandom(player));
 }
 
-
 private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3, List<ItemType> ItemTypes, List<int> CustomItemTypes)
 {
     if (Item1 == null || Item2 == null || Item3 == null)
@@ -215,9 +229,14 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
                 Log.Info($"Attempting to spawn custom item with ID {customItemId} at position {transform.position}");
                 if (CustomItem.TrySpawn((uint)customItemId, transform.position, out spawnedPickup))
                 {
-                    spawnedPickup.Rigidbody.useGravity = false;
-                    spawnedPickup.Rotation = transform.GetChild(0).rotation;
-                    Log.Info($"Successfully spawned custom item with ID {customItemId} at {transform.position}");
+                    spawnedPickup!.Rigidbody.useGravity = false;
+                    spawnedPickup!.Rigidbody.isKinematic = true;
+                    spawnedPickup!.Rotation = transform.GetChild(0).rotation;
+                    
+                    // Add to Custom Items list
+                    Scp4837Pickups.Add(spawnedPickup);
+
+                    Log.Info($"Successfully spawned custom item with ID {customItemId} at {spawnedPickup.Position} | {spawnedPickup.Rotation} | {transform.GetChild(0).rotation}");
                 }
                 else
                 {
@@ -229,28 +248,18 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
                 var itemType = ItemTypes.GetRandomValue();
                 Log.Info($"Spawning regular item of type {itemType} at position {transform.position}");
                 spawnedPickup = Pickup.CreateAndSpawn(itemType, transform.position);
-                if (spawnedPickup != null) spawnedPickup.Rigidbody.useGravity = false;
+                if (spawnedPickup != null)
+                {
+                    spawnedPickup.Rigidbody.useGravity = false; 
+                    spawnedPickup.Rigidbody.isKinematic = true;
+                    spawnedPickup.Rotation = transform.GetChild(0).rotation;
+                    
+                    Scp4837Pickups.Add(spawnedPickup);
+                }
             }
             else
             {
                 Log.Warn($"No items available to spawn at transform {index}.");
-            }
-
-            // Assign spawned pickup to the corresponding property
-            switch (index)
-            {
-                case 1:
-                    Scp4837Pickup_1 = spawnedPickup;
-                    break;
-                case 2:
-                    Scp4837Pickup_2 = spawnedPickup;
-                    break;
-                case 3:
-                    Scp4837Pickup_3 = spawnedPickup;
-                    break;
-                default:
-                    Log.Warn($"Invalid index {index} for spawning item.");
-                    break;
             }
         }
         
@@ -264,54 +273,41 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
     }
 }
 
-    private void OnPickingUpItem(PickingUpItemEventArgs ev)
-    {
-        if (ev.Pickup == null || ev.Pickup.Base == null)
-            return;
-        
-        if (Scp4837Pickup_1 != null && Scp4837Pickup_1.Base != null && ev.Pickup.Base.name.Contains(Scp4837Pickup_1.Base.name))
-        {
-            _hasPlayerPickedUp = true;
-            
-            DestroyPickup(Scp4837Pickup_2);
-            DestroyPickup(Scp4837Pickup_3);
-            Scp4837Pickup_2 = null;
-            Scp4837Pickup_3 = null;
-
-            Timing.CallDelayed(1.2f, () => { _hasPlayerPickedUp = false; });
-        }
-        else if (Scp4837Pickup_2 != null && Scp4837Pickup_2.Base != null && ev.Pickup.Base.name.Contains(Scp4837Pickup_2.Base.name))
-        {
-            _hasPlayerPickedUp = true;
-            
-            DestroyPickup(Scp4837Pickup_1);
-            DestroyPickup(Scp4837Pickup_3);
-            Scp4837Pickup_1 = null;
-            Scp4837Pickup_3 = null;
-
-            Timing.CallDelayed(1.2f, () => { _hasPlayerPickedUp = false; });
-        }
-        else if (Scp4837Pickup_3 != null && Scp4837Pickup_3.Base != null && ev.Pickup.Base.name.Contains(Scp4837Pickup_3.Base.name))
-        {
-            _hasPlayerPickedUp = true;
-            
-            DestroyPickup(Scp4837Pickup_1);
-            DestroyPickup(Scp4837Pickup_2);
-            Scp4837Pickup_1 = null;
-            Scp4837Pickup_2 = null;
-
-            Timing.CallDelayed(1.2f, () => { _hasPlayerPickedUp = false; });
-        }
-    }
+private void OnPickingUpItem(PickingUpItemEventArgs ev)
+{
+    if (ev.Pickup == null || ev.Pickup.Base == null)
+        return;
     
-    private void DestroyPickup(Pickup pickup)
+    foreach (var pickup in Scp4837Pickups)
     {
-        if (pickup != null)
+        if (pickup != null && pickup.Base != null && ev.Pickup.Base.name.Contains(pickup.Base.name))
         {
-            pickup.Destroy(); 
-            pickup = null;   
+            _hasPlayerPickedUp = true;
+            
+            foreach (var otherPickup in Scp4837Pickups)
+            {
+                if (otherPickup != pickup)
+                {
+                    DestroyPickup(otherPickup);
+                }
+            }
+
+            Scp4837Pickups.Clear();
+            Scp4837Pickups.Add(pickup);
+
+            Timing.CallDelayed(1.2f, () => { _hasPlayerPickedUp = false; });
+            return;
         }
     }
+}
+
+private void DestroyPickup(Pickup pickup)
+{
+    if (pickup != null)
+    {
+        pickup.Destroy();
+    }
+}
 
 
     private IEnumerator<float> ColorRandom(Player player)
@@ -359,9 +355,9 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
                     yield break;
                 }
 
-                light.Color = Plugin.Singleton.SCP4837InteractionMenu.GetPlayerColor(player);
+                light.Color = Plugin.Singleton.PlayerColorManager.GetPlayerColor(player);
                 Log.Info(light.Color);
-                Log.Info(Plugin.Singleton.SCP4837InteractionMenu.GetPlayerColor(player));
+                Log.Info(Plugin.Singleton.PlayerColorManager.GetPlayerColor(player));
                 
                 yield return Timing.WaitForSeconds(1);
             }
@@ -370,7 +366,9 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
         }
         yield break;
     }
+    
 
+    
     private List<string> RandomSounds = new List<string>
     {
         "Horror1.ogg",
@@ -408,6 +406,7 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
                 player.EnableEffect(EffectType.Flashed, 1, 5);
                 player.EnableEffect(EffectType.Ensnared, 1, 5);
                 player.Position = SCP4837TradeRoomPlayerPosOld;
+                Scp4837Pickups.Clear();
                 if (PlayCustomSoundsHorror.SyncIsA)
                 {
                     PlayRandomSound(player, true);
@@ -431,6 +430,8 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
         player.DisableEffect(EffectType.AmnesiaVision);
         player.EnableEffect(EffectType.Flashed, 1, 5);
         player.EnableEffect(EffectType.Ensnared, 1, 5);
+        Scp4837Pickups.Clear();
+        DestroyAllPickups();
         player.Position = SCP4837TradeRoomPlayerPosOld;
         if (PlayCustomSoundsHorror.SyncIsA)
         {
@@ -469,7 +470,17 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
         Scp4837TradeDur = 30f;
         yield break;
     }
-    
+
+
+    private void DestroyAllPickups()
+    {
+        var pickupsToRemove = new List<Pickup>(Scp4837Pickups);
+        foreach (var pickup in pickupsToRemove)
+        {
+            pickup.Destroy();
+            Scp4837Pickups.Remove(pickup);
+        }
+    }
     private void PlayRandomSound(Player player, bool leaving)
     {
         string randomSound = RandomSounds.GetRandomValue();

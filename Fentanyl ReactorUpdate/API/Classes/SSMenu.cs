@@ -6,12 +6,14 @@ using Exiled.CustomItems.API.Features;
 using Fentanyl_ReactorUpdate.API.Extensions;
 using InventorySystem.Items;
 using MapEditorReborn.API.Features.Objects;
-using ServerSpecificSyncer.Features;
-using ServerSpecificSyncer.Features.Wrappers;
+using SSMenuSystem.Features;
+using SSMenuSystem.Features.Wrappers;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using MEC;
 using PlayerRoles;
+using SSMenuSystem.Features;
+using SSMenuSystem.Features.Wrappers;
 using UserSettings.ServerSpecific.Examples;
 
 namespace Fentanyl_ReactorUpdate.API.SCP4837
@@ -59,6 +61,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
                 new YesNoButton(414, "Soll SCP-4837 Jumpscare Sounds spielen?", "Ja", "Nein", OnAvoid4837Hint, false),
                 new Dropdown(415, "SCP-4837 Pocket Dimensions Farbe", _presets.Select(x => x.Name).ToArray(), Chose4837Color, 1, SSDropdownSetting.DropdownEntryType.Hybrid, "Wähl deine Eigene Farbe aus, für die Dimension von SCP-4837!"),
                 new YesNoButton(416, "Soll SCP-4837 Regenbogen-Farben nutzten?", "Ja", "Nein", OnAvoid4837Hint, false, "Dies überschreibt deine Eigende Farbe, falls es Aktiv ist!"),
+                new YesNoButton(417, "Soll SCP-4837 den 'ALT' Key nutzten?", "Ja", "Nein", OnAvoid4837Hint, false, "Dies überschreibt NICHT deinen Custom Keybind!"),
                 new Keybind(ExampleId.Scp4837InteractKey, "SCP-4837 Interaktion", OnScp4837KeyPress, KeyCode.E, hint: Scp4837InteractionHint, isGlobal: true),
             };
 
@@ -81,39 +84,22 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
         
         private Dictionary<Player, string> SavedPlayerColors = new();
 
-        private void Chose4837Color(ReferenceHub hub, SSDropdownSetting dropdown, string answer)
+        private void Chose4837Color(ReferenceHub hub, string answer, int rahhh, SSDropdownSetting dropdown)
         {
             Player player = Player.Get(hub);
+            if (player == null)
+                return;
 
             int selectedIndex = dropdown.SyncSelectionIndexRaw;
-
-            Color selectedColor = _presets[selectedIndex].Color;
-
-            string hexColor = ColorUtility.ToHtmlStringRGB(selectedColor);
-
-            string colorName = _presets[selectedIndex].Name;
-
-            var existingSelection = PlayerColorSelections.FirstOrDefault(p => p.Key == player);
-
-            if (existingSelection.Key != null)
-            {
-                PlayerColorSelections.Remove(existingSelection);
-            }
-
-            PlayerColorSelections.Add(new KeyValuePair<Player, Color>(player, selectedColor));
             
-            if (SavedPlayerColors.ContainsKey(player))
-            {
-                SavedPlayerColors[player] = hexColor;
-            }
-            else
-            {
-                SavedPlayerColors.Add(player, hexColor);
-            }
-
-            player.ShowMeowHint($"Du hast die Farbe <color=#{hexColor}>{colorName}</color> ausgewählt!");
+            if (selectedIndex < 0 || selectedIndex >= _presets.Count)
+                return;
+            
+            Color selectedColor = _presets[selectedIndex].Color;
+            
+            Plugin.Singleton.PlayerColorManager.SetPlayerColor(player, selectedColor);
         }
-
+        
         public Color GetPlayerColor(Player player)
         {
             if (SavedPlayerColors.TryGetValue(player, out var hexColor) && ColorUtility.TryParseHtmlString($"{hexColor}", out var color))
@@ -136,11 +122,6 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
             StartTrading4837(player);
         }
 
-        public override void OnRegistered()
-        {
-            Log.Info("SCP-4837 Interaction Menu has been registered.");
-        }
-
         public override bool CheckAccess(ReferenceHub hub) => true;
 
         public override string Name { get; set; } = "Raven's garden Interaktion";
@@ -151,7 +132,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
         {
             public static readonly int Scp4837InteractKey = 1132;
         }
-
+        
         public void StartTrading4837(Player player)
         {
 

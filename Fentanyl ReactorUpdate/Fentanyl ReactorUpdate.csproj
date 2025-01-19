@@ -94,9 +94,6 @@
         <Reference Include="SCPSLAudioApi">
           <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
         </Reference>
-        <Reference Include="ServerSpecificSyncer-EXILED">
-          <HintPath>..\..\..\Downloads\ServerSpecificSyncer-EXILED.dll</HintPath>
-        </Reference>
         <Reference Include="System" />
         <Reference Include="System.ComponentModel.Composition">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\System.ComponentModel.Composition.dll</HintPath>
@@ -440,6 +437,7 @@
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />
         <Compile Include="API\CustomItems\FentT3.cs" />
+        <Compile Include="API\CustomItems\HazmatSuit.cs" />
         <Compile Include="API\Extensions\AudioModule.cs" />
         <Compile Include="API\Extensions\PlayerHintHSM.cs" />
         <Compile Include="API\Extensions\SchematicColor.cs" />
@@ -456,6 +454,7 @@
         <Compile Include="API\SCP1356\Events\Contain.cs" />
         <Compile Include="API\SCP1356\Events\RadiationDamage.cs" />
         <Compile Include="API\SCP4837\4837Main.cs" />
+        <Compile Include="API\SCP4837\ColorManager.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Translation.cs" />
         <Compile Include="Plugin.cs" />
@@ -465,10 +464,11 @@
       <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="ExMod.Exiled" Version="9.3.0" />
+      <PackageReference Include="ExMod.Exiled" Version="9.4.0" />
       <PackageReference Include="Lib.Harmony" Version="2.2.2" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="RueI" Version="2.1.0" />
+      <PackageReference Include="SSMenuSystem" Version="2.0.3-EXILED" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

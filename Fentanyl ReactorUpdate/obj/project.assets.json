@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     ".NETFramework,Version=v4.8": {
-      "ExMod.Exiled/9.3.0": {
+      "ExMod.Exiled/9.4.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -99,13 +99,35 @@
         },
         "runtime": {
           "lib/net48/RueI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SSMenuSystem/2.0.3-EXILED": {
+        "type": "package",
+        "dependencies": {
+          "ExMod.Exiled": "[9.4.0]"
+        },
+        "compile": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
             "related": ".xml"
           }
         }
       }
     },
     ".NETFramework,Version=v4.8/win": {
-      "ExMod.Exiled/9.3.0": {
+      "ExMod.Exiled/9.4.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -202,13 +224,35 @@
         },
         "runtime": {
           "lib/net48/RueI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SSMenuSystem/2.0.3-EXILED": {
+        "type": "package",
+        "dependencies": {
+          "ExMod.Exiled": "[9.4.0]"
+        },
+        "compile": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
             "related": ".xml"
           }
         }
       }
     },
     ".NETFramework,Version=v4.8/win-arm64": {
-      "ExMod.Exiled/9.3.0": {
+      "ExMod.Exiled/9.4.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -305,13 +349,35 @@
         },
         "runtime": {
           "lib/net48/RueI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SSMenuSystem/2.0.3-EXILED": {
+        "type": "package",
+        "dependencies": {
+          "ExMod.Exiled": "[9.4.0]"
+        },
+        "compile": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
             "related": ".xml"
           }
         }
       }
     },
     ".NETFramework,Version=v4.8/win-x64": {
-      "ExMod.Exiled/9.3.0": {
+      "ExMod.Exiled/9.4.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -408,13 +474,35 @@
         },
         "runtime": {
           "lib/net48/RueI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SSMenuSystem/2.0.3-EXILED": {
+        "type": "package",
+        "dependencies": {
+          "ExMod.Exiled": "[9.4.0]"
+        },
+        "compile": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
             "related": ".xml"
           }
         }
       }
     },
     ".NETFramework,Version=v4.8/win-x86": {
-      "ExMod.Exiled/9.3.0": {
+      "ExMod.Exiled/9.4.0": {
         "type": "package",
         "compile": {
           "lib/net48/Assembly-CSharp-Publicized.dll": {},
@@ -511,6 +599,28 @@
         },
         "runtime": {
           "lib/net48/RueI.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SSMenuSystem/2.0.3-EXILED": {
+        "type": "package",
+        "dependencies": {
+          "ExMod.Exiled": "[9.4.0]"
+        },
+        "compile": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net48/Assembly-CSharp-Publicized.dll": {},
+          "lib/net48/NorthwoodLib.dll": {},
+          "lib/net48/PluginAPI.dll": {},
+          "lib/net48/SSMenuSystem-EXILED.dll": {
             "related": ".xml"
           }
         }
@@ -518,14 +628,14 @@
     }
   },
   "libraries": {
-    "ExMod.Exiled/9.3.0": {
-      "sha512": "WLeFL5T1B7TQhn5oloeEX8RF0Vy943bTmxgfR+4GtEjxQMLp0cnj0OFvo2d/V0TxfG68hVbugVANA2Koq9s+Kw==",
+    "ExMod.Exiled/9.4.0": {
+      "sha512": "1F7swNzEDlrJMCwiYkei/artRsvT2JMlqhqafouZNtAjWc4WqMcAj0wp7OXk3j7a+llcnH3YcVFzY3KdCgK3NQ==",
       "type": "package",
-      "path": "exmod.exiled/9.3.0",
+      "path": "exmod.exiled/9.4.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "exmod.exiled.9.3.0.nupkg.sha512",
+        "exmod.exiled.9.4.0.nupkg.sha512",
         "exmod.exiled.nuspec",
         "images/Exiled_Icon.png",
         "lib/net48/Assembly-CSharp-Publicized.dll",
@@ -622,14 +732,32 @@
         "ruei.2.1.0.nupkg.sha512",
         "ruei.nuspec"
       ]
+    },
+    "SSMenuSystem/2.0.3-EXILED": {
+      "sha512": "WmF3k82H+yC2Ns/Er2XC8fbPrDNZpFxzxObmSr8xgPI0mbx5WQAuGVFyU23n3ALtcF6sIyznZ+3wAZOzUG5HTg==",
+      "type": "package",
+      "path": "ssmenusystem/2.0.3-exiled",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "docs/README.md",
+        "lib/net48/Assembly-CSharp-Publicized.dll",
+        "lib/net48/NorthwoodLib.dll",
+        "lib/net48/PluginAPI.dll",
+        "lib/net48/SSMenuSystem-EXILED.dll",
+        "lib/net48/SSMenuSystem-EXILED.xml",
+        "ssmenusystem.2.0.3-exiled.nupkg.sha512",
+        "ssmenusystem.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETFramework,Version=v4.8": [
-      "ExMod.Exiled >= 9.3.0",
+      "ExMod.Exiled >= 9.4.0",
       "Lib.Harmony >= 2.2.2",
       "Newtonsoft.Json >= 13.0.3",
-      "RueI >= 2.1.0"
+      "RueI >= 2.1.0",
+      "SSMenuSystem >= 2.0.3-EXILED"
     ]
   },
   "packageFolders": {
@@ -672,7 +800,7 @@
         "dependencies": {
           "ExMod.Exiled": {
             "target": "Package",
-            "version": "[9.3.0, )"
+            "version": "[9.4.0, )"
           },
           "Lib.Harmony": {
             "target": "Package",
@@ -685,6 +813,10 @@
           "RueI": {
             "target": "Package",
             "version": "[2.1.0, )"
+          },
+          "SSMenuSystem": {
+            "target": "Package",
+            "version": "[2.0.3-EXILED, )"
           }
         }
       }

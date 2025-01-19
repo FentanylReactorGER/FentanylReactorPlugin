@@ -4,6 +4,7 @@ using Exiled.Events.EventArgs.Player;
 using MEC;
 using System.Collections.Generic;
 using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Map;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
 
@@ -40,20 +41,35 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
         {
             Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
             Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
+            Exiled.Events.Handlers.Server.RoundStarted += SpawningItem;
         }
 
         public void UnsubscribeEvents()
         {
             Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
             Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+            Exiled.Events.Handlers.Server.RoundStarted -= SpawningItem;
         }
 
+        private void SpawningItem()
+        {
+            foreach (Pickup pickup in Pickup.List)
+            {
+                if (CustomItem.TryGet(pickup, out CustomItem customItem))
+                {
+                    if (!CustomItemLightColors.TryGetValue(customItem!.Id, out var lightColor))
+                        return;
+                    Timing.RunCoroutine(SpawnLightForPickup(pickup, lightColor));
+                }
+            }
+        }
+        
         private void OnDroppedItem(DroppedItemEventArgs ev)
         {
             if (ev.Pickup == null || !CustomItem.TryGet(ev.Pickup, out CustomItem customItem))
                 return;
 
-            if (!CustomItemLightColors.TryGetValue(customItem.Id, out var lightColor))
+            if (!CustomItemLightColors.TryGetValue(customItem!.Id, out var lightColor))
                 return;
 
             Log.Info($"Player {ev.Player.Nickname} dropped custom item ID {customItem.Id} at {ev.Pickup.Position}.");

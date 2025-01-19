@@ -12,6 +12,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Spawn;
 using Exiled.CustomItems.API.Features;
 using Exiled.Events.Commands.Hub;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Fentanyl_ReactorUpdate.API.Classes;
 using Fentanyl_ReactorUpdate.API.Extensions;
@@ -22,7 +23,7 @@ using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
 using PlayerRoles;
-using ServerSpecificSyncer.Features;
+using SSMenuSystem.Features;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using Light = Exiled.API.Features.Toys.Light;
@@ -48,6 +49,8 @@ public class Brot : CustomItem
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
         Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
+        Exiled.Events.Handlers.Player.TogglingNoClip += OnStandartButton;
+        Exiled.Events.Handlers.Server.RoundStarted += SpawningItem;
     }
 
     protected override void UnsubscribeEvents()
@@ -56,6 +59,8 @@ public class Brot : CustomItem
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
         Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+        Exiled.Events.Handlers.Player.TogglingNoClip -= OnStandartButton;
+        Exiled.Events.Handlers.Server.RoundStarted -= SpawningItem;
     }
 
     private void OnRoundStarted()
@@ -72,6 +77,23 @@ public class Brot : CustomItem
         Timing.RunCoroutine(SpawnBreadSchematicAndLight(ev.Pickup));
     }
 
+    private void SpawningItem()
+    {
+        foreach (Pickup pickup in Pickup.List)
+        {
+            if (pickup == null || !Check(pickup)) return;
+            Timing.RunCoroutine(SpawnBreadSchematicAndLight(pickup));
+        }
+    }
+    
+    private void OnStandartButton(TogglingNoClipEventArgs ev)
+    {
+        SSTwoButtonsSetting UseNoclipKey = ev.Player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(417);
+        if (UseNoclipKey.SyncIsA)
+        {
+            Plugin.Singleton.SCP4837InteractionMenu.StartTrading4837(ev.Player);
+        }
+    }
 
     private void OnPickingUpItem(PickingUpItemEventArgs ev)
     {
@@ -188,7 +210,7 @@ public class Brot : CustomItem
                     
                     if (ShowTutHint.SyncIsA)
                     {
-                        player.ShowMeowHint("<color=yellow>🔒</color> Um mit <b><color=#757935>SCP-4837</b></color> zu interagieren, musst du einen Keybind festlegen! \n ESC => Settings / Einstellungen => Server-Specific / Server-Spezifisch \n Dort kannst du auch diesen Hint Deaktivieren!");
+                        player.ShowMeowHint("<color=yellow>🔒</color> Um mit <b><color=#757935>SCP-4837</b></color> zu interagieren, musst du einen Keybind festlegen! \n ESC => Settings / Einstellungen => Server-Specific / Server-Spezifisch \n Dort kannst du auch diesen Hint Deaktivieren! \n Standart: ALT");
                         if (PlayCustomSounds.SyncIsA)
                         {
                             string randomAudio = noBreadAudios.GetRandomValue();
@@ -223,7 +245,7 @@ public class Brot : CustomItem
                         {
                             player.ShowMeowHint(
                                 $"⚠️ Du brauchst Brot, um mit <b><color=#757935>SCP-4837</b></color> zu handeln! \n" +
-                                $"🔎 Suche in der Facility nach Brot und kehre zurück, um zu handeln & drücke <b>''</b>, während du auf <b><color=#757935>SCP-4837</b></color> schaust.");
+                                $"🔎 Suche in der Facility nach Brot und kehre zurück, um zu handeln & drücke Standart: <b>'ALT'</b>, während du auf <b><color=#757935>SCP-4837</b></color> schaust.");
                             if (PlayCustomSounds.SyncIsA)
                             {
                                 string randomAudio = noBreadAudios.GetRandomValue();
@@ -236,7 +258,7 @@ public class Brot : CustomItem
                         {
                             player.ShowMeowHint($"✨ Willkommen, {player.Nickname}! \n" +
                                                 "Du hast <b>Brot</b> dabei. \n" +
-                                                $"Drücke <b>''</b>, um mit <b><color=#757935>SCP-4837</b></color> zu handeln und besondere Vorteile zu erhalten!");
+                                                $"Drücke Standart: <b>'ALT'</b>, um mit <b><color=#757935>SCP-4837</b></color> zu handeln und besondere Vorteile zu erhalten!");
                             if (PlayCustomSounds.SyncIsA)
                             {
                                 string randomAudio = hasBreadAudios.GetRandomValue();

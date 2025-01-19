@@ -18,6 +18,7 @@ using Fentanyl_ReactorUpdate.API.Extensions;
 using Fentanyl_ReactorUpdate.API.SCP1356;
 using Fentanyl_ReactorUpdate.API.SCP1356.Events;
 using Fentanyl_ReactorUpdate.API.SCP4837;
+using SSMenuSystem.Features;
 using UnityEngine.PlayerLoop;
 using UserSettings.ServerSpecific;
 
@@ -46,6 +47,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
     public Breach Breach { get; private set; }
     public Main4837 Main4837 { get; private set; }
     public CustomItemLight CustomItemLight { get; private set; }
+    public PlayerColorManager PlayerColorManager { get; private set; }
     public bool SCP1356Breach { get; set; }
     public Brot brot { get; set;  }
     
@@ -65,6 +67,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
         RadiationDamage = new RadiationDamage();
         DevNuke = new DevNuke();
         FentGenerator = new FentGenerator();
+        PlayerColorManager = new PlayerColorManager();
         FentGenerator.SubEvents();
         DevNuke.SubEvents();
         Main4837 = new Main4837();
@@ -93,7 +96,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
             UpdateSchematicDemonCoreChecker.RegisterEvents();
         }
         SCP4837InteractionMenu = new SCP4837InteractionMenu();
-        ServerSpecificSyncer.Features.Menu.RegisterAll();
+        SSMenuSystem.Features.Menu.RegisterAll();
         MeltdownAutoStart = new MeltdownAutoStart();
         base.OnEnabled();
     }
@@ -112,6 +115,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
         Elevator = null;
         Breach.UnsubEvents();
         Breach = null;
+        PlayerColorManager = null;
         Contain.UnsubEvents();
         Contain = null;
         KillAreaCommand.UnSubEvents();
@@ -138,7 +142,7 @@ public class Plugin : Plugin<Configs.Config, Configs.Translation>
             UpdateOggDemonCore.UnRegisterEvents();
             UpdateSchematicDemonCoreChecker.UnRegisterEvents();
         }
-        ServerSpecificSyncer.Features.Menu.UnregisterAll();
+        SSMenuSystem.Features.Menu.Unregister(SCP4837InteractionMenu);
         SCP4837InteractionMenu = null;
         MeltdownAutoStart.UnSubEvents();
         CustomItem.UnregisterItems();
