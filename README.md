@@ -1,3 +1,5 @@
+# PLUGIN IS NOT FOR PUBLIC USE ANYMORE!
+
 ![Fentanyl Reactor](https://github.com/user-attachments/assets/4a693450-9907-457e-9643-cdb310d66298)
 <br><br><br>
 [![downloads](https://img.shields.io/github/downloads/FentanylReactorGER/FentanylReactorPlugin/total?style=for-the-badge&logo=icloud&color=%233A6D8C)](https://github.com/FentanylReactorGER/FentanylReactorPlugin/releases/latest)
