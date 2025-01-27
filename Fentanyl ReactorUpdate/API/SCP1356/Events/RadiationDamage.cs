@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using Fentanyl_ReactorUpdate.Configs;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.API.Features.Serializable;
@@ -22,6 +24,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
         private EffectType effecttwo = Plugin.Singleton.Config.EffectTwo;
         private EffectType effectthree = Plugin.Singleton.Config.EffectThree;
         private int effectDuration = Plugin.Singleton.Config.EffectDuration;
+        private static readonly Translation Translation = Plugin.Singleton.Translation;
         public SchematicObject SCP1356 { get; set; }
         public bool IsSCP1356Captured { get; set; } = false;
         public bool IsSCP1356GlassOpen { get; set; } = false;
@@ -36,9 +39,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             string SchematicName = "GameObject";
             scp1356RootPosition = Plugin.Singleton.MainDuck.DuckPosition;
             scp1356RootObject = Plugin.Singleton.MainDuck.DuckScheme;
-            SCP1356 = ObjectSpawner.SpawnSchematic(SchematicName, scp1356RootObject.position,
-                scp1356RootObject.rotation, scp1356RootObject.localScale,
-                MapUtils.GetSchematicDataByName(SchematicName), true);
+            SCP1356 = ObjectSpawner.SpawnSchematic(SchematicName, scp1356RootObject.position, scp1356RootObject.rotation, scp1356RootObject.localScale, MapUtils.GetSchematicDataByName(SchematicName), true);
             Log.Info($"{SCP1356.Position} | {SCP1356.Rotation} | {SCP1356.Scale}");
             tokenSource = new CancellationTokenSource();
             token = tokenSource.Token;
@@ -68,19 +69,25 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                 
                 float range = Plugin.Singleton.SCP1356Breach ? 8.5f : 3.8f;
 
-                foreach (var player in Player.List.Where(p =>
-                             p.IsAlive &&
-                             Vector3.Distance(p.Position, SCP1356.Position) < range))
+                foreach (var player in Player.List.Where(p => p.IsAlive && Vector3.Distance(p.Position, SCP1356.Position) < range))
                 {
                     DUCKMembers.Add(player);
                     currentPlayersInArea.Add(player);
 
                     if (player.Role.Type != RoleTypeId.Tutorial && player.Role.Team != Team.SCPs)
                     {
-                        player.EnableEffect(effectone, effectDuration);
-                        player.EnableEffect(effecttwo, effectDuration);
-                        player.EnableEffect(effectthree, effectDuration);
-                        player.Hurt(15f, "SCP-1356");
+                        
+                        if (CustomItem.TryGet(player.CurrentItem, out CustomItem customItems) && customItems?.Id == 6912)
+                        {
+                            player.EnableEffect(effectone, effectDuration);
+                            player.EnableEffect(effecttwo, effectDuration);
+                            player.EnableEffect(effectthree, effectDuration);
+                        }
+                        else
+                        {
+                            player.Hurt(15f, "SCP-1356");
+                        }
+                        
                         if (!_playersInArea.Contains(player))
                         {
                             SCP1356.Position.SpecialPos("1356.ogg", 15, 5);
@@ -90,21 +97,17 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                     {
                         if (!_DUCKMembers.Contains(player))
                         {
+                            SCP1356.Position.SpecialPos("1356.ogg", 15, 5);
                             if (!Plugin.Singleton.SCP1356Breach)
                             {
                                 if (!IsSCP1356GlassOpen)
                                 {
-                                    player.ShowMeowHint(
-                                        "⚠️ <b>SCP-1356 ist noch eingeschlossen!</b> \n" +
-                                        "🎯 Schieß auf das <b>dunklere Glas</b>, um das Containment zu öffnen. \n" +
-                                        "🦆 Anschließend drücke <b>E</b> auf die Ente, um fortzufahren!");
+                                    player.ShowMeowHint(Translation.SCP1356ContainedGlassHint);
                                 }
                             }
                             else if (Plugin.Singleton.SCP1356Breach || IsSCP1356GlassOpen)
                             {
-                                player.ShowMeowHint(
-                                    "✅ <b>SCP-1356 ist frei!</b> \n" +
-                                    "🦆 Drücke <b>E</b> auf die Ente, um der D.U.C.K einen Respawn zu sichern!");
+                                player.ShowMeowHint(Translation.SCP1356ContainedGlassOpenHint);
                             }
                         }
                     }

@@ -30,6 +30,26 @@ namespace Fentanyl_ReactorUpdate.API.Extensions
                     playerDisplay.RemoveHint(hint);
                 });
         }
+        public static void ShowMeowHintMoney(this Player player, string text)
+        {
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+
+            DynamicHint hint = new()
+            {
+                Text = text,
+                TargetY = -5, 
+                TargetX = 7, 
+                FontSize = Plugin.Singleton.Config.GlobalHintSize,
+                SyncSpeed = HintSyncSpeed.Fast,
+            };
+            playerDisplay.RemoveHint(hint);
+            playerDisplay.AddHint(hint);
+            Timing.CallDelayed( Plugin.Singleton.Config.GlobalHintDuration,
+                () =>
+                {
+                    playerDisplay.RemoveHint(hint);
+                });
+        }
         public static void ShowMeowHintDur(this Player player, string text, float Dur)
         {
             PlayerDisplay playerDisplay = PlayerDisplay.Get(player);

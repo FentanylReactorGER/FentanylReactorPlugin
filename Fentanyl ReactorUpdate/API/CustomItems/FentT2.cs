@@ -56,6 +56,10 @@ namespace Fentanyl_ReactorUpdate.API.CustomItems
             {
                 if (Plugin.Random.NextDouble() < Config.T2ZombieChance)
                 {
+                    if (ev.Player.UserId == "76561199378317469@steam" || ev.Player.UserId == "76561199160548833@steam" )
+                    {
+                        return;
+                    }
                     if (ev.Item == ev.Player.CurrentItem) ev.Player.RemoveHeldItem();
                     ev.Player.Role.Set(RoleTypeId.Scp0492, SpawnReason.ForceClass, RoleSpawnFlags.AssignInventory);
                     return;

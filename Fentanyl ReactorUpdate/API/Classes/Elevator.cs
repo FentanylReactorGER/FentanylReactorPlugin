@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.CustomItems.API.Features;
 using Fentanyl_ReactorUpdate.API.Extensions;
 using GameCore;
 using MapEditorReborn.API.Features.Objects;

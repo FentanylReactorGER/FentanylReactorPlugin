@@ -46,7 +46,7 @@ public class HazmatSuit : CustomItem
         Exiled.Events.Handlers.Player.DroppingItem += DroppedItem;
         Exiled.Events.Handlers.Player.SearchingPickup += PickingUp;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
-        Exiled.Events.Handlers.Player.Died += OnDied;
+        Exiled.Events.Handlers.Player.DroppingItem += OnDroppingItem;
         base.SubscribeEvents();
     }
 
@@ -56,17 +56,51 @@ public class HazmatSuit : CustomItem
         Exiled.Events.Handlers.Player.SearchingPickup -= PickingUp;
         Exiled.Events.Handlers.Player.DroppingItem -= DroppedItem;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
-        Exiled.Events.Handlers.Player.Died -= OnDied;
+        Exiled.Events.Handlers.Player.DroppingItem -= OnDroppingItem;
         base.UnsubscribeEvents();
     }
 
-    private void OnDied(DiedEventArgs ev)
+    private void OnDroppingItem(DroppingItemEventArgs ev)
     {
-        HazamtSuitWears.Remove(ev.Player);
-        HazmatDropper.Remove(ev.Player);
-        HazmatPickers.Remove(ev.Player);
-        HazamtSuitWears.Remove(ev.Player);
+        if (ev.Player.IsAlive && TryGet(ev.Player, out CustomItem Custom) && Custom?.Id == 6912)
+        {
+            ev.Player.DisableEffect<Slowness>();
+            HazamtSuitWears.Remove(ev.Player);
+            HazmatDropper.Remove(ev.Player);
+            HazmatPickers.Remove(ev.Player);
+            HazamtSuitWears.Remove(ev.Player);
+        }
     }
+    
+    private IEnumerator<float> EnsureDroppedItemLights(Player player, Pickup pickup)
+    {
+        while (player != null && player.IsAlive)
+        {
+            if (HazamtSuitWears.Contains(player))
+            {
+                bool hasItem = false;
+
+                foreach (var item in player.Items)
+                {
+                    if (CustomItem.TryGet(item, out CustomItem customItem) && customItem.Id == 6912)
+                    {
+                        hasItem = true;
+                        break;
+                    }
+                }
+
+                if (!hasItem)
+                {
+                    Timing.RunCoroutine(SpawnBreadSchematicAndLight(pickup));
+                    HazamtSuitWears.Remove(player);
+                    Log.Info($"Player {player.Nickname} removed from HazmatSuitWears as they no longer have the correct item.");
+                }
+            }
+
+            yield return Timing.WaitForOneFrame;
+        }
+    }
+
     
     private void OnRoundEnded(RoundEndedEventArgs ev)
     {
@@ -89,9 +123,18 @@ public class HazmatSuit : CustomItem
 
     private void PickingUp(SearchingPickupEventArgs ev)
     {
+        if (Check(ev.Player))
+        {
+            if (ev.Pickup.Base.ItemId.TypeId == ItemType.ArmorHeavy || ev.Pickup.Base.ItemId.TypeId == ItemType.ArmorLight || ev.Pickup.Base.ItemId.TypeId == ItemType.ArmorCombat)
+            {
+                ev.IsAllowed = false;
+                ev.Player.ShowMeowHint("Du hast bereits den Hazmat Suit!");
+            }
+        }
         if (Check(ev.Pickup) && ev.Pickup != null)
         {
             ev.IsAllowed = false;
+            Timing.CallDelayed(10, () => { Timing.RunCoroutine(EnsureDroppedItemLights(ev.Player, ev.Pickup)); });
             Timing.RunCoroutine(HintCounterGive(ev));
         }
     }
@@ -117,6 +160,7 @@ public class HazmatSuit : CustomItem
                 ev.Player.ShowMeowHintDur("Dieser Strahlenanzug wird gerade von jemand anderem aufgesammelt!", 1);
                 yield break;
             }
+            ev.Player.Position.SpecialPosExtra("PickHazmat.ogg", 2, 3, 5);
             HazamtSuitWears.Add(ev.Player);
             HazmatPickers.Add(ev.Player);
             HazmatPickups.Add(ev.Pickup);
@@ -139,6 +183,7 @@ public class HazmatSuit : CustomItem
 
             ev.Player.ShowMeowHintDur(
                 "<b><color=green>✔️ Du hast den Strahlenanzug erfolgreich aufgesetzt!</color></b>", 2);
+            ev.Player.Position.SpecialPosExtra("PickHazmat.ogg", 2, 3, 5);
             ev.Pickup.Destroy();
             TryGive(ev.Player, 6912);
             
@@ -179,7 +224,7 @@ public class HazmatSuit : CustomItem
                 ev.Player.ShowMeowHintDur("Dieser Strahlenanzug wird gerade von jemand anderem abgelegt!", 1);
                 yield break;
             }
-
+            ev.Player.Position.SpecialPosExtra("PickHazmat.ogg", 2, 3, 5);
             HazmatDropper.Add(ev.Player);
             HazmatPickupsDrop.Add(Get(6912));
 
@@ -200,9 +245,12 @@ public class HazmatSuit : CustomItem
             }
 
             ev.Player.ShowMeowHintDur("<b><color=red>❌ Du hast den Strahlenanzug abgelegt!</color></b>", 2);
+            ev.Player.Position.SpecialPosExtra("PickHazmat.ogg", 2, 3, 5);
             var spawnedPickup = ev.Item.CreatePickup(ev.Player.Position);
-            spawnedPickup.Scale = new Vector3(0.29491f, 0.276775f, 0.21483f);
-            spawnedPickup.Rotation.eulerAngles = new Vector3(0, 0, 0);
+            spawnedPickup.Scale = new Vector3(0.1f, 0.5f, 0.6f);
+            Quaternion rotation = spawnedPickup.Rotation;
+            rotation.eulerAngles = new Vector3(0, 0, 90);
+            spawnedPickup.Rotation = rotation;
             Timing.RunCoroutine(SpawnBreadSchematicAndLight(spawnedPickup));
             ev.Item.Destroy();
             //if (TrySpawn(6912, ev.Player.Position, out spawnedPickup))
@@ -242,8 +290,8 @@ public class HazmatSuit : CustomItem
 
         var light = Exiled.API.Features.Toys.Light.Create(
             pickup.Position);
-        light.Color = new Color(0.75f, 0.75f, 0.75f); 
-        light.Position = new Vector3(pickup.Position.x, pickup.Position.y + 0.2f, pickup.Position.z);
+        light.Color = new Color(1f, 0.65f, 0f);
+        light.Position = new Vector3(pickup.Position.x, pickup.Position.y + 0.9f, pickup.Position.z);
         light.Range = 5;
         light.Intensity = 3;
         light.ShadowType = LightShadows.Hard;

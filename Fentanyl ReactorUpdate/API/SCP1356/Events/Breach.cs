@@ -10,10 +10,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
 {
     public class Breach
     {
-        // List to store spawn point schematics' transforms
         private readonly List<Transform> spawnPointTransforms = new();
-
-        // List of valid schematic names for spawn points
         private readonly List<string> spawnPointSchematicNames = new List<string>
         {
             "049SpawnPoint1356",
@@ -22,17 +19,14 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             "106SpawnPoint1356",
             "ChkpSpawnPoint1356",
             "MicroSpawnPoint1356",
-            "FentanylReactorSpawnPoint1356"
         };
 
-        // Subscribe to events
         public void SubEvents()
         {
             MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned += OnSchematicSpawned;
             Exiled.Events.Handlers.Map.Decontaminating += OnDecontaminating;
         }
 
-        // Unsubscribe from events
         public void UnsubEvents()
         {
             MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned -= OnSchematicSpawned;
@@ -41,10 +35,13 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
         
         private void OnSchematicSpawned(MapEditorReborn.Events.EventArgs.SchematicSpawnedEventArgs ev)
         {
+            Log.Info($"Schematic spawned: {ev.Schematic.Name}");
+
             if (spawnPointSchematicNames.Contains(ev.Schematic.Name))
             {
+                Plugin.Singleton.RadiationDamage.IsSCP1356Captured = false;
                 spawnPointTransforms.Add(ev.Schematic.transform);
-                Log.Info(ev.Schematic.transform.name + " Registered");
+                Log.Info($"{ev.Schematic.Name} registered as a spawn point.");
             }
 
             foreach (Transform DuckSpawnPoint in ev.Schematic.gameObject.GetComponentsInChildren<Transform>())
@@ -52,19 +49,24 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                 if (DuckSpawnPoint.name.Contains("FentanylReactorSpawnPoint1356"))
                 {
                     spawnPointTransforms.Add(DuckSpawnPoint);
-                    Log.Info(DuckSpawnPoint.name + " Registered");
+                    Log.Info($"Child spawn point registered: {DuckSpawnPoint.name}");
                 }
             }
         }
         
         private void OnDecontaminating(Exiled.Events.EventArgs.Map.DecontaminatingEventArgs ev)
         {
-            Timing.CallDelayed(30f, () => 
+            Timing.CallDelayed(30f, () =>
             {
-                if (!Warhead.IsInProgress || Warhead.IsDetonated || Round.InProgress)
+                if (!Warhead.IsInProgress && !Warhead.IsDetonated && Round.InProgress)
                 {
+                    Log.Info("Starting SCP-1356 breach after decontamination.");
                     Plugin.Singleton.SCP1356Breach = true;
                     StartBreach(Plugin.Singleton.RadiationDamage.SCP1356);
+                }
+                else
+                {
+                    Log.Warn("Conditions for SCP-1356 breach were not met.");
                 }
             });
         }
@@ -82,13 +84,17 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                 Log.Warn("No spawn points have been added. Breach cannot start!");
                 return;
             }
-            Cassie.MessageTranslated("pitch_0.7 BELL_START .g4 .g6 pitch_1 SCP 1 3 5 6 containment pitch_0.9 failure pitch_1 detected . Containment status .g3 .g2 pitch_0.7 error .g2 . pitch_1 . continue with pitch_0.9 caution pitch_1 pitch_0.7 .g6 .g4 BELL_END pitch_1", "<color=yellow>SCP-1356</color> Eindämmungsbruch festgestellt. Eindämmungsstatus: <color=red>Fehler.</color> Fahren Sie mit <color=red>Vorsicht</color> fort!");
+
+            Log.Info("Starting SCP-1356 breach process.");
+            Cassie.MessageTranslated(Plugin.Singleton.Translation.SCP1356CassieMessageBreach, Plugin.Singleton.Translation.SCP1356CassieMessageTranslatedBreach
+            );
             Timing.RunCoroutine(BreachCoroutine(scp1356));
         }
         
         private IEnumerator<float> BreachCoroutine(SchematicObject scp1356)
         {
-            while (true)
+            Log.Info($"Starting Breach {Plugin.Singleton.RadiationDamage.IsSCP1356Captured}");
+            while (!Plugin.Singleton.RadiationDamage.IsSCP1356Captured)
             {
                 var randomIndex = Random.Range(0, spawnPointTransforms.Count);
                 var selectedTransform = spawnPointTransforms[randomIndex];
@@ -100,15 +106,16 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                 }
 
                 var firstChild = selectedTransform.GetChild(0);
-                
                 firstChild.position.SpecialPos("RadiationWarn.ogg", 15, 25);
-                Log.Info($"SCP-1356 will teleported to {selectedTransform.name}'s first child: {firstChild.name}");
+                Log.Info($"SCP-1356 will teleport to {selectedTransform.name}'s first child: {firstChild.name}");
+
                 yield return Timing.WaitForSeconds(24f);
                 scp1356.Position = firstChild.position;
                 Log.Info($"SCP-1356 teleported to {selectedTransform.name}'s first child: {firstChild.name}");
-                
+
                 yield return Timing.WaitForSeconds(60f); 
             }
+            Log.Info("Ending Breach");
         }
     }
 }

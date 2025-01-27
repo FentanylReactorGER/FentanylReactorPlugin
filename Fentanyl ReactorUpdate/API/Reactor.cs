@@ -184,7 +184,7 @@ public class Reactor
         if (customItem == null) return $"Cant get custom item for level {level}";
 
         if (player.Nickname.Equals("TristanLikesUran", StringComparison.OrdinalIgnoreCase) ||
-            player.Nickname.Equals("Fentanyl Reaktor", StringComparison.OrdinalIgnoreCase))
+            player.Nickname.Equals("Raven's Reaktor", StringComparison.OrdinalIgnoreCase))
         {
             player.MassivePlayer("FentReactorTest.ogg", 25, 15);
             Timing.CallDelayed(Plugin.Singleton.Config.ReactorWaitTime,
@@ -264,13 +264,14 @@ public class Reactor
 
         _meltdownTriggered = true;
 
+        
         // Handle audio
         if (!Plugin.Singleton.Config.UseCassieInsteadOfAudio)
         {
             Plugin.Singleton.AudioPlayerRandom.GlobalPlayer("FentReactorMeltdown.ogg", 50000, randomDelay);
-            Cassie.MessageTranslated(
-                ".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
-                CassieTranslation, false, false);
+            string updatedCassieTranslation = CassieTranslation.Replace("{NukeDuration}", $"{Math.Round(RandomDelay).ToString()} Sekunden");
+            
+            Cassie.MessageTranslated(".g1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .", updatedCassieTranslation, false, false);
         }
         else
         {
@@ -393,8 +394,15 @@ public class Reactor
 
         if (ev.Button.Base.name == Plugin.Singleton.Config.ButtonRefillName)
         {
-            ev.Button.Base.enabled = true;
-            Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {ev.Player.Id}");
+            if (!CustomItem.TryGet(ev.Player, out CustomItem Custom) && ev.Player.CurrentItem != null && ev.Player.CurrentItem.Type == ItemType.Adrenaline)
+            {
+                ev.Button.Base.enabled = true;
+                Server.ExecuteCommand($"/{Plugin.Singleton.Translation.FuelCommandName} {ev.Player.Id}");
+            }
+            else
+            {
+                ev.Player.ShowMeowHint("Du kannst keine Custom Items zum auffüllen nehmen oder musst Adrenaline in der Hand halten!");
+            }
             return;
         } 
     }

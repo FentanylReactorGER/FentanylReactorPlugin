@@ -12,7 +12,7 @@
         <AssemblyName>Fentanyl_ReactorUpdate</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
+        <LangVersion>12</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -55,6 +55,9 @@
         <Reference Include="Caress">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Caress.dll</HintPath>
         </Reference>
+        <Reference Include="CedModV3">
+          <HintPath>..\..\..\Downloads\CedModV3.dll</HintPath>
+        </Reference>
         <Reference Include="DnsClient">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\DnsClient.dll</HintPath>
         </Reference>
@@ -93,6 +96,9 @@
         </Reference>
         <Reference Include="SCPSLAudioApi">
           <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\dependencies\SCPSLAudioApi.dll</HintPath>
+        </Reference>
+        <Reference Include="SimpleDiscord">
+          <HintPath>..\..\..\Downloads\SimpleDiscord.dll</HintPath>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.ComponentModel.Composition">
@@ -154,6 +160,9 @@
         <Reference Include="System.Xml.Linq">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\System.Xml.Linq.dll</HintPath>
         </Reference>
+        <Reference Include="UnifiedEconomy">
+          <HintPath>..\..\..\Downloads\UnifiedEconomy.dll</HintPath>
+        </Reference>
         <Reference Include="Unity.TextMeshPro">
           <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Unity.TextMeshPro.dll</HintPath>
         </Reference>
@@ -177,13 +186,20 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\Classes\AntiCamp.cs" />
+        <Compile Include="API\Classes\CraftingSystem.cs" />
+        <Compile Include="API\Classes\CustomAdminPanel.cs" />
         <Compile Include="API\Classes\DevNuke.cs" />
         <Compile Include="API\Classes\Elevator.cs" />
+        <Compile Include="API\Classes\Enm.cs" />
         <Compile Include="API\Classes\MeltdownAutoStart.cs" />
+        <Compile Include="API\Classes\MoneyEvents.cs" />
         <Compile Include="API\Classes\RoomReplacer.cs" />
         <Compile Include="API\Classes\RoundSummaryText.cs" />
+        <Compile Include="API\Classes\ShopMenu.cs" />
         <Compile Include="API\Classes\SpawnGenerator.cs" />
         <Compile Include="API\Classes\SSMenu.cs" />
+        <Compile Include="API\Classes\Testing.cs" />
         <Compile Include="API\Commands\AudioCommand.cs" />
         <Compile Include="API\Commands\Breach1356.cs" />
         <Compile Include="API\Commands\CommandDevNuke.cs" />
@@ -193,26 +209,24 @@
         <Compile Include="API\Commands\FentanylReactorRefill.cs" />
         <Compile Include="API\Commands\MeltdownCancelCommand.cs" />
         <Compile Include="API\Commands\MeltdownCommand.cs" />
+        <Compile Include="API\Commands\MOENYYY.cs" />
         <Compile Include="API\Commands\ResetCooldown.cs" />
         <Compile Include="API\Commands\RoomReplacerCommand.cs" />
         <Compile Include="API\Commands\TeleportCommand.cs" />
         <Compile Include="API\Commands\Trade4837.cs" />
-        <Compile Include="API\Commands\UseButtons.cs" />
         <Compile Include="API\CustomItems\Brot.cs" />
         <Compile Include="API\CustomItems\CustomItemLight.cs" />
+        <Compile Include="API\CustomItems\CustomItemSchematic.cs" />
         <Compile Include="API\CustomItems\FentT1.cs" />
         <Compile Include="API\CustomItems\FentT2.cs" />
         <Compile Include="API\CustomItems\FentT3.cs" />
         <Compile Include="API\CustomItems\HazmatSuit.cs" />
+        <Compile Include="API\Database\LiteSQL.cs" />
+        <Compile Include="API\Database\SQLManager.cs" />
         <Compile Include="API\Extensions\AudioModule.cs" />
         <Compile Include="API\Extensions\PlayerHintHSM.cs" />
         <Compile Include="API\Extensions\SchematicColor.cs" />
-        <Compile Include="API\Extensions\UpdateOggDemonCore.cs" />
-        <Compile Include="API\Extensions\UpdateOggMeltdown.cs" />
-        <Compile Include="API\Extensions\UpdateOggReactor.cs" />
         <Compile Include="API\Extensions\UpdatePlugin.cs" />
-        <Compile Include="API\Extensions\UpdateSchematic.cs" />
-        <Compile Include="API\Extensions\UpdateSchematicDemonCore.cs" />
         <Compile Include="API\Reactor.cs" />
         <Compile Include="API\SCP1356\1356Main.cs" />
         <Compile Include="API\SCP1356\CustomItems1356\RecontainmentDevice.cs" />
@@ -221,6 +235,7 @@
         <Compile Include="API\SCP1356\Events\RadiationDamage.cs" />
         <Compile Include="API\SCP4837\4837Main.cs" />
         <Compile Include="API\SCP4837\ColorManager.cs" />
+        <Compile Include="API\SCPBuffs\SCP049\SCP049Buff.cs" />
         <Compile Include="Configs\Config.cs" />
         <Compile Include="Configs\Translation.cs" />
         <Compile Include="Plugin.cs" />
@@ -232,9 +247,11 @@
     <ItemGroup>
       <PackageReference Include="ExMod.Exiled" Version="9.4.0" />
       <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+      <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="RueI" Version="2.1.0" />
-      <PackageReference Include="SSMenuSystem" Version="2.0.3-EXILED" />
+      <PackageReference Include="SSMenuSystem" Version="2.0.4-EXILED" />
+      <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

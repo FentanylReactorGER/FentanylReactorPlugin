@@ -30,20 +30,14 @@ namespace Fentanyl_ReactorUpdate.API.Classes
                 return;
             }
             
-            var topConsumers = consumers
-                .OrderByDescending(kvp => kvp.Value)
-                .Take(5)
-                .Select(kvp => Plugin.Singleton.Translation.RoundSummaryHintPlayers
-                    .Replace("{PlayerNickname}", kvp.Key.Nickname)
-                    .Replace("{FentanylItems}", kvp.Value.ToString()));
+            var topConsumers = consumers.OrderByDescending(kvp => kvp.Value).Take(5).Select(kvp => Plugin.Singleton.Translation.RoundSummaryHintPlayers.Replace("{PlayerNickname}", kvp.Key.Nickname).Replace("{FentanylItems}", kvp.Value.ToString()));
             
             string joinedConsumers = string.Join("\n", topConsumers);
             
             string message;
             if (Plugin.Singleton.Translation.RoundSummaryHint.Contains("{FentanylConsumers}"))
             {
-                message = Plugin.Singleton.Translation.RoundSummaryHint
-                    .Replace("{FentanylConsumers}", joinedConsumers);
+                message = Plugin.Singleton.Translation.RoundSummaryHint.Replace("{FentanylConsumers}", $"\n{joinedConsumers}");
             }
             else
             {

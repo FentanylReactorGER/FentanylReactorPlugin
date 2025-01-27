@@ -10,12 +10,14 @@ using Exiled.CustomItems.API.Features;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using Fentanyl_ReactorUpdate.Configs;
 using MapEditorReborn.API.Features;
 using MapEditorReborn.API.Features.Objects;
 using MapEditorReborn.Commands.UtilityCommands;
 using MapEditorReborn.Events.EventArgs;
 using MEC;
 using SSMenuSystem.Features;
+using UnifiedEconomy.Helpers.Extension;
 using UnityEngine;
 using UserSettings.ServerSpecific;
 using Utils.Networking;
@@ -32,14 +34,15 @@ public class Main4837
     private Transform Scp4837PickupPosition_1 { get; set; }
     private Transform Scp4837PickupPosition_2 { get; set; }
     private Transform Scp4837PickupPosition_3 { get; set; }
-    private CustomItem SCP4837Custom { get; set; }
     private Transform Scp4837PickupPositionScheme { get; set; }
     private Vector3 Scp4837PickupPositionSchemeOld { get; set; }
     private Quaternion Scp4837PickupRotationSchemeOld { get; set; }
+    private static readonly Translation Translation = Plugin.Singleton.Translation;
     private List<Pickup> Scp4837Pickups { get; set; } = new List<Pickup>();
     private List<CustomItem> Scp4837CustomItems { get; set; } = new List<CustomItem>();
     private Transform SCP4837Light { get; set; }
     private bool _hasPlayerPickedUp { get; set; }
+    public Dictionary<Player, int> PlayerTradeCounts = new Dictionary<Player, int>();
     public bool _Cooldown { get; set; }
     private float Scp4837TradeDur = 30f;
     private List<ItemType> SCP4837TradeItems = new List<ItemType>
@@ -82,7 +85,7 @@ public class Main4837
         89,
         90,
         1112,
-        1113
+        1113,
     };
 
 
@@ -92,6 +95,7 @@ public class Main4837
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned += OnSchematicSpawned;
         Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
+        Exiled.Events.Handlers.Server.RoundEnded += RoundEndingN;
     }
 
     public void UnsEvents()
@@ -99,10 +103,19 @@ public class Main4837
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned -= OnSchematicSpawned;
         Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
+        Exiled.Events.Handlers.Server.RoundEnded -= RoundEndingN;
     }
 
+    private void RoundEndingN(RoundEndedEventArgs obj)
+    {       
+        PlayerTradeCounts.Clear();
+        _Cooldown = false;
+        _hasPlayerPickedUp = true;
+    }
+    
     private void OnRoundStarted()
     {
+        PlayerTradeCounts.Clear();
         _Cooldown = false;
         _hasPlayerPickedUp = false;
         string RoomTradeName = "Scp4837Room";
@@ -167,6 +180,11 @@ public class Main4837
  
 public void Trade4837(Player player)
 {
+    if (_Cooldown)
+    {
+        player.ShowMeowHint("Cooldown!");
+        return;
+    }
     if (player == null)
     {
         Log.Error("Player is null in Trade4837!");
@@ -178,12 +196,11 @@ public void Trade4837(Player player)
         Log.Error("SCP4837TradeRoomPlayerPos is not initialized!");
         return;
     }
-
+    _Cooldown = true;
     Timing.CallDelayed(0.1f, () => { player.Position = SCP4837TradeRoomPlayerPos; });
     player.EnableEffect(EffectType.Flashed, 1, 5);
     SCP4837TradeRoomPlayerPosOld = player.Position;
     Timing.RunCoroutine(StartSCP4837Trade(player));
-    _Cooldown = true;
 
     Scp4837PickupPositionSchemeOld = SCP4837.Position;
     Scp4837PickupRotationSchemeOld = SCP4837.Rotation;
@@ -275,35 +292,46 @@ private void CreateRandomItems(Transform Item1, Transform Item2, Transform Item3
 
 private void OnPickingUpItem(PickingUpItemEventArgs ev)
 {
-    if (ev.Pickup == null || ev.Pickup.Base == null)
+    if (ev.Pickup?.Base == null)
         return;
-    
-    foreach (var pickup in Scp4837Pickups)
-    {
-        if (pickup != null && pickup.Base != null && ev.Pickup.Base.name.Contains(pickup.Base.name))
+
+    foreach (var pickup in Scp4837Pickups.Where(p => Vector3.Distance(p.Position, SCP4837TradeRoom.Position) < 20))
+    {           
+        if (pickup?.Base == null)
+            continue;
+
+        if (ev.Pickup.Base.name.Contains(pickup.Base.name))
         {
             _hasPlayerPickedUp = true;
-            
+
+            var pickupsToDestroy = new List<Exiled.API.Features.Pickups.Pickup>();
             foreach (var otherPickup in Scp4837Pickups)
             {
-                if (otherPickup != pickup)
+                if (otherPickup != null && otherPickup != pickup)
                 {
-                    DestroyPickup(otherPickup);
+                    pickupsToDestroy.Add(otherPickup);
                 }
+            }
+
+            foreach (var otherPickup in pickupsToDestroy)
+            {
+                DestroyPickup(otherPickup);
             }
 
             Scp4837Pickups.Clear();
             Scp4837Pickups.Add(pickup);
 
-            Timing.CallDelayed(1.2f, () => { _hasPlayerPickedUp = false; });
+            Timing.CallDelayed(1.8f, () => { _hasPlayerPickedUp = false; });
             return;
         }
     }
 }
 
+
+
 private void DestroyPickup(Pickup pickup)
 {
-    if (pickup != null)
+    if (pickup != null && pickup.IsSpawned)
     {
         pickup.Destroy();
     }
@@ -378,79 +406,108 @@ private void DestroyPickup(Pickup pickup)
         "Horror14.ogg",
         "Horror7.ogg"
     };
-    private IEnumerator<float> StartSCP4837Trade(Player player)
+ 
+ private IEnumerator<float> StartSCP4837Trade(Player player)
+{
+    if (PlayerTradeCounts.ContainsKey(player) && PlayerTradeCounts[player] >= 3)
     {
-        SSTwoButtonsSetting PlayCustomSounds = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(413);
-        SSTwoButtonsSetting PlayCustomSoundsHorror = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(414);
-        Timing.RunCoroutine(Timer4837(player));
-        player.EnableEffect(EffectType.Ensnared, 1, Scp4837TradeDur);
-        player.EnableEffect(EffectType.AmnesiaVision, 1, 30);
-        player.EnableEffect(EffectType.Burned, 1, 30);
-        if (PlayCustomSoundsHorror.SyncIsA)
-        {
-            Timing.CallDelayed(0.11f, () => { PlayRandomSound(player, false); });
-            
-        }
-        if (PlayCustomSounds.SyncIsA)
-        {
-            Timing.CallDelayed(0.11f, () => { player.Position.SpecialPosExtra("4837Pocket.ogg", 15, 1, 30); });   
-        }
+        player.ShowMeowHint(Translation.SCP4837MaxTrades);
+        yield break;
+    }
 
-        while (Scp4837TradeDur > 0)
+    if (!PlayerTradeCounts.ContainsKey(player))
+    {
+        PlayerTradeCounts[player] = 0;
+    }
+
+    PlayerTradeCounts[player]++;
+
+    player.AddBalance(15f);
+    player.ShowMeowHintMoney(Translation.SCP4837TradeMoney);
+    SSTwoButtonsSetting PlayCustomSounds = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(413);
+    SSTwoButtonsSetting PlayCustomSoundsHorror = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(414);
+
+    Timing.RunCoroutine(Timer4837(player));
+    player.EnableEffect(EffectType.Ensnared, 1, Scp4837TradeDur);
+    player.EnableEffect(EffectType.AmnesiaVision, 1, 30);
+    player.EnableEffect(EffectType.Burned, 1, 30);
+
+    if (PlayCustomSoundsHorror.SyncIsA)
+    {
+        Timing.CallDelayed(0.11f, () => { PlayRandomSound(player, false); });
+    }
+
+    if (PlayCustomSounds.SyncIsA)
+    {
+        Timing.CallDelayed(0.11f, () => { player.Position.SpecialPosExtra("4837Pocket.ogg", 15, 1, 30); });
+    }
+
+    while (Scp4837TradeDur > 0)
+    {
+        if (_hasPlayerPickedUp)
         {
-            if (_hasPlayerPickedUp)
+            Scp4837TradeDur = 0;
+            player.DisableEffect(EffectType.Ensnared);
+            player.DisableEffect(EffectType.Burned);
+            player.DisableEffect(EffectType.AmnesiaVision);
+
+            player.EnableEffect(EffectType.Flashed, 1, 5);
+            player.EnableEffect(EffectType.Ensnared, 1, 5);
+            player.Position = SCP4837TradeRoomPlayerPosOld;
+
+            Scp4837Pickups.Clear();
+            DestroyAllPickups();
+
+            if (PlayCustomSoundsHorror.SyncIsA)
             {
-                player.DisableEffect(EffectType.Ensnared);
-                player.DisableEffect(EffectType.Burned);
-                player.DisableEffect(EffectType.AmnesiaVision);
-                player.EnableEffect(EffectType.Flashed, 1, 5);
-                player.EnableEffect(EffectType.Ensnared, 1, 5);
-                player.Position = SCP4837TradeRoomPlayerPosOld;
-                Scp4837Pickups.Clear();
-                if (PlayCustomSoundsHorror.SyncIsA)
-                {
-                    PlayRandomSound(player, true);
-                }
-
-                Timing.CallDelayed(45 + Scp4837TradeDur,
-                    () =>
-                    {
-                        Log.Info("SCP-4837 wieder aktiv!");
-                        SCP4837.Position = Scp4837PickupPositionSchemeOld;
-                        SCP4837.Rotation = Scp4837PickupRotationSchemeOld;
-                    });
-                _Cooldown = false;
-                yield break;
+                PlayRandomSound(player, true);
             }
-            
-            yield return Timing.WaitForSeconds(0.1f);
-        }
-        player.DisableEffect(EffectType.Ensnared);
-        player.DisableEffect(EffectType.Burned);
-        player.DisableEffect(EffectType.AmnesiaVision);
-        player.EnableEffect(EffectType.Flashed, 1, 5);
-        player.EnableEffect(EffectType.Ensnared, 1, 5);
-        Scp4837Pickups.Clear();
-        DestroyAllPickups();
-        player.Position = SCP4837TradeRoomPlayerPosOld;
-        if (PlayCustomSoundsHorror.SyncIsA)
-        {
-            PlayRandomSound(player, true);
-        }
-        
 
-        Timing.CallDelayed(45f,
-            () =>
+            _hasPlayerPickedUp = false;
+
+            Timing.CallDelayed(45 + Scp4837TradeDur, () =>
             {
                 Log.Info("SCP-4837 wieder aktiv!");
                 SCP4837.Position = Scp4837PickupPositionSchemeOld;
                 SCP4837.Rotation = Scp4837PickupRotationSchemeOld;
-
                 _Cooldown = false;
+                Scp4837TradeDur = 30f;
             });
 
-        yield break;
+            yield break;
+        }
+
+        yield return Timing.WaitForSeconds(0.1f);
     }
+
+    player.DisableEffect(EffectType.Ensnared);
+    player.DisableEffect(EffectType.Burned);
+    player.DisableEffect(EffectType.AmnesiaVision);
+    player.EnableEffect(EffectType.Flashed, 1, 5);
+    player.EnableEffect(EffectType.Ensnared, 1, 5);
+    Scp4837TradeDur = 0;
+    Scp4837Pickups.Clear();
+    DestroyAllPickups();
+    player.Position = SCP4837TradeRoomPlayerPosOld;
+
+    if (PlayCustomSoundsHorror.SyncIsA)
+    {
+        PlayRandomSound(player, true);
+    }
+
+    Timing.CallDelayed(45f, () =>
+    {
+        Log.Info("SCP-4837 wieder aktiv!");
+        SCP4837.Position = Scp4837PickupPositionSchemeOld;
+        SCP4837.Rotation = Scp4837PickupRotationSchemeOld;
+        _Cooldown = false;
+        Scp4837TradeDur = 30;
+    });
+
+    yield break;
+}
+
+
 
     private IEnumerator<float> Timer4837(Player player)
     {
@@ -458,27 +515,29 @@ private void DestroyPickup(Pickup pickup)
         {
             if (_hasPlayerPickedUp)
             {
-                Scp4837TradeDur = 30f;
                 yield break;
             }
-            player.ShowMeowHintDur($"Du hast noch <b>{Scp4837TradeDur} Sekunden</b>, um mit <b><color=#757935>SCP-4837</b></color> zu traden!", 1);
+            string SCP4837TradeTimer = Translation.SCP4837TradeTimer.Replace("{Scp4837TradeDur}", Scp4837TradeDur.ToString());
+            player.ShowMeowHintDur(SCP4837TradeTimer, 1);
 
             Scp4837TradeDur--;
             yield return Timing.WaitForSeconds(1f);
         }
-        player.ShowMeowHint("Die Zeit ist abgelaufen! Du wurdest zurück <b>Teleportiert</b>.");
-        Scp4837TradeDur = 30f;
+        player.ShowMeowHint(Translation.SCP4837TradeTimerOver);
         yield break;
     }
 
 
     private void DestroyAllPickups()
     {
-        var pickupsToRemove = new List<Pickup>(Scp4837Pickups);
+        var pickupsToRemove = Pickup.List;
         foreach (var pickup in pickupsToRemove)
         {
-            pickup.Destroy();
-            Scp4837Pickups.Remove(pickup);
+            if (Vector3.Distance(pickup.Position, SCP4837TradeRoom.Position) <= 10f && pickup.IsSpawned)
+            {
+                Log.Info($"Destroying pickup {pickup.Info}");
+                pickup.Destroy();
+            }
         }
     }
     private void PlayRandomSound(Player player, bool leaving)

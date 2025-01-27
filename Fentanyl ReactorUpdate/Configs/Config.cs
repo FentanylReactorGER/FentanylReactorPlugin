@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Exiled.API.Enums;
 using Exiled.API.Interfaces;
@@ -8,16 +9,188 @@ using UnityEngine;
 
 namespace Fentanyl_ReactorUpdate.Configs;
 
+public class Preset
+{
+    public string Name { get; set; }
+    public ItemType? Item { get; set; }
+    public uint? CustomItemId { get; set; }
+    public float Price { get; set; }
+
+    public Preset() { }
+
+    public Preset(string name, ItemType item, float price)
+    {
+        Name = name;
+        Item = item;
+        CustomItemId = null;
+        Price = price;
+    }
+
+    public Preset(string name, uint customItemId, float price)
+    {
+        Name = name;
+        Item = null;
+        CustomItemId = customItemId;
+        Price = price;
+    }
+}
+
 public class Config : IConfig
 {
-[Description("Should the plugin be enabled")]
-public bool IsEnabled { get; set; } = true;
+    [Description("Should the plugin be enabled")]
+    public bool IsEnabled { get; set; } = true;
 
-[Description("Should the plugin display a debug message")]
-public bool Debug { get; set; } = false;
+    [Description("Should the plugin display a debug message")]
+    public bool Debug { get; set; } = false;
 
+    [Description("Custom Item ID, RGB Color.")]
+    public Dictionary<uint, Color> CustomItemLightColors { get; set; } = new()
+    {
+        { 88, new Color(1f, 0.41f, 0.15f) },
+        { 89, new Color(0.3f, 1f, 0.3f) },
+        { 90, new Color(0.15f, 0.45f, 1f) },
+        { 20, new Color(1f, 1f, 0.15f) },
+        { 21, new Color(0.85f, 0.14f, 0.14f) },
+        { 22, new Color(0.8f, 0.5f, 0.2f) },
+        { 23, new Color(0.6f, 0.1f, 0.5f) },
+        { 24, new Color(0.95f, 0.7f, 0.1f) },
+        { 25, new Color(0.34f, 0.17f, 0.72f) },
+        { 26, new Color(0.14f, 0.8f, 0.72f) },
+        { 27, new Color(0.9f, 0.3f, 0.7f) },
+        { 28, new Color(0.25f, 0.85f, 0.25f) },
+        { 29, new Color(1f, 0.53f, 0.26f) },
+        { 30, new Color(0.43f, 0.75f, 1f) },
+        { 31, new Color(1f, 0.6f, 0f) },
+        { 32, new Color(0.88f, 0.56f, 0.9f) },
+        { 34, new Color(0.6f, 0.25f, 0.75f) },
+        { 1112, new Color(0.2f, 0.8f, 1f) },
+        { 1113, new Color(0.7f, 0.35f, 0.98f) },
+        { 1488, new Color(0.99f, 0.85f, 0.25f) }
+    };
+
+    [Description("Shop Items.")]
+    public List<Preset> presets { get; set; } = new List<Preset>
+    {
+        new Preset("Heavy Armory", ItemType.ArmorHeavy, 250),
+        new Preset("Combat Armory", ItemType.ArmorCombat, 150),
+        new Preset("Light Armory", ItemType.ArmorLight, 50),
+        new Preset("Medkit", ItemType.Medkit, 50),
+        new Preset("Granate", ItemType.GrenadeHE, 100),
+        new Preset("SCP-207", ItemType.SCP207, 350),
+        new Preset("Anti-SCP-207", ItemType.AntiSCP207, 350),
+        new Preset("SCP-1853", ItemType.SCP1853, 250),
+        new Preset("SCP-1344", ItemType.SCP1344, 500),
+        new Preset("SCP-268", ItemType.SCP268, 350),
+        new Preset("Brot", 1489, 100),
+        new Preset("Strahlenanzug", 6912, 750),
+        new Preset("Streugranate", 26, 300),
+        new Preset("Bessers SCP-207", 37, 450),
+        new Preset("SCP-1499", 29, 150),
+        new Preset("Nachtsichtgerät", 1113, 750),
+        new Preset("SCRAMBLE-Brille", 1112, 1000),
+        new Preset("Ravensinjektion [STUFE 1]", 88, 150),
+        new Preset("Ravensinjektion [STUFE 2]", 89, 250),
+        new Preset("Ravensinjektion [STUFE 3]", 90, 350),
+    };
+    
+    public List<RoomType> _presetRoomTypes { get; set; } = new List<RoomType>
+    {
+        RoomType.LczCheckpointA,
+        RoomType.LczCheckpointB,
+        RoomType.HczEzCheckpointA,
+        RoomType.HczEzCheckpointB,
+        RoomType.Surface,
+    };
+
+    public List<RoomType> _presetRoomTypesNonNormal { get; set; } = new List<RoomType>
+    {
+        RoomType.LczCheckpointA,
+        RoomType.LczCheckpointB,
+        RoomType.HczEzCheckpointA,
+        RoomType.HczEzCheckpointB,
+        RoomType.Surface,
+    };
+    
+    [Description("Crafting System.")]
+    public bool CraftingSystem { get; set; } = true;
+    
+    [Description("List of recipes for crafting items. Format: <Input1Input2>: OutputItemType")]
+        public Dictionary<string, string> Recipes { get; set; } = new()
+        {
+            { "RadioPainkillers", "None" },
+            { "PainkillersRadio", "None" },
+            { "GunCOM15Coin", "GunCOM18" },
+            { "CoinGunCOM15", "GunCOM18" },
+            { "GunCOM18Coin", "GunFSP9" },
+            { "CoinGunCOM18", "GunFSP9" },
+            { "GunFSP9Coin", "GunCrossvec" },
+            { "CoinGunFSP9", "GunCrossvec" },
+            { "GunCrossvecCoin", "GunE11SR" },
+            { "CoinGunCrossvec", "GunE11SR" },
+            { "GunE11SRCoin", "GunShotgun" },
+            { "CoinGunE11SR", "GunShotgun" },
+            { "GunShotgunCoin", "GunLogicer" },
+            { "CoinGunShotgun", "GunLogicer" },
+            { "GunLogicerCoin", "ParticleDisruptor" },
+            { "CoinGunLogicer", "ParticleDisruptor" },
+            { "FlashlightCoin", "GrenadeFlash" },
+            { "CoinFlashlight", "GrenadeFlash" },
+            { "GrenadeHEKeycardChaosInsurgency", "None" },
+            { "KeycardChaosInsurgencyGrenadeHE", "None" },
+            { "MedkitCoin", "Painkillers" },
+            { "CoinMedkit", "Painkillers" },
+            { "AdrenalinPainkiller", "SCP500" },
+            { "PainkillerAdrenalin", "SCP500" },
+            { "PainkillersAdrenaline", "SCP207" },
+            { "AdrenalinePainkillers", "SCP207" },
+            { "GunCOM15GunCOM15", "GunCom45" },
+            { "RadioSCP2176", "SCP1576" },
+            { "SCP2176Radio", "SCP1576" },
+            { "KeycardContainmentEngineerGrenadeFlash", "Jailbird" },
+            { "GrenadeFlashKeycardContainmentEngineer", "Jailbird" },
+            { "GrenadeFlashFlashlight", "SCP268" },
+            { "FlashlightGrenadeFlash", "SCP268" },
+            { "GrenadeFlashCoin", "SCP2176" },
+            { "CoinGrenadeFlash", "SCP2176" },
+            { "GunCOM15SCP207", "SCP1853" },
+            { "SCP207GunCOM15", "SCP1853" },
+            { "JailbirdFlashlight", "ParticleDisruptor" },
+            { "FlashlightJailbird", "ParticleDisruptor" },
+            { "KeycardResearchCoordinatorCoinGrenadeHE", "SCP244b" },
+            { "CoinGrenadeHEKeycardResearchCoordinator", "SCP244b" },
+            { "CoinCoin", "Painkillers" },
+            { "KeycardJanitorCoin", "KeycardScientist" },
+            { "CoinKeycardJanitor", "KeycardScientist" },
+            { "CoinKeycardScientist", "KeycardResearchCoordinator" },
+            { "KeycardScientistCoin", "KeycardResearchCoordinator" },
+            { "KeycardResearchCoordinatorCoin", "KeycardZoneManager" },
+            { "CoinKeycardResearchCoordinator", "KeycardZoneManager" },
+            { "CoinKeycardZoneManager", "KeycardGuard" },
+            { "KeycardZoneManagerCoin", "KeycardGuard" },
+            { "KeycardGuardCoin", "KeycardContainmentEngineer" },
+            { "CoinKeycardGuard", "KeycardContainmentEngineer" },
+            { "KeycardContainmentEngineerCoin", "KeycardMTFOperative" },
+            { "CoinKeycardContainmentEngineer", "KeycardMTFOperative" },
+            { "CoinKeycardKeycardMTFOperative", "KeycardMTFCaptain" },
+            { "KeycardMTFOperativeCoin", "KeycardMTFCaptain" },
+            { "KeycardMTFCaptainCoin", "KeycardFacilityManager" },
+            { "CoinKeycardMTFCaptain", "KeycardFacilityManager" },
+            { "CoinKeycardFacilityManager", "KeycardChaosInsurgency" },
+            { "KeycardFacilityManagerCoin", "KeycardChaosInsurgency" },
+            { "KeycardChaosInsurgencyCoin", "KeycardO5" },
+            { "CoinKeycardChaosInsurgency", "KeycardO5" },
+        };
+    
+    [Description("Crafting Hint Color.")]
+    public Color CraftingHintColor { get; set; } = new Color(0.85f, 0.14f, 0.14f);
+    
 [Description("Should the plugin Check for Updates / Set this false if you want Custom Schematics / Sounds!")]
 public bool Update { get; set; } = true;
+
+[Description("SCP-1356 Module?")]
+public bool SCP1356 { get; set; } = true;
+[Description("SCP-4837 Module?")]
+public bool SCP4837 { get; set; } = true;
 
 [Description("Devnuke (Experimental Feature, for now only in German!)")]
 public bool Devnuke { get; set; } = false;

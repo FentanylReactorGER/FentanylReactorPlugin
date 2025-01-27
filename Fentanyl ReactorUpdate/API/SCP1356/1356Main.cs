@@ -5,23 +5,11 @@ using System.Threading;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.CustomItems.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using Exiled.Events.Handlers;
-using Fentanyl_ReactorUpdate.API.Extensions;
-using MapEditorReborn.API.Features;
-using MapEditorReborn.API.Features.Objects;
 using MEC;
-using StartDamageCoroutine = Fentanyl_ReactorUpdate.API.SCP1356.Events;
-using NorthwoodLib;
-using PlayerRoles;
-using PlayerRoles.PlayableScps.Scp079.Map;
+using UnifiedEconomy.Helpers.Extension;
 using UnityEngine;
-using Cassie = Exiled.API.Features.Cassie;
-using Map = Exiled.Events.Handlers.Map;
-using Object = UnityEngine.Object;
-using Player = Exiled.API.Features.Player;
-using Server = Exiled.API.Features.Server;
-using Warhead = Exiled.API.Features.Warhead;
 
 namespace Fentanyl_ReactorUpdate.API.SCP1356;
 
@@ -39,6 +27,7 @@ public class MainDuck
         MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned += OnSchematicSpawned;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
+        Exiled.Events.Handlers.Player.Joined += Joined;
         tokenSource = new CancellationTokenSource();
         token = tokenSource.Token;
     }
@@ -48,15 +37,19 @@ public class MainDuck
         MapEditorReborn.Events.Handlers.Schematic.SchematicSpawned -= OnSchematicSpawned;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
+        Exiled.Events.Handlers.Player.Joined -= Joined;
         tokenSource?.Cancel();
     }
 
+    private void Joined(JoinedEventArgs ev)
+    {
+    }
+    
     private void OnRoundStarted()
     {
         Timing.CallDelayed(1f, () => Plugin.Singleton.RadiationDamage.StartDamageCoroutine());
     }
-
-
+    
     private void OnRoundEnded(RoundEndedEventArgs obj)
     {
         Plugin.Singleton.RadiationDamage.StopDamageCoroutine();

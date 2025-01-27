@@ -47,43 +47,19 @@ public class Brot : CustomItem
     {
         base.SubscribeEvents();
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStarted;
-        Exiled.Events.Handlers.Player.DroppedItem += OnDroppedItem;
-        Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
         Exiled.Events.Handlers.Player.TogglingNoClip += OnStandartButton;
-        Exiled.Events.Handlers.Server.RoundStarted += SpawningItem;
     }
 
     protected override void UnsubscribeEvents()
     {
         base.UnsubscribeEvents();
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
-        Exiled.Events.Handlers.Player.DroppedItem -= OnDroppedItem;
-        Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
         Exiled.Events.Handlers.Player.TogglingNoClip -= OnStandartButton;
-        Exiled.Events.Handlers.Server.RoundStarted -= SpawningItem;
     }
 
     private void OnRoundStarted()
     {
         Timing.RunCoroutine(CheckSCP4837Range());
-    }
-
-    private void OnDroppedItem(DroppedItemEventArgs ev)
-    {
-        if (ev.Pickup == null || !Check(ev.Pickup))
-            return;
-
-        Log.Info($"Player {ev.Player.Nickname} hat das Brot fallen gelassen bei {ev.Pickup.Position}.");
-        Timing.RunCoroutine(SpawnBreadSchematicAndLight(ev.Pickup));
-    }
-
-    private void SpawningItem()
-    {
-        foreach (Pickup pickup in Pickup.List)
-        {
-            if (pickup == null || !Check(pickup)) return;
-            Timing.RunCoroutine(SpawnBreadSchematicAndLight(pickup));
-        }
     }
     
     private void OnStandartButton(TogglingNoClipEventArgs ev)
@@ -94,85 +70,8 @@ public class Brot : CustomItem
             Plugin.Singleton.SCP4837InteractionMenu.StartTrading4837(ev.Player);
         }
     }
-
-    private void OnPickingUpItem(PickingUpItemEventArgs ev)
-    {
-        if (ev.Pickup == null || !Check(ev.Pickup))
-            return;
-
-        if (!ActiveBreads.TryGetValue(ev.Pickup, out var breadSchematic))
-            return;
-
-        Log.Info($"Player {ev.Player.Nickname} hat das Brot aufgehoben bei {ev.Pickup.Position}.");
-        breadSchematic.Destroy();
-        ActiveBreads.Remove(ev.Pickup);
-
-        if (ActiveLights.TryGetValue(ev.Pickup, out var light))
-        {
-            light.Destroy();
-            ActiveLights.Remove(ev.Pickup);
-        }
-    }
-
-    private IEnumerator<float> SpawnBreadSchematicAndLight(Pickup pickup)
-    {
-        if (pickup == null)
-            yield break;
-
-        const string SchemeName = "Bread4837";
-        var breadSchematic = ObjectSpawner.SpawnSchematic(
-            SchemeName,
-            pickup.Position,
-            Quaternion.Euler(pickup.Rotation.eulerAngles.x, pickup.Rotation.eulerAngles.y, 0),
-            Vector3.one,
-            MapUtils.GetSchematicDataByName(SchemeName),
-            true);
-
-        if (breadSchematic == null)
-            yield break;
-
-        Log.Info(
-            $"Spawned Bread schematic at {pickup.Position} with rotation {breadSchematic.transform.rotation.eulerAngles}.");
-        ActiveBreads[pickup] = breadSchematic;
-
-        var light = Exiled.API.Features.Toys.Light.Create(
-            pickup.Position);
-        light.Color = new Color(238f / 255f, 192f / 255f, 123f / 255f);
-        light.Position = new Vector3(pickup.Position.x, pickup.Position.y + 0.2f, pickup.Position.z);
-        light.Range = 5;
-        light.Intensity = 3;
-        light.ShadowType = LightShadows.Hard;
-        ActiveLights[pickup] = light;
-
-        if (light == null)
-            yield break;
-
-        ActiveLights[pickup] = light;
-
-        while (pickup != null && pickup.GameObject != null && ActiveBreads.ContainsKey(pickup))
-        {
-            breadSchematic.transform.position = pickup.Position;
-            var rotation = pickup.Rotation.eulerAngles;
-            breadSchematic.transform.rotation = Quaternion.Euler(rotation.x, -rotation.y, 0);
-            light.Position = pickup.Position;
-
-            yield return Timing.WaitForOneFrame;
-        }
-
-        if (ActiveLights.TryGetValue(pickup, out var activeLight))
-        {
-            activeLight.Destroy();
-            ActiveLights.Remove(pickup);
-        }
-
-        if (ActiveBreads.TryGetValue(pickup, out var activeBread))
-        {
-            activeBread.Destroy();
-            ActiveBreads.Remove(pickup);
-        }
-    }
     
-
+    
     private IEnumerator<float> CheckSCP4837Range()
     {
         List<string> noBreadAudios = new()
@@ -208,13 +107,20 @@ public class Brot : CustomItem
                     SSTwoButtonsSetting ShowTutHint = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(412);
                     SSTwoButtonsSetting PlayCustomSounds = player.ReferenceHub.GetParameter<SCP4837InteractionMenu, SSTwoButtonsSetting>(413);
                     
+                    if (Plugin.Singleton.Main4837.PlayerTradeCounts.ContainsKey(player) && Plugin.Singleton.Main4837.PlayerTradeCounts[player] >= 3)
+                    {
+                        player.ShowMeowHint("<color=yellow>⚠️</color> Du hast bereits dreimal mit <b><color=#757935>SCP-4837</b></color> gehandelt.\n Du kannst nächste Runde erneut handeln!");
+                        Plugin.Singleton.Main4837.SCP4837.Position.SpecialPos("2384_ScD.ogg", 10, 9);
+                        continue;
+                    }
+                    
                     if (ShowTutHint.SyncIsA)
                     {
                         player.ShowMeowHint("<color=yellow>🔒</color> Um mit <b><color=#757935>SCP-4837</b></color> zu interagieren, musst du einen Keybind festlegen! \n ESC => Settings / Einstellungen => Server-Specific / Server-Spezifisch \n Dort kannst du auch diesen Hint Deaktivieren! \n Standart: ALT");
                         if (PlayCustomSounds.SyncIsA)
                         {
                             string randomAudio = noBreadAudios.GetRandomValue();
-                            Plugin.Singleton.Main4837.SCP4837.Position.SpecialPos(randomAudio, 10, 7);
+                            Plugin.Singleton.Main4837.SCP4837.Position.SpecialPos(randomAudio, 10, 9);
                         }
                         continue;
                     }

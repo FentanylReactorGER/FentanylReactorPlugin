@@ -47,6 +47,10 @@
               "target": "Package",
               "version": "[2.2.2, )"
             },
+            "Microsoft.CSharp": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -57,7 +61,11 @@
             },
             "SSMenuSystem": {
               "target": "Package",
-              "version": "[2.0.3-EXILED, )"
+              "version": "[2.0.4-EXILED, )"
+            },
+            "System.Data.SQLite": {
+              "target": "Package",
+              "version": "[1.0.119, )"
             }
           }
         }

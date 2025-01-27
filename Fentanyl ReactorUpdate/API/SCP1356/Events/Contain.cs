@@ -1,16 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using AdvancedMERTools;
 using Exiled.API.Features;
 using Fentanyl_ReactorUpdate.API.Extensions;
+using Fentanyl_ReactorUpdate.Configs;
 using MapEditorReborn.API.Features.Objects;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.RoleAssign;
+using UnifiedEconomy.Helpers.Extension;
 using UnityEngine;
 
 namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
 {
     public class Contain
     {
+        private static readonly Translation Translation = Plugin.Singleton.Translation;
         public void SubEvents()
         {
             EventHandler.HealthObjectDead += OnHealthObjectDead;
@@ -22,26 +27,10 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStarted;
         }
         private HealthObject SCP1356HealthObject { get; set; } 
-        private SchematicObject SCP1356 { get; set; } 
-        private readonly Dictionary<RoleTypeId, string> RoleTranslations = new()
-        {
-            { RoleTypeId.ClassD, "Class D Personnel" },
-            { RoleTypeId.Scientist, "Scientist Personnel" },
-            { RoleTypeId.ChaosConscript, "Chaos Insurgency" },
-            { RoleTypeId.ChaosMarauder, "Chaos Insurgency" },
-            { RoleTypeId.ChaosRepressor, "Chaos Insurgency" },
-            { RoleTypeId.ChaosRifleman, "Chaos Insurgency" }
-        };
-        
-        private readonly Dictionary<RoleTypeId, string> RoleTranslationsGer = new()
-        {
-            { RoleTypeId.ClassD, "Klasse-D Personal" },
-            { RoleTypeId.Scientist, "Wissenschaftliches Personal" },
-            { RoleTypeId.ChaosConscript, "Chaos Insurgency" },
-            { RoleTypeId.ChaosMarauder, "Chaos Insurgency" },
-            { RoleTypeId.ChaosRepressor, "Chaos Insurgency" },
-            { RoleTypeId.ChaosRifleman, "Chaos Insurgency" }
-        };
+        private SchematicObject SCP1356 { get; set; }
+        private readonly Dictionary<RoleTypeId, string> RoleTranslations = Translation.RoleTranslations;
+
+        private readonly Dictionary<RoleTypeId, string> RoleTranslationsGer = Translation.RoleTranslationsCustomLanguage;
 
         private void OnRoundStarted()
         {
@@ -65,7 +54,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             {
                 if (ev.Killer.Role.Type == RoleTypeId.Tutorial)
                 {
-                    ev.Killer.ShowMeowHint("Als D.U.C.K kannst du SCP-1356 nicht Eindämmen!");
+                    ev.Killer.ShowMeowHint(Translation.SCP1356CantContainRole);
                     ev.HealthObject.DoNotDestroyAfterDeath = true;
                     ev.HealthObject.Active = true;
                     ev.HealthObject.Health = 1650;
@@ -74,6 +63,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
                 if (ev.Killer.Role.Type != RoleTypeId.Tutorial)
                 {
                     ContainSCP1356(ev.Killer, SCP1356);
+                    Respawn.GrantTokens(ev.Killer.Role.Team.GetFaction(), 2);
                     ev.HealthObject.DoNotDestroyAfterDeath = false;
                     ev.HealthObject.Active = false;
                 }
@@ -88,6 +78,9 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
         
         public void ContainSCP1356(Player player, SchematicObject SCP1356)
         {
+            player.AddBalance(50f);
+            string MoneyHint1356 = Translation.SCP1356MoneyHintContain.Replace("{0}", player.GetPlayerFromDB().Balance.ToString());
+            player.ShowMeowHintMoney(MoneyHint1356);
                 SCP1356.Destroy();
                 string cassieMessage = GetCassieMessage(player);
                 string cassieTranslation = GetCassieTranslation(player);
@@ -101,16 +94,28 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             {
                 string unitDesignation = string.IsNullOrEmpty(player.UnitName)
                     ? null
-                    : $"NATO_{player.UnitName[0]} . {player.UnitName.Substring(1)}";
+                    : $"NATO_{player.UnitName[0]}";
 
+                float unitNumber = 0;
+                if (!string.IsNullOrEmpty(player.UnitName))
+                {
+                    Match match = Regex.Match(player.UnitName, @"\d+"); // Find the first number in the string
+                    if (match.Success)
+                    { 
+                        unitNumber = float.Parse(match.Value); // Convert the number to a float
+                    }
+                }
+
+                string ConCassieNtf = Translation.SCP1356CassieMessageContainNtf.Replace("{unitDesignation}", unitDesignation);
+                string ConCassieNtfFinal = ConCassieNtf.Replace("{unitNumber}", unitNumber.ToString());
                 return !string.IsNullOrEmpty(unitDesignation)
-                    ? $"SCP 1 3 5 6 contained successfully . Containmentunit {unitDesignation}"
+                    ? ConCassieNtfFinal
                     : "Mobile Task Force has contained SCP 1 3 5 6";
             }
-
+            
             return RoleTranslations.TryGetValue(player.Role.Type, out string customTranslation)
-                ? $"SCP 1 3 5 6 contained successfully by {customTranslation}"
-                : $"{player.Role.Type.ToString()} has contained SCP 1 3 5 6";
+                ? Translation.SCP1356CassieMessageContainOther.Replace("{customTranslation}", customTranslation)
+                : $"SCP 1 3 5 6 contain succesfully containemnt reason unknown";
         }
 
         private string GetCassieTranslation(Player player)
@@ -119,12 +124,12 @@ namespace Fentanyl_ReactorUpdate.API.SCP1356.Events
             {
                 string unitDesignation = player.UnitName;
                 return !string.IsNullOrEmpty(unitDesignation)
-                    ? $"SCP-1356 Eindämmung erfolgreich. Eindämmungseinheit: {unitDesignation}."
+                    ? Translation.SCP1356CassieMessageTranslatedContainNtf.Replace("{unitDesignation}", unitDesignation)
                     : "Mobile Task Force hat SCP-1356 erfolgreich eingedämmt.";
             }
 
             return RoleTranslationsGer.TryGetValue(player.Role.Type, out string customTranslationGer)
-                ? $"SCP-1356 Eindämmung erfolgreich durch {customTranslationGer}."
+                ? Translation.SCP1356CassieMessageTranslatedContainOther.Replace("{customTranslationGer}", customTranslationGer)
                 : $"SCP-1356 Eindämmung erfolgreich durch {player.Role.Type.ToString()}.";
         }
     }

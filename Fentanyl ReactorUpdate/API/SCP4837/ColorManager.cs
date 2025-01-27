@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using UnityEngine;
+using UserSettings.ServerSpecific;
 
 namespace Fentanyl_ReactorUpdate.API.SCP4837
 {
@@ -10,7 +11,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
     {
         private readonly Dictionary<Player, Color> playerColorSelections = new();
         
-        public void SetPlayerColor(Player player, Color selectedColor)
+        public void SetPlayerColor(Player player, Color selectedColor, SSTextArea text)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
@@ -18,7 +19,7 @@ namespace Fentanyl_ReactorUpdate.API.SCP4837
             playerColorSelections[player] = selectedColor;
             
             string hexColor = ColorUtility.ToHtmlStringRGB(selectedColor);
-            player.ShowHint($"Du hast deine Farbe <color=#{hexColor}>geändert</color>!", 5);
+            text.SendTextUpdate($"Du hast deine Farbe <color=#{hexColor}>geändert</color>!");
             Log.Info($"{player.Nickname} hat die Farbe {hexColor} ausgewählt.");
         }
         
